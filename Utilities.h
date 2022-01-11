@@ -7,11 +7,7 @@ namespace util {
 
 static const double EPSILON{0.00001};
 
-bool equals(double x, double y){
-    auto absoluteDifference = std::abs(x - y);
-    if (absoluteDifference < EPSILON) return true;
-    else return false;
-}
+bool equals(double x, double y);
 
 }
 #endif // UTILITIES_H
