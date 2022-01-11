@@ -90,3 +90,66 @@ TEST_F(TupleFeature, NegatingTuple){
     Tuple tupleNegated = (-tuple);
     ASSERT_THAT(correctValue == tupleNegated, true);
 }
+
+TEST_F(TupleFeature, MultiplyingTupleByScalar){
+    Tuple tuple{1, -2, 3, -4};
+    double factor{3.5};
+    Tuple correctValue{3.5, -7, 10.5, -14};
+    Tuple scaledTuple = tuple * factor;
+    ASSERT_THAT(correctValue == scaledTuple, true);
+}
+
+TEST_F(TupleFeature, DividingTupleByScalar){
+    Tuple tuple{1, -2, 3, -4};
+    double factor{2.0};
+    Tuple correctValue{0.5, -1, 1.5, -2};
+    Tuple scaledTuple = tuple / factor;
+    ASSERT_THAT(correctValue == scaledTuple, true);
+}
+
+TEST_F(TupleFeature, ComputingMagnitudeOfVector){
+    Tuple vector1{1, 0, 0, TupleType::vector};
+    Tuple vector2{0, 1, 0, TupleType::vector};
+    Tuple vector3{0, 0, 1, TupleType::vector};
+    Tuple vector4{1, 2, 3, TupleType::vector};
+    Tuple vector5{-1, -2, -3, TupleType::vector};
+
+    ASSERT_THAT(vector1.magnitude(), Eq(1.0));
+    ASSERT_THAT(vector2.magnitude(), Eq(1.0));
+    ASSERT_THAT(vector3.magnitude(), Eq(1.0));
+    ASSERT_THAT(util::equals(vector4.magnitude(), 3.74165738677), true);
+    ASSERT_THAT(util::equals(vector5.magnitude(), 3.74165738677), true);
+
+}
+
+TEST_F(TupleFeature, ComputingNormalVector){
+    Tuple vector1{4, 0, 0, TupleType::vector};
+    Tuple correctNormal1{1, 0, 0, 0};
+    Tuple vector1Normalized = vector1.normalize();
+    Tuple vector2{1, 2, 3, TupleType::vector};
+    Tuple correctNormal2{0.26726, 0.53452, 0.80178, 0};
+    Tuple vector2Normalized = vector2.normalize();
+
+    ASSERT_THAT(correctNormal1 == vector1Normalized, true);
+    ASSERT_THAT(correctNormal2 == vector2Normalized, true);
+}
+
+TEST_F(TupleFeature, DotProductOfTwoTuples){
+    Tuple a{1, 2, 3, 0};
+    Tuple b{2, 3, 4, 0};
+    double correctValue{20.0};
+    double aDotB = a.dot(b);
+    ASSERT_THAT(correctValue == aDotB, true);
+}
+
+TEST_F(TupleFeature, CrossProductOfTwoVectors){
+    Tuple a{1, 2, 3, 0};
+    Tuple b{2, 3, 4, 0};
+    Tuple correctACrossB{-1, 2, -1, 0};
+    Tuple correctBCrossA{1, -2, 1, 0};
+    Tuple ACrossB = a.cross(b);
+    Tuple BCrossA = b.cross(a);
+
+    ASSERT_THAT(correctACrossB == ACrossB, true);
+    ASSERT_THAT(correctBCrossA == BCrossA, true);
+}

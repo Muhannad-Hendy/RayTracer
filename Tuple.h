@@ -70,6 +70,51 @@ public:
         return negated;
     }
 
+    friend Tuple operator* (const Tuple& tuple, const double& factor){
+        Tuple scaledTuple{tuple.x * factor, tuple.y * factor, tuple.z * factor, tuple.w * factor};
+        return scaledTuple;
+    }
+
+    double dot (const Tuple& bVector){
+        double dotProduct = this->x * bVector.x +
+                            this->y * bVector.y +
+                            this->z * bVector.z +
+                            this->w * bVector.w;
+        return dotProduct;
+    }
+
+    Tuple cross (const Tuple& vector){
+        double xComponent = this->y * vector.z - this->z * vector.y;
+        double yComponent = this->z * vector.x - this->x * vector.z;
+        double zComponent = this->x * vector.y - this->y * vector.x;
+        Tuple crossProduct{xComponent, yComponent, zComponent, 0};
+        return crossProduct;
+    }
+
+    friend Tuple operator/ (const Tuple& tuple, const double& factor){
+        Tuple scaledTuple{tuple.x / factor, tuple.y / factor, tuple.z / factor, tuple.w / factor};
+        return scaledTuple;
+    }
+
+    double magnitude (){
+        double x_squared = pow(x, 2.0);
+        double y_squared = pow(y, 2.0);
+        double z_squared = pow(z, 2.0);
+        double magnitude = sqrt(x_squared + y_squared + z_squared);
+        return magnitude;
+    }
+
+    Tuple normalize (){
+        double magnitude = this->magnitude();
+        double x_normalized = this->x / magnitude;
+        double y_normalized = this->y / magnitude;
+        double z_normalized = this->z / magnitude;
+        double w_normalized = this->w / magnitude;
+        Tuple normalizedVector{x_normalized, y_normalized, z_normalized, w_normalized};
+        return normalizedVector;
+    }
+
+
 private:
     const double x{};
     const double y{};

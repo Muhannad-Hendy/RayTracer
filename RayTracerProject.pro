@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        ColorTest.cpp \
         TupleTest.cpp \
         main.cpp
 
