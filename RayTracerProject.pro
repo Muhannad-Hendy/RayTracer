@@ -6,6 +6,7 @@ CONFIG -= qt
 SOURCES += \
         ColorTest.cpp \
         TupleTest.cpp \
+        Utilities.cpp \
         main.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
@@ -17,5 +18,6 @@ SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googletest/src/gtest-all.c
 SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googlemock/src/gmock-all.cc
 
 HEADERS += \
+    Color.h \
     Tuple.h \
     Utilities.h
