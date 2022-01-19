@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        CanvasTest.cpp \
         ColorTest.cpp \
         TupleTest.cpp \
         Utilities.cpp \
@@ -18,6 +19,7 @@ SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googletest/src/gtest-all.c
 SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googlemock/src/gmock-all.cc
 
 HEADERS += \
+    Canvas.h \
     Color.h \
     Tuple.h \
     Utilities.h
