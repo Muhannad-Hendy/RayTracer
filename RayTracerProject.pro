@@ -6,6 +6,7 @@ CONFIG -= qt
 SOURCES += \
         CanvasTest.cpp \
         ColorTest.cpp \
+        Tuple.cpp \
         TupleTest.cpp \
         Utilities.cpp \
         main.cpp
