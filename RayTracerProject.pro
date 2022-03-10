@@ -4,6 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Canvas.cpp \
         CanvasTest.cpp \
         Color.cpp \
         ColorTest.cpp \
