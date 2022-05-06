@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "Tuple.h"
 #include "Utilities.h"
+#include "Matrix.h"
 
 using namespace testing;
 
@@ -153,4 +154,17 @@ TEST_F(TupleFeature, CrossProductOfTwoVectors){
 
     ASSERT_THAT(correctACrossB == ACrossB, true);
     ASSERT_THAT(correctBCrossA == BCrossA, true);
+}
+
+TEST_F(TupleFeature, TypecastMatrixIntoTuple){
+    Matrix A(4,1);
+    A.set(0,0,18);
+    A.set(1,0,24);
+    A.set(2,0,33);
+    A.set(3,0,1);
+
+    Tuple B(A);
+    Tuple trueValue{18,24,33,1};
+
+    ASSERT_THAT(B == trueValue, true);
 }

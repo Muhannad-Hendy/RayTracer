@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "Utilities.h"
+class Matrix;
 
 enum class TupleType{
     point,
@@ -16,13 +17,15 @@ public:
 
     Tuple(double xCoordinate, double yCoordinate, double zCoordinate, double wCoordinate);
 
-    double getXValue();
+    Tuple(const Matrix& matrix);
 
-    double getYValue();
+    double getXValue() const;
 
-    double getZValue();
+    double getYValue() const;
 
-    double getWValue();
+    double getZValue() const;
+
+    double getWValue() const;
 
     friend bool operator== (Tuple& tuple1, Tuple& tuple2);
 

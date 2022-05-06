@@ -1,4 +1,5 @@
 #include "Tuple.h"
+#include "Matrix.h"
 
 Tuple::Tuple(double xCoordinate, double yCoordinate, double zCoordinate, TupleType type) : x{xCoordinate}, y{yCoordinate}, z{zCoordinate} {
     switch(type){
@@ -13,19 +14,21 @@ Tuple::Tuple(double xCoordinate, double yCoordinate, double zCoordinate, TupleTy
 
 Tuple::Tuple(double xCoordinate, double yCoordinate, double zCoordinate, double wCoordinate) : x{xCoordinate}, y{yCoordinate}, z{zCoordinate}, w{wCoordinate} {}
 
-double Tuple::getXValue(){
+Tuple::Tuple(const Matrix& matrix) : x{matrix.get(0,0)}, y{matrix.get(1,0)}, z{matrix.get(2,0)}, w{matrix.get(3,0)} {}
+
+double Tuple::getXValue() const{
     return x;
 }
 
-double Tuple::getYValue(){
+double Tuple::getYValue() const{
     return y;
 }
 
-double Tuple::getZValue(){
+double Tuple::getZValue() const{
     return z;
 }
 
-double Tuple::getWValue(){
+double Tuple::getWValue() const{
     return w;
 }
 
