@@ -8,6 +8,8 @@ SOURCES += \
         CanvasTest.cpp \
         Color.cpp \
         ColorTest.cpp \
+        Matrix.cpp \
+        MatrixTest.cpp \
         Tuple.cpp \
         TupleTest.cpp \
         Utilities.cpp \
@@ -24,5 +26,6 @@ SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googlemock/src/gmock-all.c
 HEADERS += \
     Canvas.h \
     Color.h \
+    Matrix.h \
     Tuple.h \
     Utilities.h
