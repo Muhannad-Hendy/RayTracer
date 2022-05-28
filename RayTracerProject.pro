@@ -10,6 +10,8 @@ SOURCES += \
         ColorTest.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
+        TransformationTest.cpp \
+        Transformer.cpp \
         Tuple.cpp \
         TupleTest.cpp \
         Utilities.cpp \
@@ -27,5 +29,6 @@ HEADERS += \
     Canvas.h \
     Color.h \
     Matrix.h \
+    Transformer.h \
     Tuple.h \
     Utilities.h

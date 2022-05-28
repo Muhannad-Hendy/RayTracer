@@ -36,6 +36,25 @@ Matrix::Matrix(int matrixSize, MatrixType type) : rowCount{matrixSize}, columnCo
     setNumberOfElements();
 }
 
+Matrix::Matrix(const Matrix& original) : rowCount{original.rowCount}, columnCount{original.columnCount}, numberOfElements{original.numberOfElements}, flattenedArray{new double[original.numberOfElements]}{
+    for (int i = 0; i < original.numberOfElements; i++){
+        this->flattenedArray[i] = original.flattenedArray[i];
+    }
+}
+
+Matrix& Matrix::operator= (const Matrix& original){
+    if (this == &original) return *this;
+    rowCount = original.rowCount;
+    columnCount = original.columnCount;
+    numberOfElements = original.numberOfElements;
+    flattenedArray = new double[original.numberOfElements];
+
+    for (int i = 0; i < original.numberOfElements; i++){
+        this->flattenedArray[i] = original.flattenedArray[i];
+    }
+    return *this;
+}
+
 Matrix::~Matrix(){
     delete [] flattenedArray;
 }

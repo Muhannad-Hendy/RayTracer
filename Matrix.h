@@ -21,13 +21,17 @@ public:
 
     Matrix(int matrixSize, MatrixType type);
 
+    Matrix(const Matrix& original);
+
+    Matrix& operator= (const Matrix& original);
+
     ~Matrix();
 
     void set(int row, int column, double value);
 
     double get(int row, int column) const;
 
-   void setNumberOfElements();
+    void setNumberOfElements();
 
     friend bool operator== (const Matrix& matrixA, const Matrix& matrixB);
 
