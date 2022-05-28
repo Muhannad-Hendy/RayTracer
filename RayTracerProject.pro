@@ -10,6 +10,7 @@ SOURCES += \
         ColorTest.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
+        RaySphereIntersectionTest.cpp \
         TransformationTest.cpp \
         Transformer.cpp \
         Tuple.cpp \
@@ -29,6 +30,8 @@ HEADERS += \
     Canvas.h \
     Color.h \
     Matrix.h \
+    Ray.h \
+    Sphere.h \
     Transformer.h \
     Tuple.h \
     Utilities.h

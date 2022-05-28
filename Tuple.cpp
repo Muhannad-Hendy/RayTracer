@@ -1,6 +1,8 @@
 #include "Tuple.h"
 #include "Matrix.h"
 
+Tuple::Tuple(){}
+
 Tuple::Tuple(double xCoordinate, double yCoordinate, double zCoordinate, TupleType type) : x{xCoordinate}, y{yCoordinate}, z{zCoordinate} {
     switch(type){
     case TupleType::point: {
@@ -103,4 +105,18 @@ Tuple Tuple::normalize (){
     double w_normalized = this->w / magnitude;
     Tuple normalizedVector{x_normalized, y_normalized, z_normalized, w_normalized};
     return normalizedVector;
+}
+
+void Tuple::initialize(double xCoordinate, double yCoordinate, double zCoordinate, TupleType type){
+    Tuple temporary{xCoordinate, yCoordinate, zCoordinate, type};
+    *this = temporary;
+}
+
+Tuple& Tuple::operator=(const Tuple &original){
+    if (this == &original) return *this;
+    x = original.x;
+    y = original.y;
+    z = original.z;
+    w = original.w;
+    return *this;
 }

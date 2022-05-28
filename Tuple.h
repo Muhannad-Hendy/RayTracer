@@ -13,6 +13,8 @@ enum class TupleType{
 class Tuple
 {
 public:
+    Tuple();
+
     Tuple(double xCoordinate, double yCoordinate, double zCoordinate, TupleType type);
 
     Tuple(double xCoordinate, double yCoordinate, double zCoordinate, double wCoordinate);
@@ -47,10 +49,13 @@ public:
 
     Tuple normalize ();
 
+    void initialize(double xCoordinate, double yCoordinate, double zCoordinate, TupleType type);
+
+    Tuple& operator= (const Tuple& original);
 private:
-    const double x{};
-    const double y{};
-    const double z{};
+    double x{};
+    double y{};
+    double z{};
     double w{};
 };
 
