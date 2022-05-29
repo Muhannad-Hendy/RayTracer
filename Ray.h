@@ -1,10 +1,9 @@
 #ifndef RAY_H
 #define RAY_H
 #include "Tuple.h"
-#include <iostream>
 #include "Sphere.h"
 #include <cmath>
-//class Sphere;
+#include <vector>
 
 class Ray
 {
@@ -47,19 +46,21 @@ public:
         return intersectionDistance[index];
     }
 
-    void intersect(Sphere& sphere){
+    std::vector<double> calculateIntersectionParameters(Sphere& sphere){
         Tuple sphereCenter = sphere.getCenter();
         Tuple sphereToRay = this->origin - sphereCenter;
-        std::cout << sphereToRay.getYValue() << sphereToRay.getZValue() << std::endl;
         double a = this->direction.dot(this->direction);
-        std::cout << "a: " << a << std::endl;
         double b = 2 * this->direction.dot(sphereToRay);
-        std::cout << "b: " << b << std::endl;
         double c = sphereToRay.dot(sphereToRay) - 1;
-        std::cout << "c: " << c << std::endl;
-
         double discriminant = b * b - 4 * a * c;
-        std::cout << "discriminant: " << discriminant << std::endl;
+        return {a, b, c, discriminant};
+    }
+
+    void intersect(Sphere& sphere){
+        std::vector<double> intersectionParameters = calculateIntersectionParameters(sphere);
+        double a = intersectionParameters[0];
+        double b = intersectionParameters[1];
+        double discriminant = intersectionParameters[3];
 
         if (discriminant < 0) {
             numberOfIntersections = 0;
