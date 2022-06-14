@@ -1,12 +1,26 @@
 #include "gmock/gmock.h"
 #include "Ray.h"
 #include "Sphere.h"
+#include "Intersection.h"
 
 using namespace testing;
 
 class RaySphereIntersectionFeature : public Test {
 
 };
+
+TEST_F(RaySphereIntersectionFeature, SphereIDStartsAtZero){
+    Sphere sphere1{};
+    ASSERT_THAT(sphere1.getSphereID(), Eq(0));
+}
+
+TEST_F(RaySphereIntersectionFeature, SpheresHaveIdenticalIDs){
+    Sphere sphere2{};
+    Sphere sphere3{};
+
+    ASSERT_THAT(sphere2.getSphereID(), Eq(1));
+    ASSERT_THAT(sphere3.getSphereID(), Eq(2));
+}
 
 TEST_F(RaySphereIntersectionFeature, CreatingAndQueryingRay){
     Tuple origin{1,2,3,TupleType::point};
@@ -90,4 +104,12 @@ TEST_F(RaySphereIntersectionFeature, SphereIsBehindRay){
     ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
     ASSERT_THAT(ray.getIntersectionDistance(0), Eq(-6));
     ASSERT_THAT(ray.getIntersectionDistance(1), Eq(-4));
+}
+
+TEST_F(RaySphereIntersectionFeature, IntersectionEncapsulatesTimeAndObject){
+    Sphere sphere{};
+    Intersection intersection{3.5, sphere};
+
+    ASSERT_THAT(intersection.getIntersectionTime(), Eq(3.5));
+    ASSERT_THAT(intersection.getIntersectedSphere()->getSphereID(), Eq(sphere.getSphereID()));
 }

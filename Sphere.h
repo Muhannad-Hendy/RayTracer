@@ -17,6 +17,10 @@ public:
         return center;
     }
 
+    int getSphereID(){
+        return ID;
+    }
+
 private:
     static int spheresCounter;
     int ID{};

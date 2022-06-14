@@ -29,6 +29,7 @@ SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googlemock/src/gmock-all.c
 HEADERS += \
     Canvas.h \
     Color.h \
+    Intersection.h \
     Matrix.h \
     Ray.h \
     Sphere.h \
