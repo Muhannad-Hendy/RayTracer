@@ -30,6 +30,7 @@ HEADERS += \
     Canvas.h \
     Color.h \
     Intersection.h \
+    IntersectionTracker.h \
     Matrix.h \
     Ray.h \
     Sphere.h \

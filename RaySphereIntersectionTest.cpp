@@ -2,6 +2,7 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "Intersection.h"
+#include "IntersectionTracker.h"
 
 using namespace testing;
 
@@ -60,8 +61,8 @@ TEST_F(RaySphereIntersectionFeature, RayIntersectsSphereAtTwoPoints){
     Sphere sphere{};
     ray.intersect(sphere);
     ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionDistance(0), Eq(4));
-    ASSERT_THAT(ray.getIntersectionDistance(1), Eq(6));
+    ASSERT_THAT(ray.getIntersectionTime(0), Eq(4));
+    ASSERT_THAT(ray.getIntersectionTime(1), Eq(6));
 }
 
 TEST_F(RaySphereIntersectionFeature, RayIntersectsSphereAtTangent){
@@ -71,8 +72,8 @@ TEST_F(RaySphereIntersectionFeature, RayIntersectsSphereAtTangent){
     Sphere sphere{};
     ray.intersect(sphere);
     ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionDistance(0), Eq(5));
-    ASSERT_THAT(ray.getIntersectionDistance(1), Eq(5));
+    ASSERT_THAT(ray.getIntersectionTime(0), Eq(5));
+    ASSERT_THAT(ray.getIntersectionTime(1), Eq(5));
 }
 
 TEST_F(RaySphereIntersectionFeature, RayMissesSphere){
@@ -91,8 +92,8 @@ TEST_F(RaySphereIntersectionFeature, RayOriginatesInsideSphere){
     Sphere sphere{};
     ray.intersect(sphere);
     ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionDistance(0), Eq(-1));
-    ASSERT_THAT(ray.getIntersectionDistance(1), Eq(1));
+    ASSERT_THAT(ray.getIntersectionTime(0), Eq(-1));
+    ASSERT_THAT(ray.getIntersectionTime(1), Eq(1));
 }
 
 TEST_F(RaySphereIntersectionFeature, SphereIsBehindRay){
@@ -102,8 +103,8 @@ TEST_F(RaySphereIntersectionFeature, SphereIsBehindRay){
     Sphere sphere{};
     ray.intersect(sphere);
     ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionDistance(0), Eq(-6));
-    ASSERT_THAT(ray.getIntersectionDistance(1), Eq(-4));
+    ASSERT_THAT(ray.getIntersectionTime(0), Eq(-6));
+    ASSERT_THAT(ray.getIntersectionTime(1), Eq(-4));
 }
 
 TEST_F(RaySphereIntersectionFeature, IntersectionEncapsulatesTimeAndObject){
@@ -112,4 +113,26 @@ TEST_F(RaySphereIntersectionFeature, IntersectionEncapsulatesTimeAndObject){
 
     ASSERT_THAT(intersection.getIntersectionTime(), Eq(3.5));
     ASSERT_THAT(intersection.getIntersectedSphere()->getSphereID(), Eq(sphere.getSphereID()));
+}
+
+TEST_F(RaySphereIntersectionFeature, IntersectionsObjectAggregatesIntersections){
+    Sphere sphere{};
+    Intersection intersection1{1, sphere};
+    Intersection intersection2{2, sphere};
+    std::vector<Intersection> intersectionsVector{intersection1, intersection2};
+    IntersectionTracker intersections{intersectionsVector};
+    ASSERT_THAT(intersections.count(), Eq(2));
+    ASSERT_THAT(intersections.getIntersection(0).getIntersectionTime(), Eq(1));
+    ASSERT_THAT(intersections.getIntersection(1).getIntersectionTime(), Eq(2));
+}
+
+TEST_F(RaySphereIntersectionFeature, IntersectSetsIntersectedObjectOnTheIntersection){
+    Tuple origin{0,0,-5,TupleType::point};
+    Tuple direction{0,0,1,TupleType::vector};
+    Ray ray{origin,direction};
+    Sphere sphere{};
+    ray.intersect(sphere);
+    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(ray.getIntersectedObject(0) == sphere, true);
+    ASSERT_THAT(ray.getIntersectedObject(1) == sphere, true);
 }

@@ -21,6 +21,11 @@ public:
         return ID;
     }
 
+    friend bool operator== (Sphere& sphere1, Sphere& sphere2){
+        if (sphere1.ID == sphere2.ID) return true;
+        else return false;
+    }
+
 private:
     static int spheresCounter;
     int ID{};

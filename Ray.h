@@ -4,6 +4,7 @@
 #include "Sphere.h"
 #include <cmath>
 #include <vector>
+#include "IntersectionTracker.h"
 
 class Ray
 {
@@ -39,11 +40,17 @@ public:
     }
 
     int getNumberOfIntersections(){
-        return numberOfIntersections;
+        return intersections.count();
     }
 
-    double getIntersectionDistance(int index){
-        return intersectionDistance[index];
+    double getIntersectionTime(int index){
+        Intersection intersection =  intersections.getIntersection(index);
+        return intersection.getIntersectionTime();
+    }
+
+    Sphere& getIntersectedObject(int index){
+        Intersection intersection = intersections.getIntersection(index);
+        return *intersection.getIntersectedSphere();
     }
 
     std::vector<double> calculateIntersectionParameters(Sphere& sphere){
@@ -62,20 +69,17 @@ public:
         double b = intersectionParameters[1];
         double discriminant = intersectionParameters[3];
 
-        if (discriminant < 0) {
-            numberOfIntersections = 0;
-        }
-        else {
-            numberOfIntersections = 2;
-            intersectionDistance = new double[numberOfIntersections];
-            intersectionDistance[0] = (-b - sqrt(discriminant)) / (2 * a);
-            intersectionDistance[1] = (-b + sqrt(discriminant)) / (2 * a);
+        if (discriminant >= 0) {
+            double intersectionTime1 = (-b - sqrt(discriminant)) / (2 * a);
+            double intersectionTime2 = (-b + sqrt(discriminant)) / (2 * a);
+            intersections.addIntersection(intersectionTime1, sphere);
+            intersections.addIntersection(intersectionTime2, sphere);
         }
     }
+
 private:
     Tuple origin{};
     Tuple direction{};
-    int numberOfIntersections{};
-    double* intersectionDistance;
+    IntersectionTracker intersections{};
 };
 #endif // RAY_H
