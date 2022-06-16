@@ -136,3 +136,39 @@ TEST_F(RaySphereIntersectionFeature, IntersectSetsIntersectedObjectOnTheIntersec
     ASSERT_THAT(ray.getIntersectedObject(0) == sphere, true);
     ASSERT_THAT(ray.getIntersectedObject(1) == sphere, true);
 }
+
+TEST_F(RaySphereIntersectionFeature, HitWhenAllIntersectionsHavePositiveTime){
+    Sphere sphere{};
+    IntersectionTracker intersections;
+    intersections.addIntersection(2, sphere);
+    Intersection intersection1{1, sphere};
+    intersections.addIntersection(intersection1);
+    Intersection* hit = intersections.hit();
+    ASSERT_THAT(*hit == intersection1, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, HitWhenSomeIntersectionsHaveNegativeTime){
+    Sphere sphere{};
+    Intersection intersection1{-1,sphere};
+    Intersection intersection2{1,sphere};
+    IntersectionTracker intersections{std::vector<Intersection> {intersection1,intersection2}};
+    ASSERT_THAT(*intersections.hit() == intersection2, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, HitWhenAllIntersectionsHaveNegativeTime){
+    Sphere sphere{};
+    Intersection intersection1{-1,sphere};
+    Intersection intersection2{-2,sphere};
+    IntersectionTracker intersections{std::vector<Intersection> {intersection1,intersection2}};
+    ASSERT_THAT(intersections.hit() == nullptr, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, HitIsAlwaysLowestNonnegativeIntersectionTime){
+    Sphere sphere{};
+    Intersection intersection1{5,sphere};
+    Intersection intersection2{7,sphere};
+    Intersection intersection3{-3,sphere};
+    Intersection intersection4{2,sphere};
+    IntersectionTracker intersections{std::vector<Intersection> {intersection1,intersection2,intersection3,intersection4}};
+    ASSERT_THAT(*intersections.hit() == intersection4, true);
+}
