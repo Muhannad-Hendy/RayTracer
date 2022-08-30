@@ -3,6 +3,7 @@
 
 #include "Matrix.h"
 class Tuple;
+class Ray;
 
 enum class Transformation{
     translation,
@@ -30,9 +31,13 @@ public:
 
     Tuple transform(const Tuple& original) const;
 
+    Ray transform(const Ray& original) const;
+
     Transformer invert() const;
 
     friend Transformer operator> (const Transformer& transformation1, const Transformer& transformation2);
+
+    Matrix getTransformationMatrix() const;
 
 private:
     Matrix transformationMatrix{4, MatrixType::identity};

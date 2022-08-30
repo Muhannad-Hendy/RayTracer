@@ -2,6 +2,7 @@
 #include "Transformer.h"
 #include "Matrix.h"
 #include "Tuple.h"
+#include "Ray.h"
 
 Transformer::Transformer(){}
 
@@ -60,6 +61,13 @@ Tuple Transformer::transform(const Tuple& original) const{
     return transformed;
 }
 
+Ray Transformer::transform(const Ray& original) const{
+    Tuple originTransformed = this->transformationMatrix * original.getOrigin();
+    Tuple directionTransformed = this->transformationMatrix * original.getDirection();
+    Ray transformed{originTransformed, directionTransformed};
+    return transformed;
+}
+
 Transformer Transformer::invert() const{
     Transformer transformation{};
     transformation.transformationMatrix = this->transformationMatrix.invert();
@@ -70,4 +78,8 @@ Transformer operator> (const Transformer& transformation1, const Transformer& tr
     Transformer chain{};
     chain.transformationMatrix = transformation2.transformationMatrix * transformation1.transformationMatrix;
     return chain;
+}
+
+Matrix Transformer::getTransformationMatrix() const{
+    return transformationMatrix;
 }
