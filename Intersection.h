@@ -1,32 +1,25 @@
 #ifndef INTERSECTION_H
 #define INTERSECTION_H
-#include "Sphere.h"
+
+class Sphere;
 
 class Intersection
 {
 public:
-    Intersection(){};
+    Intersection();
 
-    Intersection(double time, Sphere& sphere) : intersectionTime{time}, intersectedSphere{&sphere}{};
+    Intersection(double time, Sphere& sphere);
 
-    double getIntersectionTime() const{
-        return intersectionTime;
-    }
+    double getIntersectionTime() const;
 
-    Sphere* getIntersectedSphere(){
-        return intersectedSphere;
-    }
+    Sphere* getIntersectedSphere();
 
     friend bool operator< (const Intersection& intersection1, const Intersection& intersection2){
         if (intersection1.intersectionTime < intersection2.intersectionTime) return true;
         else return false;
     }
 
-    friend bool operator== (const Intersection& intersection1, const Intersection& intersection2){
-        if ((intersection1.intersectionTime == intersection2.intersectionTime)
-                && (*intersection1.intersectedSphere == *intersection2.intersectedSphere)) return true;
-        else return false;
-    }
+    friend bool operator== (const Intersection& intersection1, const Intersection& intersection2);
 
 private:
     double intersectionTime{};
