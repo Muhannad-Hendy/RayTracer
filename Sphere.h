@@ -2,36 +2,29 @@
 #define SPHERE_H
 
 #include "Tuple.h"
+#include "Transformer.h"
 
 class Sphere
 {
 public:
-    Sphere() {
-        ID = spheresCounter;
-        spheresCounter++;
-        radius = 1.0;
-        center.initialize(0,0,0,TupleType::point);
-    }
+    Sphere();
 
-    Tuple getCenter(){
-        return center;
-    }
+    Tuple getCenter() const;
 
-    int getSphereID(){
-        return ID;
-    }
+    int getSphereID() const;
 
-    friend bool operator== (Sphere& sphere1, Sphere& sphere2){
-        if (sphere1.ID == sphere2.ID) return true;
-        else return false;
-    }
+    friend bool operator== (Sphere& sphere1, Sphere& sphere2);
+
+    Transformer getTransformation() const;
+
+    void setTransformation(const Transformer& transformation);
 
 private:
     static int spheresCounter;
     int ID{};
     double radius{};
     Tuple center{};
+    Transformer transformation{};
 };
 
-int Sphere::spheresCounter=0;
 #endif // SPHERE_H
