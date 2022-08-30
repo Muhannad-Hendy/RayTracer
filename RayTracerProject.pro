@@ -9,6 +9,7 @@ SOURCES += \
         Color.cpp \
         ColorTest.cpp \
         Intersection.cpp \
+        IntersectionTracker.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
         Ray.cpp \

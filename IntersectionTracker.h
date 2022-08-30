@@ -8,46 +8,21 @@
 class IntersectionTracker
 {
 public:
-    IntersectionTracker(){};
+    IntersectionTracker();
 
-    IntersectionTracker(std::vector<Intersection> intersectionsVector){
-        for (auto intersection : intersectionsVector){
-            addIntersection(intersection);
-            sortIntersections();
-        }
-    }
+    IntersectionTracker(std::vector<Intersection> intersectionsVector);
 
-    void addIntersection(const Intersection& intersection){
-        intersections.push_back(intersection);
-        sortIntersections();
-    }
+    void addIntersection(const Intersection& intersection);
 
-    void addIntersection(double time, Sphere& sphere){
-        intersections.emplace_back(time, sphere);
-        sortIntersections();
-    }
+    void addIntersection(double time, Sphere& sphere);
 
-    Intersection getIntersection(int position) const{
-        auto listStart = intersections.begin();
-        std::advance(listStart, position);
-        return *listStart;
-    }
+    Intersection getIntersection(int position) const;
 
-    int count() const{
-        return intersections.size();
-    }
+    int count() const;
 
-    void sortIntersections(){
-        intersections.sort([](const Intersection& intersection1, const Intersection intersection2)
-                            { return intersection1 < intersection2; });
-    }
+    void sortIntersections();
 
-    Intersection* hit(){
-        for (auto& element : intersections){
-            if (element.getIntersectionTime() >= 0) return &element;
-        }
-        return nullptr;
-    }
+    Intersection* hit();
 
 private:
     std::list<Intersection> intersections{};
