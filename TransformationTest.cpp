@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "Tuple.h"
 #include "Transformer.h"
+#include "Ray.h"
 #include <cmath>
 #define PI 3.14159265
 using namespace testing;
@@ -156,9 +157,41 @@ TEST_F(TransformationFeature, ChainedTransformationsMustBeAppliedInReverseOrder)
     Transformer rotator{Transformation::xRotation, PI / 2};
     Transformer scalar{Transformation::scaling, 5,5,5};
     Transformer translator{Transformation::translation,10,5,7};
-    Transformer chain = rotator > scalar > translator; //reversal happends under the hood. The syntax is in natural order.
+    Transformer chain = rotator > scalar > translator; //reversal happens under the hood. The syntax is in natural order.
 
     Tuple transformed = chain.transform(point);
     Tuple trueValue{15,0,7,TupleType::point};
     ASSERT_THAT(transformed == trueValue, true);
+}
+
+TEST_F(TransformationFeature, TranslatingRay){
+    Tuple point{1,2,3,TupleType::point};
+    Tuple direction{0,1,0,TupleType::vector};
+    Ray ray{point,direction};
+    Transformer translator{Transformation::translation, 3,4,5};
+
+    Ray rayTransformed = translator.transform(ray);
+    Tuple truePointTransformed{4,6,8,TupleType::point};
+    Tuple trueDirectionTransformed{0,1,0,TupleType::vector};
+
+    Tuple pointTransformed = rayTransformed.getOrigin();
+    ASSERT_THAT(pointTransformed == truePointTransformed, true);
+    Tuple directionTransformed = rayTransformed.getDirection();
+    ASSERT_THAT(directionTransformed == trueDirectionTransformed, true);
+}
+
+TEST_F(TransformationFeature, ScalingRay){
+    Tuple point{1,2,3,TupleType::point};
+    Tuple direction{0,1,0,TupleType::vector};
+    Ray ray{point,direction};
+    Transformer scalar{Transformation::scaling,2,3,4};
+
+    Ray rayTransformed = scalar.transform(ray);
+    Tuple truePointTransformed{2,6,12,TupleType::point};
+    Tuple trueDirectionTransformed{0,3,0,TupleType::vector};
+
+    Tuple pointTransformed = rayTransformed.getOrigin();
+    ASSERT_THAT(pointTransformed == truePointTransformed, true);
+    Tuple directionTransformed = rayTransformed.getDirection();
+    ASSERT_THAT(directionTransformed == trueDirectionTransformed, true);
 }
