@@ -2,7 +2,6 @@
 #define MATRIX_H
 
 #include "Utilities.h"
-//#include "Tuple.h"
 #include <cassert>
 #include <iostream>
 

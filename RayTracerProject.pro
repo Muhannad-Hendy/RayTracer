@@ -8,9 +8,12 @@ SOURCES += \
         CanvasTest.cpp \
         Color.cpp \
         ColorTest.cpp \
+        Intersection.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
+        Ray.cpp \
         RaySphereIntersectionTest.cpp \
+        Sphere.cpp \
         TransformationTest.cpp \
         Transformer.cpp \
         Tuple.cpp \
