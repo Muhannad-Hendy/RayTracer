@@ -3,6 +3,9 @@
 #include "Sphere.h"
 #include "Intersection.h"
 #include "IntersectionTracker.h"
+#include "Matrix.h"
+#include "Canvas.h"
+#include "Color.h"
 
 using namespace testing;
 
@@ -171,4 +174,80 @@ TEST_F(RaySphereIntersectionFeature, HitIsAlwaysLowestNonnegativeIntersectionTim
     Intersection intersection4{2,sphere};
     IntersectionTracker intersections{std::vector<Intersection> {intersection1,intersection2,intersection3,intersection4}};
     ASSERT_THAT(*intersections.hit() == intersection4, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, SphereHasDefaultTransformation){
+    Sphere sphere{};
+    Matrix identityMatrix{4, MatrixType::identity};
+    Matrix sphereDefaultTransformation = sphere.getTransformation().getTransformationMatrix();
+
+    ASSERT_THAT(sphereDefaultTransformation == identityMatrix, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, ChangeSphereTransformation){
+    Sphere sphere{};
+    Transformer translation{Transformation::translation, 2,3,4};
+    sphere.setTransformation(translation);
+
+    Matrix translationMatrix = translation.getTransformationMatrix();
+    Matrix sphereTransformation = sphere.getTransformation().getTransformationMatrix();
+
+    ASSERT_THAT(translationMatrix == sphereTransformation, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, IntersectingScaledSphereWithRay){
+    Tuple origin{0,0,-5, TupleType::point};
+    Tuple direction{0,0,1,TupleType::vector};
+    Ray ray{origin,direction};
+    Sphere sphere{};
+    Transformer scaling{Transformation::scaling, 2,2,2};
+    sphere.setTransformation(scaling);
+    ray.intersect(sphere);
+
+    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(ray.getIntersectionTime(0), Eq(3));
+    ASSERT_THAT(ray.getIntersectionTime(1), Eq(7));
+}
+
+TEST_F(RaySphereIntersectionFeature, IntersectingTranslatedSphereWithRay){
+    Tuple origin{0,0,-5, TupleType::point};
+    Tuple direction{0,0,1,TupleType::vector};
+    Ray ray{origin,direction};
+    Sphere sphere{};
+    Transformer translate(Transformation::translation,5,0,0);
+    sphere.setTransformation(translate);
+    ray.intersect(sphere);
+
+    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(0));
+}
+
+TEST_F(RaySphereIntersectionFeature, ProjectingSphereOntoCanvas){
+
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    double wallSize{7};
+    int canvasPixels{100};
+    double pixelSize = wallSize / canvasPixels;
+    double halfCanvasLength = wallSize / 2;
+    Canvas canvas{canvasPixels, canvasPixels};
+    Color red{1,0,0};
+    Sphere sphere{};
+    double worldX{};
+    double worldY{};
+    double worldZ{10};
+
+    for (int i=0; i<canvasPixels; i++){
+        worldX = i * pixelSize - halfCanvasLength;
+        for (int j=0; j<canvasPixels; j++){
+            worldY = halfCanvasLength - j * pixelSize;
+            Tuple targetPoint{worldX, worldY, worldZ, TupleType::point};
+            Tuple directionVector = targetPoint - rayOrigin;
+            directionVector = directionVector.normalize();
+            Ray ray{rayOrigin, directionVector};
+            ray.intersect(sphere);
+            if (ray.hitFound()){
+                canvas.setPixelColor(i, j, red);
+            }
+        }
+    }
+    canvas.saveToPPM("../Output/sphereProjection.ppm");
 }
