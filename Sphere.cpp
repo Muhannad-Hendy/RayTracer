@@ -29,3 +29,9 @@ Transformer Sphere::getTransformation() const{
 void Sphere::setTransformation(const Transformer& transformation){
     this->transformation = transformation;
 }
+
+Tuple Sphere::normal(Tuple& pointOnSphere) const{
+    Tuple origin{0,0,0,TupleType::point};
+    Tuple normalVector = (pointOnSphere - origin).normalize();
+    return normalVector;
+}

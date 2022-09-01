@@ -19,6 +19,8 @@ public:
 
     void setTransformation(const Transformer& transformation);
 
+    Tuple normal(Tuple& pointOnSphere) const;
+
 private:
     static int spheresCounter;
     int ID{};
