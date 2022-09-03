@@ -10,6 +10,7 @@ SOURCES += \
         ColorTest.cpp \
         Intersection.cpp \
         IntersectionTracker.cpp \
+        Light.cpp \
         LightAndShadingTest.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     Color.h \
     Intersection.h \
     IntersectionTracker.h \
+    Light.h \
     Matrix.h \
     Ray.h \
     Sphere.h \

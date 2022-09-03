@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
 #include "Sphere.h"
 #include "Tuple.h"
+#include "Color.h"
+#include "Light.h"
 #define PI 3.14159265
 
 using namespace testing;
@@ -97,4 +99,15 @@ TEST_F(LightAndShadingFeature, ReflectingVectorOffSlantedSurface){
     Tuple trueReflection{1,0,0,TupleType::vector};
 
     ASSERT_THAT(reflection == trueReflection, true);
+}
+
+TEST_F(LightAndShadingFeature, PointLightHasPositionAndIntensity){
+    Color intensity{1,1,1};
+    Tuple position{0,0,0,TupleType::point};
+    Light light{position, intensity};
+
+    Tuple lightPosition = light.getPosition();
+    Color lightIntensity = light.getIntensity();
+    ASSERT_THAT(lightPosition== position, true);
+    ASSERT_THAT(lightIntensity == intensity, true);
 }
