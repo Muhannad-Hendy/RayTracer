@@ -12,6 +12,7 @@ SOURCES += \
         IntersectionTracker.cpp \
         Light.cpp \
         LightAndShadingTest.cpp \
+        Material.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
         Ray.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     Intersection.h \
     IntersectionTracker.h \
     Light.h \
+    Material.h \
     Matrix.h \
     Ray.h \
     Sphere.h \

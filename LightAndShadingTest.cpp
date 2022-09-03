@@ -3,6 +3,7 @@
 #include "Tuple.h"
 #include "Color.h"
 #include "Light.h"
+#include "Material.h"
 #define PI 3.14159265
 
 using namespace testing;
@@ -110,4 +111,15 @@ TEST_F(LightAndShadingFeature, PointLightHasPositionAndIntensity){
     Color lightIntensity = light.getIntensity();
     ASSERT_THAT(lightPosition== position, true);
     ASSERT_THAT(lightIntensity == intensity, true);
+}
+
+TEST_F(LightAndShadingFeature, DefaultMaterial){
+    Material material{};
+    Color materialColor = material.getColor();
+    Color color{1,1,1};
+    ASSERT_THAT(materialColor == color, true);
+    ASSERT_THAT(material.getAmbient(), Eq(0.1));
+    ASSERT_THAT(material.getDiffuse(), Eq(0.9));
+    ASSERT_THAT(material.getSpecular(), Eq(0.9));
+    ASSERT_THAT(material.getShininess(), Eq(200));
 }
