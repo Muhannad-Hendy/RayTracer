@@ -40,3 +40,11 @@ Tuple Sphere::normal(Tuple& worldPoint) const{
     worldNormal.setWValue(0);
     return worldNormal.normalize();
 }
+
+Material Sphere::getMaterial() const{
+    return material;
+}
+
+void Sphere::setMaterial(const Material &newMaterial){
+    material = newMaterial;
+}

@@ -123,3 +123,21 @@ TEST_F(LightAndShadingFeature, DefaultMaterial){
     ASSERT_THAT(material.getSpecular(), Eq(0.9));
     ASSERT_THAT(material.getShininess(), Eq(200));
 }
+
+TEST_F(LightAndShadingFeature, SphereHasDefaultMaterial){
+    Sphere sphere{};
+    Material sphereMaterial = sphere.getMaterial();
+    Material defaultMaterial{};
+
+    ASSERT_THAT(sphereMaterial == defaultMaterial, true);
+}
+
+TEST_F(LightAndShadingFeature, SphereMayBeAssignedMaterial){
+    Sphere sphere{};
+    Material material{};
+    material.setAmbient(1);
+    sphere.setMaterial(material);
+    Material sphereMaterial = sphere.getMaterial();
+
+    ASSERT_THAT(sphereMaterial == material, true);
+}
