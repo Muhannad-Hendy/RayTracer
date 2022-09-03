@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include "Matrix.h"
 
 int Sphere::spheresCounter=0;
 
@@ -30,8 +31,12 @@ void Sphere::setTransformation(const Transformer& transformation){
     this->transformation = transformation;
 }
 
-Tuple Sphere::normal(Tuple& pointOnSphere) const{
+Tuple Sphere::normal(Tuple& worldPoint) const{
+    Tuple objectPoint = this->transformation.invert().transform(worldPoint);
     Tuple origin{0,0,0,TupleType::point};
-    Tuple normalVector = (pointOnSphere - origin).normalize();
-    return normalVector;
+    Tuple objectNormal = objectPoint - origin;
+    Matrix objectToWorldTransformation = this->transformation.invert().getTransformationMatrix().transpose();
+    Tuple worldNormal = objectToWorldTransformation * objectNormal;
+    worldNormal.setWValue(0);
+    return worldNormal.normalize();
 }
