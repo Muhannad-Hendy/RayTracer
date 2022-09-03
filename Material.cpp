@@ -48,3 +48,23 @@ double Material::getShininess() const{
 void Material::setShininess(const double newShininess){
     shininess = newShininess;
 }
+
+bool operator== (Material& material1, Material& material2){
+    using namespace util;
+    if ((material1.color == material2.color) &&
+        equals(material1.ambient, material2.ambient) &&
+        equals(material1.diffuse, material2.diffuse) &&
+        equals(material1.specular, material2.specular) &&
+        equals(material1.shininess, material2.shininess)) return true;
+    else return false;
+}
+
+Material& Material::operator=(const Material& original){
+    if (this == &original) return *this;
+    color = original.color;
+    ambient = original.ambient;
+    diffuse = original.diffuse;
+    specular = original.specular;
+    shininess = original.shininess;
+    return *this;
+}

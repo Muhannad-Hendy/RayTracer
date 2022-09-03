@@ -27,7 +27,9 @@ public:
 
     void setShininess(const double newShininess);
 
+    friend bool operator== (Material& material1, Material& material2);
 
+    Material& operator= (const Material& original);
 private:
     Color color{};
     double ambient{};
