@@ -6,6 +6,8 @@
 class Color
 {
 public:
+    Color();
+
     Color(double red, double green, double blue);
 
     double getRed ();
