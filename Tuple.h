@@ -29,6 +29,8 @@ public:
 
     double getWValue() const;
 
+    void setWValue(double value);
+
     friend bool operator== (Tuple& tuple1, Tuple& tuple2);
 
     friend Tuple operator+ (Tuple& tuple1, Tuple& tuple2);
@@ -52,6 +54,8 @@ public:
     void initialize(double xCoordinate, double yCoordinate, double zCoordinate, TupleType type);
 
     Tuple& operator= (const Tuple& original);
+
+    Tuple reflectAround(const Tuple& normalVector);
 private:
     double x{};
     double y{};

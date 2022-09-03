@@ -34,6 +34,10 @@ double Tuple::getWValue() const{
     return w;
 }
 
+void Tuple::setWValue(double value){
+    w = value;
+}
+
 bool operator== (Tuple& tuple1, Tuple& tuple2){
     using namespace util;
     if (equals(tuple1.x, tuple2.x) && equals(tuple1.y, tuple2.y) && equals(tuple1.z, tuple2.z) && equals(tuple1.w, tuple2.w)) return true;
@@ -119,4 +123,10 @@ Tuple& Tuple::operator=(const Tuple &original){
     z = original.z;
     w = original.w;
     return *this;
+}
+
+Tuple Tuple::reflectAround(const Tuple &normalVector) {
+    Tuple subtractedVector = normalVector * 2 * this->dot(normalVector);
+    Tuple reflection = *this - subtractedVector;
+    return reflection;
 }
