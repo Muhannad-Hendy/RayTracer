@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "Sphere.h"
 #include "Tuple.h"
+#define PI 3.14159265
 
 using namespace testing;
 
@@ -52,4 +53,48 @@ TEST_F(LightAndShadingFeature, NormalVectorIsNormalized){
     Tuple normalizedVector = normalVector.normalize();
 
     ASSERT_THAT(normalVector == normalizedVector, true);
+}
+
+TEST_F(LightAndShadingFeature, ComputingNormalOnTranslatedSphere){
+    Sphere sphere{};
+    Transformer translation{Transformation::translation,0,1,0};
+    sphere.setTransformation(translation);
+    Tuple point{0, 1.70711, -0.70711, TupleType::point};
+    Tuple normalVector = sphere.normal(point);
+    Tuple trueNormalVector{0, 0.70711, -0.70711, TupleType::vector};
+
+    ASSERT_THAT(normalVector == trueNormalVector, true);
+}
+
+TEST_F(LightAndShadingFeature, ComputingNormalOnTransformedSphere){
+    Sphere sphere{};
+    Transformer scaling{Transformation::scaling, 1, 0.5, 1};
+    Transformer rotation{Transformation::zRotation, PI/5};
+    Transformer combined = rotation > scaling;
+    sphere.setTransformation(combined);
+    double value{sqrt(2)/2};
+    Tuple point{0, value, -value, TupleType::point};
+    Tuple normalVector = sphere.normal(point);
+    Tuple trueNormalVector{0, 0.97014, -0.24254, TupleType::vector};
+
+    ASSERT_THAT(normalVector == trueNormalVector, true);
+}
+
+TEST_F(LightAndShadingFeature, ReflectingVectorApproachingAt45Deg){
+    Tuple velocity{1,-1,0,TupleType::vector};
+    Tuple normal{0,1,0,TupleType::vector};
+    Tuple reflection = velocity.reflectAround(normal);
+    Tuple trueReflection{1,1,0,TupleType::vector};
+
+    ASSERT_THAT(reflection == trueReflection, true);
+}
+
+TEST_F(LightAndShadingFeature, ReflectingVectorOffSlantedSurface){
+    Tuple velocity{0,-1,0,TupleType::vector};
+    double value{sqrt(2)/2};
+    Tuple normal{value,value,0,TupleType::vector};
+    Tuple reflection = velocity.reflectAround(normal);
+    Tuple trueReflection{1,0,0,TupleType::vector};
+
+    ASSERT_THAT(reflection == trueReflection, true);
 }
