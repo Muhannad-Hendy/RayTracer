@@ -2,6 +2,7 @@
 #define LIGHT_H
 #include "Color.h"
 #include "Tuple.h"
+#include "Material.h"
 
 class Light
 {
@@ -12,9 +13,12 @@ public:
 
     Color getIntensity() const;
 
+    Color light(Material& material, Tuple& target, Tuple& eyeVector, Tuple& normalVector);
+
 private:
     Tuple position;
     Color intensity;
+    Color black{0,0,0};
 };
 
 #endif // LIGHT_H

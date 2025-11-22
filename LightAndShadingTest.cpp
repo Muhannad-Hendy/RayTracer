@@ -11,6 +11,10 @@ using namespace testing;
 class LightAndShadingFeature : public Test {
 public:
     double coordinateValue{sqrt(3) / 3};
+    // common values for lighting tests:
+    Material material{};
+    Tuple position{0,0,0,TupleType::point};
+    Tuple normalVector{0,0,-1,TupleType::vector};
 };
 
 TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnXAxis){
@@ -141,3 +145,61 @@ TEST_F(LightAndShadingFeature, SphereMayBeAssignedMaterial){
 
     ASSERT_THAT(sphereMaterial == material, true);
 }
+
+TEST_F(LightAndShadingFeature, LightingWithEyeBetweenLightAndSurface){
+    Tuple eyeVector{0,0,-1,TupleType::vector};
+    Tuple lightPosition{0,0,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition, lightColor};
+    Color result = light.light(material, position, eyeVector, normalVector);
+    Color trueResult{1.9, 1.9, 1.9};
+
+    ASSERT_THAT(result == trueResult, true);
+}
+
+TEST_F(LightAndShadingFeature, LightingWithEyeBetweenLightAndSurfaceEyeOffset45){
+    double coordinateValue{sqrt(2)/2};
+    Tuple eyeVector{0,coordinateValue, -coordinateValue,TupleType::vector};
+    Tuple lightPosition{0,0,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition, lightColor};
+    Color result = light.light(material, position, eyeVector, normalVector);
+    Color trueResult{1.0, 1.0, 1.0};
+
+    ASSERT_THAT(result == trueResult, true);
+}
+
+TEST_F(LightAndShadingFeature, LightingWithEyeOppositeSurfaceLightOffset45){
+    Tuple eyeVector{0,0,-1,TupleType::vector};
+    Tuple lightPosition{0,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition, lightColor};
+    Color result = light.light(material, position, eyeVector, normalVector);
+    Color trueResult{0.7364, 0.7364, 0.7364};
+
+    ASSERT_THAT(result == trueResult, true);
+}
+
+TEST_F(LightAndShadingFeature, LightingWithEyeInPathOfReflectionVector){
+    double coordinateValue{sqrt(2)/2};
+    Tuple eyeVector{0,-coordinateValue,-coordinateValue,TupleType::vector};
+    Tuple lightPosition{0,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition, lightColor};
+    Color result = light.light(material, position, eyeVector, normalVector);
+    Color trueResult{1.6364, 1.6364, 1.6364};
+
+    ASSERT_THAT(result == trueResult, true);
+}
+
+TEST_F(LightAndShadingFeature, LightingWithLightBehindSurface){
+    Tuple eyeVector{0,0,-1,TupleType::vector};
+    Tuple lightPosition{0,0,10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition, lightColor};
+    Color result = light.light(material, position, eyeVector, normalVector);
+    Color trueResult{0.1, 0.1, 0.1};
+
+    ASSERT_THAT(result == trueResult, true);
+}
+
