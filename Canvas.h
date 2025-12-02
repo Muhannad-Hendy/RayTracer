@@ -22,7 +22,7 @@ public:
 
     Color* getPixelColor (int columnNumber, int rowNumber);
 
-    void setPixelColor (int columnNumber, int rowNumber, Color& color);
+    void setPixelColor (int columnNumber, int rowNumber, Color color);
 
     void saveToPPM(const std::string& filePath);
 

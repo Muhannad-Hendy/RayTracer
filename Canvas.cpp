@@ -28,8 +28,8 @@ Color* Canvas::getPixelColor (int columnNumber, int rowNumber){
     return pixelColor;
 }
 
-void Canvas::setPixelColor (int columnNumber, int rowNumber, Color& color){
-    *(pixelArray + rowNumber * width + columnNumber) = &color;
+void Canvas::setPixelColor (int columnNumber, int rowNumber, Color color){
+    **(pixelArray + rowNumber * width + columnNumber) = color;
 }
 
 void Canvas::saveToPPM(const std::string& filePath){
