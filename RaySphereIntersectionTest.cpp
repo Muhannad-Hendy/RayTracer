@@ -6,6 +6,7 @@
 #include "Matrix.h"
 #include "Canvas.h"
 #include "Color.h"
+#include "Light.h"
 
 using namespace testing;
 
@@ -250,4 +251,46 @@ TEST_F(RaySphereIntersectionFeature, ProjectingSphereOntoCanvas){
         }
     }
     canvas.saveToPPM("../Output/sphereProjection.ppm");
+}
+
+TEST_F(RaySphereIntersectionFeature, Projecting3DSphereOntoCanvas){
+
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    double wallSize{7};
+    int canvasPixels{1000};
+    double pixelSize = wallSize / canvasPixels;
+    double halfCanvasLength = wallSize / 2;
+    Canvas canvas{canvasPixels, canvasPixels};
+    Sphere sphere{};
+    Material sphereMaterial{};
+    Color materialColor{0.25,0.88,0.82};
+    sphereMaterial.setColor(materialColor);
+    sphere.setMaterial(sphereMaterial);
+    Tuple lightPosition{-10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    double worldX{};
+    double worldY{};
+    double worldZ{10};
+
+    for (int i=0; i<canvasPixels; i++){
+        worldX = i * pixelSize - halfCanvasLength;
+        for (int j=0; j<canvasPixels; j++){
+            worldY = halfCanvasLength - j * pixelSize;
+            Tuple targetPoint{worldX, worldY, worldZ, TupleType::point};
+            Tuple directionVector = targetPoint - rayOrigin;
+            directionVector = directionVector.normalize();
+            Ray ray{rayOrigin, directionVector};
+            ray.intersect(sphere);
+            if (ray.hitFound()){
+                double intersectionTime = ray.getIntersectionTracker().hit()->getIntersectionTime();
+                Tuple hitLocation = ray.locate(intersectionTime);
+                Tuple normalAtHit = sphere.normal(hitLocation);
+                Tuple eyeVector = -ray.getDirection();
+                Color lightingColor  = light.light(sphereMaterial,hitLocation,eyeVector,normalAtHit);
+                canvas.setPixelColor(i, j, lightingColor);
+            }
+        }
+    }
+    canvas.saveToPPM("../Output/sphere3DProjection.ppm");
 }
