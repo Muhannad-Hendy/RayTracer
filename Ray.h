@@ -36,6 +36,8 @@ public:
 
     bool hitFound();
 
+    IntersectionTracker getIntersectionTracker() const;
+
 private:
     Tuple origin{};
     Tuple direction{};

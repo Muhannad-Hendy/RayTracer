@@ -79,3 +79,7 @@ bool Ray::hitFound() {
     if (this->intersections.hit() != nullptr) return true;
     else return false;
 }
+
+IntersectionTracker Ray::getIntersectionTracker() const {
+    return intersections;
+}
