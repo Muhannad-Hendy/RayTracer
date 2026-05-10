@@ -36,3 +36,9 @@ Color Light::light(Material &material, Tuple &target, Tuple &eyeVector, Tuple &n
     }
     return ambientComponent + diffuseComponent + specularComponent;
 }
+
+bool operator== (Light& light1, Light& light2){
+    if ((light1.position==light2.position) && (light1.intensity==light2.intensity))
+            return true;
+    else return false;
+}

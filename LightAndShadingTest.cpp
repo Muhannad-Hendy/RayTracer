@@ -203,3 +203,29 @@ TEST_F(LightAndShadingFeature, LightingWithLightBehindSurface){
     ASSERT_THAT(result == trueResult, true);
 }
 
+TEST_F(LightAndShadingFeature, TwoLightsAreEqual){
+    Tuple lightPosition{0,0,10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light1{lightPosition, lightColor};
+
+    Light light2{lightPosition, lightColor};
+
+    ASSERT_THAT(light1 == light2, true);
+}
+
+TEST_F(LightAndShadingFeature, TwoLightsAreNotEqual){
+    Tuple lightPosition{0,0,10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light1{lightPosition, lightColor};
+
+    Tuple light2Position{0,10,10, TupleType::point};
+    Light light2{light2Position, lightColor};
+
+    Color light3Color{0,1,1};
+    Light light3{lightPosition, light3Color};
+
+    ASSERT_THAT(light1 == light2, false);
+    ASSERT_THAT(light1 == light3, false);
+}
+
+

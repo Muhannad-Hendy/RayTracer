@@ -15,6 +15,8 @@ public:
 
     Color light(Material& material, Tuple& target, Tuple& eyeVector, Tuple& normalVector);
 
+    friend bool operator== (Light& light1, Light& light2);
+
 private:
     Tuple position;
     Color intensity;

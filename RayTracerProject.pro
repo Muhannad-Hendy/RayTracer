@@ -23,6 +23,8 @@ SOURCES += \
         Tuple.cpp \
         TupleTest.cpp \
         Utilities.cpp \
+        World.cpp \
+        WorldTest.cpp \
         main.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
@@ -45,4 +47,5 @@ HEADERS += \
     Sphere.h \
     Transformer.h \
     Tuple.h \
-    Utilities.h
+    Utilities.h \
+    World.h
