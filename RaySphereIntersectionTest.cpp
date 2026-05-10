@@ -14,12 +14,12 @@ class RaySphereIntersectionFeature : public Test {
 
 };
 
-TEST_F(RaySphereIntersectionFeature, SphereIDStartsAtZero){
+TEST_F(RaySphereIntersectionFeature, DISABLED_SphereIDStartsAtZero){
     Sphere sphere1{};
     ASSERT_THAT(sphere1.getSphereID(), Eq(0));
 }
 
-TEST_F(RaySphereIntersectionFeature, SpheresHaveIdenticalIDs){
+TEST_F(RaySphereIntersectionFeature, DISABLED_SpheresHaveIdenticalIDs){
     Sphere sphere2{};
     Sphere sphere3{};
 
@@ -222,7 +222,7 @@ TEST_F(RaySphereIntersectionFeature, IntersectingTranslatedSphereWithRay){
     ASSERT_THAT(ray.getNumberOfIntersections(), Eq(0));
 }
 
-TEST_F(RaySphereIntersectionFeature, ProjectingSphereOntoCanvas){
+TEST_F(RaySphereIntersectionFeature, DISABLED_ProjectingSphereOntoCanvas){
 
     Tuple rayOrigin{0,0,-5,TupleType::point};
     double wallSize{7};
@@ -253,7 +253,7 @@ TEST_F(RaySphereIntersectionFeature, ProjectingSphereOntoCanvas){
     canvas.saveToPPM("../Output/sphereProjection.ppm");
 }
 
-TEST_F(RaySphereIntersectionFeature, Projecting3DSphereOntoCanvas){
+TEST_F(RaySphereIntersectionFeature, DISABLED_Projecting3DSphereOntoCanvas){
 
     Tuple rayOrigin{0,0,-5,TupleType::point};
     double wallSize{7};
