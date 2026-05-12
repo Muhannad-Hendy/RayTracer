@@ -1,7 +1,10 @@
 TEMPLATE = app
 CONFIG += console c++11
+CONFIG += debug
 CONFIG -= app_bundle
 CONFIG -= qt
+
+LIBS += -lpthread
 
 SOURCES += \
         Canvas.cpp \
