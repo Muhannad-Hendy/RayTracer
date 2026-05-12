@@ -61,7 +61,7 @@ std::vector<double> Ray::calculateIntersectionParameters(Sphere& sphere){
     return {a, b, c, discriminant};
 }
 
-void Ray::intersect(Sphere& sphere){
+void Ray::intersect(Sphere& sphere) {
     std::vector<double> intersectionParameters = calculateIntersectionParameters(sphere);
     double a = intersectionParameters[0];
     double b = intersectionParameters[1];
@@ -72,6 +72,14 @@ void Ray::intersect(Sphere& sphere){
         double intersectionTime2 = (-b + sqrt(discriminant)) / (2 * a);
         intersections.addIntersection(intersectionTime1, sphere);
         intersections.addIntersection(intersectionTime2, sphere);
+    }
+}
+
+void Ray::intersect(World& world) {
+    int numberOfSpheres = world.getNumberOfSpheres();
+    for (int i = 0; i < numberOfSpheres; i++) {
+        Sphere sphere = world.getSphere(i);
+        intersect(sphere);
     }
 }
 

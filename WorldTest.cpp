@@ -2,6 +2,7 @@
 #include <cmath>
 #include "World.h"
 #include "Light.h"
+#include "Ray.h"
 #define PI 3.14159265
 using namespace testing;
 
@@ -43,4 +44,18 @@ TEST_F(WorldFeature, DefaultWorldHasDefaultSpheres) {
 
     ASSERT_THAT(world.getNumberOfSpheres() == 2, true);
     ASSERT_THAT(sphereMaterial == material, true);
+}
+
+TEST_F(WorldFeature, IntersectWorldWithRay) {
+    World world{};
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    ray.intersect(world);
+
+    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(4));
+    ASSERT_THAT(ray.getIntersectionTime(0), Eq(4));
+    ASSERT_THAT(ray.getIntersectionTime(1), Eq(4.5));
+    ASSERT_THAT(ray.getIntersectionTime(2), Eq(5.5));
+    ASSERT_THAT(ray.getIntersectionTime(3), Eq(6));
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include "IntersectionTracker.h"
 #include "Tuple.h"
+#include "World.h"
 
 class Sphere;
 
@@ -33,6 +34,8 @@ public:
     std::vector<double> calculateIntersectionParameters(Sphere& sphere);
 
     void intersect(Sphere& sphere);
+
+    void intersect(World& world);
 
     bool hitFound();
 
