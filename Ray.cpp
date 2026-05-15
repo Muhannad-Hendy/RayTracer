@@ -36,12 +36,12 @@ int Ray::getNumberOfIntersections() const{
     return intersections.count();
 }
 
-double Ray::getIntersectionTime(int index) const{
+double Ray::getIntersectionTime(int index) {
     Intersection intersection =  intersections.getIntersection(index);
     return intersection.getIntersectionTime();
 }
 
-Sphere& Ray::getIntersectedObject(int index) const{
+Sphere& Ray::getIntersectedObject(int index) {
     Intersection intersection = intersections.getIntersection(index);
     return *intersection.getIntersectedSphere();
 }
@@ -90,4 +90,13 @@ bool Ray::hitFound() {
 
 IntersectionTracker Ray::getIntersectionTracker() const {
     return intersections;
+}
+
+void Ray::prepComputations() {
+    for (Intersection& intersection : intersections) {
+        Tuple intersectionPoint = locate(intersection.getIntersectionTime());
+        intersection.setIntersectionPoint(intersectionPoint);
+        intersection.setEyeVector(-direction);
+        intersection.setNormalVector();
+    }
 }

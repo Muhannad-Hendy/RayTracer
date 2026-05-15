@@ -18,3 +18,27 @@ bool operator== (const Intersection& intersection1, const Intersection& intersec
             && (*intersection1.intersectedSphere == *intersection2.intersectedSphere)) return true;
     else return false;
 }
+
+Tuple* Intersection::getIntersectionPoint() {
+    return &intersectionPoint;
+}
+
+void Intersection::setIntersectionPoint(Tuple point) {
+    intersectionPoint= point;
+}
+
+Tuple& Intersection::getEyeVector() {
+    return eyeVector;
+}
+
+void Intersection::setEyeVector(Tuple point) {
+    eyeVector = point;
+}
+
+Tuple& Intersection::getNormalVector() {
+    return normalVector;
+}
+
+void Intersection::setNormalVector() {
+    normalVector = intersectedSphere->normal(intersectionPoint);
+}

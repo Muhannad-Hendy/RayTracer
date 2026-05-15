@@ -27,9 +27,9 @@ public:
 
     int getNumberOfIntersections() const;
 
-    double getIntersectionTime(int index) const;
+    double getIntersectionTime(int index);
 
-    Sphere& getIntersectedObject(int index) const;
+    Sphere& getIntersectedObject(int index);
 
     std::vector<double> calculateIntersectionParameters(Sphere& sphere);
 
@@ -40,6 +40,8 @@ public:
     bool hitFound();
 
     IntersectionTracker getIntersectionTracker() const;
+
+    void prepComputations();
 
 private:
     Tuple origin{};

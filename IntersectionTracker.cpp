@@ -19,7 +19,7 @@ void IntersectionTracker::addIntersection(double time, Sphere& sphere){
     sortIntersections();
 }
 
-Intersection IntersectionTracker::getIntersection(int position) const{
+Intersection IntersectionTracker::getIntersection(int position) {
     auto listStart = intersections.begin();
     std::advance(listStart, position);
     return *listStart;

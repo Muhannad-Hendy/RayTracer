@@ -1,5 +1,6 @@
 #ifndef INTERSECTION_H
 #define INTERSECTION_H
+#include "Tuple.h"
 
 class Sphere;
 
@@ -21,9 +22,24 @@ public:
 
     friend bool operator== (const Intersection& intersection1, const Intersection& intersection2);
 
+    Tuple* getIntersectionPoint();
+
+    void setIntersectionPoint(Tuple point);
+
+    Tuple& getEyeVector();
+
+    void setEyeVector(Tuple point);
+
+    Tuple& getNormalVector();
+
+    void setNormalVector();
+
 private:
     double intersectionTime{};
     Sphere* intersectedSphere{};
+    Tuple intersectionPoint{};
+    Tuple eyeVector{};
+    Tuple normalVector{};
 };
 
 #endif // INTERSECTION_H

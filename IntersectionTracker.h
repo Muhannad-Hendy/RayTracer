@@ -16,13 +16,21 @@ public:
 
     void addIntersection(double time, Sphere& sphere);
 
-    Intersection getIntersection(int position) const;
+    Intersection getIntersection(int position);
 
     int count() const;
 
     void sortIntersections();
 
     Intersection* hit();
+
+    auto begin() {
+        return intersections.begin();
+    }
+
+    auto end() {
+        return intersections.end();
+    }
 
 private:
     std::list<Intersection> intersections{};

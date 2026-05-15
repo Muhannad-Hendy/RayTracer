@@ -294,3 +294,25 @@ TEST_F(RaySphereIntersectionFeature, DISABLED_Projecting3DSphereOntoCanvas){
     }
     canvas.saveToPPM("../Output/sphere3DProjection.ppm");
 }
+
+TEST_F(RaySphereIntersectionFeature, PrecomputeStateOfIntersection){
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin, rayDirection};
+    Sphere sphere{};
+    ray.intersect(sphere);
+    ray.prepComputations();
+    Intersection intersection = ray.getIntersectionTracker().getIntersection(0);
+    Sphere* intersectedObject = intersection.getIntersectedSphere();
+    ASSERT_THAT(intersectedObject->getSphereID(), Eq(sphere.getSphereID()));
+    Tuple correctIntersectionPoint{0,0,-1,TupleType::point};
+    Tuple* intersectionPoint = intersection.getIntersectionPoint();
+    ASSERT_THAT(*intersectionPoint == correctIntersectionPoint, true);
+    Tuple correctEyeVector{0,0,-1,TupleType::vector};
+    Tuple& eyeVector = intersection.getEyeVector();
+    ASSERT_THAT(eyeVector == correctEyeVector, true);
+    Tuple correctNormal{0,0,-1,TupleType::vector};
+    Tuple& normalVector = intersection.getNormalVector();
+    ASSERT_THAT(normalVector == correctNormal, true);
+
+}
