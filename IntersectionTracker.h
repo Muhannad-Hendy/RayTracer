@@ -16,7 +16,7 @@ public:
 
     void addIntersection(double time, Sphere& sphere);
 
-    Intersection getIntersection(int position);
+    Intersection& getIntersection(int position);
 
     int count() const;
 
