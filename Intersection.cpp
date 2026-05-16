@@ -42,3 +42,15 @@ Tuple& Intersection::getNormalVector() {
 void Intersection::setNormalVector() {
     normalVector = intersectedSphere->normal(intersectionPoint);
 }
+
+bool Intersection::isInside() const {
+    return m_isInside;
+}
+
+void Intersection::setInside(bool status) {
+    m_isInside = status;
+}
+
+void Intersection::invertNormal() {
+    normalVector = -normalVector;
+}

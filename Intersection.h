@@ -34,12 +34,19 @@ public:
 
     void setNormalVector();
 
+    bool isInside() const;
+
+    void setInside(bool status);
+
+    void invertNormal();
+
 private:
     double intersectionTime{};
     Sphere* intersectedSphere{};
     Tuple intersectionPoint{};
     Tuple eyeVector{};
     Tuple normalVector{};
+    bool m_isInside{};
 };
 
 #endif // INTERSECTION_H

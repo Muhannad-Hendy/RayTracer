@@ -316,3 +316,34 @@ TEST_F(RaySphereIntersectionFeature, PrecomputeStateOfIntersection){
     ASSERT_THAT(normalVector == correctNormal, true);
 
 }
+
+TEST_F(RaySphereIntersectionFeature, HitIntersectionOnOutside){
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin, rayDirection};
+    Sphere sphere{};
+    ray.intersect(sphere);
+    ray.prepComputations();
+    Intersection* intersection = ray.getIntersectionTracker().hit();
+    ASSERT_THAT(intersection->isInside(), Eq(false));
+}
+
+TEST_F(RaySphereIntersectionFeature, HitIntersectionOnInside){
+    Tuple rayOrigin{0,0,0,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin, rayDirection};
+    Sphere sphere{};
+    ray.intersect(sphere);
+    ray.prepComputations();
+    Intersection* intersection = ray.getIntersectionTracker().hit();
+    Tuple correctIntersectionPoint{0,0,1,TupleType::point};
+    Tuple* intersectionPoint = intersection->getIntersectionPoint();
+    ASSERT_THAT(*intersectionPoint == correctIntersectionPoint, true);
+    Tuple correctEyeVector{0,0,-1,TupleType::vector};
+    Tuple& eyeVector = intersection->getEyeVector();
+    ASSERT_THAT(eyeVector == correctEyeVector, true);
+    ASSERT_THAT(intersection->isInside(), Eq(true));
+    Tuple correctNormal{0,0,-1,TupleType::vector};
+    Tuple& normalVector = intersection->getNormalVector();
+    ASSERT_THAT(normalVector == correctNormal, true);
+}
