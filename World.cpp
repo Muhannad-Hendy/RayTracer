@@ -39,6 +39,16 @@ int World::getNumberOfSpheres() const{
     return spheres.size();
 }
 
-Sphere World::getSphere(int i) const{
+Sphere& World::getSphere(int i) {
     return spheres.at(i);
+}
+
+Color World::shadeHit(Intersection &intersection) {
+    Material material = intersection.getIntersectedSphere()->getMaterial();
+    Light light = this->getLight(0);
+    Tuple* point = intersection.getIntersectionPoint();
+    Tuple eyeVector = intersection.getEyeVector();
+    Tuple normalVector = intersection.getNormalVector();
+    Color color = light.light(material,*point,eyeVector,normalVector);
+    return color;
 }

@@ -59,3 +59,17 @@ TEST_F(WorldFeature, IntersectWorldWithRay) {
     ASSERT_THAT(ray.getIntersectionTime(2), Eq(5.5));
     ASSERT_THAT(ray.getIntersectionTime(3), Eq(6));
 }
+
+TEST_F(WorldFeature, ShadingAnIntersection){
+    World world{};
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin, rayDirection};
+    Sphere sphere = world.getSphere(0);
+    ray.intersect(sphere);
+    ray.prepComputations();
+    Intersection* hit = ray.getIntersectionTracker().hit();
+    Color color = world.shadeHit(*hit);
+    Color correctColor{0.38066,0.47583,0.2855};
+    ASSERT_THAT(color == correctColor, true);
+}

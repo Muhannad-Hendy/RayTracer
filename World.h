@@ -4,6 +4,7 @@
 #include <vector>
 #include "Sphere.h"
 #include "Light.h"
+#include "Intersection.h"
 
 
 class World
@@ -21,7 +22,9 @@ public:
 
     int getNumberOfSpheres() const;
 
-    Sphere getSphere(int i) const;
+    Sphere& getSphere(int i);
+
+    Color shadeHit(Intersection& intersection);
 
 private:
     std::vector<Sphere> spheres{};
