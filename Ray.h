@@ -43,6 +43,8 @@ public:
 
     void prepComputations();
 
+    Color colorAt(World& world);
+
 private:
     Tuple origin{};
     Tuple direction{};

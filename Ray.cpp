@@ -78,7 +78,7 @@ void Ray::intersect(Sphere& sphere) {
 void Ray::intersect(World& world) {
     int numberOfSpheres = world.getNumberOfSpheres();
     for (int i = 0; i < numberOfSpheres; i++) {
-        Sphere sphere = world.getSphere(i);
+        Sphere& sphere = world.getSphere(i);
         intersect(sphere);
     }
 }
@@ -106,5 +106,18 @@ void Ray::prepComputations() {
         else {
             intersection.setInside(false);
         }
+    }
+}
+
+Color Ray::colorAt(World &world) {
+    this->intersect(world);
+    this->prepComputations();
+    Intersection* hit = this->getIntersectionTracker().hit();
+    if (hit) {
+        return world.shadeHit(*hit);
+    }
+    else {
+        Color black{0,0,0};
+        return black;
     }
 }

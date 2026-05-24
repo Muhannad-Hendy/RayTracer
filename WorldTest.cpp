@@ -73,3 +73,41 @@ TEST_F(WorldFeature, ShadingAnIntersection){
     Color correctColor{0.38066,0.47583,0.2855};
     ASSERT_THAT(color == correctColor, true);
 }
+
+TEST_F(WorldFeature, ColorWhenRayMisses){
+    World world{};
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,1,0,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    Color color = ray.colorAt(world);
+    Color correctColor{0,0,0};
+    ASSERT_THAT(color == correctColor, true);
+}
+
+TEST_F(WorldFeature, ColorWhenRayHits) {
+    World world{};
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    Color color = ray.colorAt(world);
+    Color correctColor{0.38066,0.47583,0.2855};
+    ASSERT_THAT(color == correctColor, true);
+}
+
+TEST_F(WorldFeature, ColorWithIntersectionBehindRay) {
+    World world{};
+    Sphere& outerSphere = world.getSphere(0);
+    Sphere& innerSphere = world.getSphere(1);
+    Material material = outerSphere.getMaterial();
+    material.setAmbient(1);
+    outerSphere.setMaterial(material);
+    material = innerSphere.getMaterial();
+    material.setAmbient(1);
+    innerSphere.setMaterial(material);
+    Tuple rayOrigin{0,0,0.75,TupleType::point};
+    Tuple rayDirection{0,0,-1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    Color color = ray.colorAt(world);
+    Color correctColor = material.getColor();
+    ASSERT_THAT(color == correctColor, true);
+}
