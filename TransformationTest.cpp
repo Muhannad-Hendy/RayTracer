@@ -195,3 +195,56 @@ TEST_F(TransformationFeature, ScalingRay){
     Tuple directionTransformed = rayTransformed.getDirection();
     ASSERT_THAT(directionTransformed == trueDirectionTransformed, true);
 }
+
+TEST_F(TransformationFeature, TransformationMatrixOfDefaultOrientation) {
+    Tuple from{0,0,0,TupleType::point};
+    Tuple to{0,0,-1,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from, to, up};
+    Matrix viewTransformation = viewTransformer.getTransformationMatrix();
+    Matrix identityMatrix{4, MatrixType::identity};
+    ASSERT_THAT(viewTransformation == identityMatrix, true);
+}
+
+TEST_F(TransformationFeature, ViewTransformationMatrixLookingInPositiveZDirection){
+    Tuple from{0,0,0,TupleType::point};
+    Tuple to{0,0,1,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from, to, up};
+    Matrix viewTransformation = viewTransformer.getTransformationMatrix();
+    Transformer scaler{Transformation::scaling, -1, 1, -1};
+    Matrix scalingMatrix = scaler.getTransformationMatrix();
+    ASSERT_THAT(viewTransformation == scalingMatrix, true);
+}
+
+TEST_F(TransformationFeature, ViewTransformationMovesTheWorld){
+    Tuple from{0,0,8,TupleType::point};
+    Tuple to{0,0,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from, to, up};
+    Matrix viewTransformation = viewTransformer.getTransformationMatrix();
+    Transformer translator{Transformation::translation, 0,0,-8};
+    Matrix translationMatrix = translator.getTransformationMatrix();
+    ASSERT_THAT(viewTransformation == translationMatrix, true);
+}
+
+TEST_F(TransformationFeature, ArbitraryViewTransformation){
+    Tuple from{1,3,2,TupleType::point};
+    Tuple to{4,-2,8,TupleType::point};
+    Tuple up{1,1,0,TupleType::vector};
+    Transformer viewTransformer{from, to, up};
+    Matrix viewTransformation = viewTransformer.getTransformationMatrix();
+    Matrix correctTransformation{4,MatrixType::identity};
+    correctTransformation.set(0,0, -0.50709);
+    correctTransformation.set(0,1, 0.50709);
+    correctTransformation.set(0,2, 0.67612);
+    correctTransformation.set(0,3, -2.36643);
+    correctTransformation.set(1,0, 0.76772);
+    correctTransformation.set(1,1, 0.60609);
+    correctTransformation.set(1,2, 0.12122);
+    correctTransformation.set(1,3, -2.82843);
+    correctTransformation.set(2,0, -0.35857);
+    correctTransformation.set(2,1, 0.59761);
+    correctTransformation.set(2,2, -0.71714);
+    ASSERT_THAT(viewTransformation == correctTransformation, true);
+}

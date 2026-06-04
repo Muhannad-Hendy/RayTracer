@@ -56,6 +56,25 @@ Transformer::Transformer(double xRelativeY, double xRelativeZ, double yRelativeX
     transformationMatrix.set(2,1,zRelativeY);
 }
 
+Transformer::Transformer(Tuple from, Tuple to, Tuple upDirection){
+    Tuple forwardVector = (to - from).normalize();
+    Tuple normalizedUp = upDirection.normalize();
+    Tuple leftDirection = forwardVector.cross(normalizedUp);
+    Tuple trueUp = leftDirection.cross(forwardVector);
+    transformationMatrix.set(0,0, leftDirection.getXValue());
+    transformationMatrix.set(0,1, leftDirection.getYValue());
+    transformationMatrix.set(0,2, leftDirection.getZValue());
+    transformationMatrix.set(1,0, trueUp.getXValue());
+    transformationMatrix.set(1,1, trueUp.getYValue());
+    transformationMatrix.set(1,2, trueUp.getZValue());
+    transformationMatrix.set(2,0, -forwardVector.getXValue());
+    transformationMatrix.set(2,1, -forwardVector.getYValue());
+    transformationMatrix.set(2,2, -forwardVector.getZValue());
+    Transformer translation{Transformation::translation, -from.getXValue(), -from.getYValue(), -from.getZValue()};
+    Matrix viewTransformation = transformationMatrix * translation.getTransformationMatrix();
+    transformationMatrix = viewTransformation;
+}
+
 Tuple Transformer::transform(const Tuple& original) const{
     Tuple transformed = this->transformationMatrix * original;
     return transformed;

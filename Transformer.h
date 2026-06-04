@@ -11,7 +11,8 @@ enum class Transformation{
     xRotation,
     yRotation,
     zRotation,
-    shearing
+    shearing,
+    view
 };
 
 class Transformer
@@ -28,6 +29,8 @@ public:
     Transformer(const Transformer& original) {
         transformationMatrix = original.transformationMatrix;
     }
+
+    Transformer(Tuple from, Tuple to, Tuple upDirection);
 
     Tuple transform(const Tuple& original) const;
 
