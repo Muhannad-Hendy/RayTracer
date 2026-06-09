@@ -8,6 +8,7 @@ CONFIG += c++14
 LIBS += -lpthread
 
 SOURCES += \
+        CameraTest.cpp \
         Canvas.cpp \
         CanvasTest.cpp \
         Color.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
         Utilities.cpp \
         World.cpp \
         WorldTest.cpp \
+        camera.cpp \
         main.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
@@ -52,4 +54,5 @@ HEADERS += \
     Transformer.h \
     Tuple.h \
     Utilities.h \
-    World.h
+    World.h \
+    camera.h
