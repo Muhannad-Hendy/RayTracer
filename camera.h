@@ -19,11 +19,18 @@ public:
 
     Transformer& getTransformation();
 
+    double getPixelSize() const;
+
+    void setPixelSize();
+
 private:
     int horizontalPixelSize{};
     int verticalPixelSize{};
     double fieldOfView{};
     Transformer cameraTransform{};
+    double pixelSize{};
+    double halfWidth{};
+    double halfHeight{};
 };
 
 #endif // CAMERA_H
