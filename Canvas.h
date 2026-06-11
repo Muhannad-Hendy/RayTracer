@@ -20,7 +20,7 @@ public:
 
     int getHeight ();
 
-    Color* getPixelColor (int columnNumber, int rowNumber);
+    Color* getPixelColor (int columnNumber, int rowNumber) const;
 
     void setPixelColor (int columnNumber, int rowNumber, Color color);
 

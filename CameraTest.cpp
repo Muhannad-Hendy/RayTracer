@@ -78,3 +78,16 @@ TEST_F(CameraFeature, ConstructingRayWhenCameraIsTransformed) {
     ASSERT_THAT(rayDirection==correctDirection, true);
 }
 
+TEST_F(CameraFeature, RenderingWorldWithCamera) {
+    World world{};
+    Camera camera{11,11,util::PI/2};
+    Tuple from{0,0,-5,TupleType::point};
+    Tuple to{0,0,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformation{from,to,up};
+    camera.setCameraTransformation(viewTransformation);
+    const Canvas& image=camera.render(world);
+    Color* pixelColor = image.getPixelColor(5,5);
+    Color correctColor{0.38066,0.47583,0.2855};
+    ASSERT_THAT(*pixelColor==correctColor, true);
+}

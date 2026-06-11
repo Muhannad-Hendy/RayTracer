@@ -3,6 +3,8 @@
 #include <cmath>
 #include "Utilities.h"
 #include "Transformer.h"
+#include "Canvas.h"
+#include "World.h"
 
 class Camera
 {
@@ -27,6 +29,8 @@ public:
 
     Ray generateRayForPixel(int pixelXCoordinate, int pixelYCoordinate);
 
+    const Canvas& render(World& world);
+
 private:
     int horizontalPixelSize{};
     int verticalPixelSize{};
@@ -35,6 +39,7 @@ private:
     double pixelSize{};
     double halfWidth{};
     double halfHeight{};
+    Canvas canvas{horizontalPixelSize,verticalPixelSize};
 };
 
 #endif // CAMERA_H

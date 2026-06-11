@@ -23,7 +23,7 @@ int Canvas::getHeight (){
     return height;
 }
 
-Color* Canvas::getPixelColor (int columnNumber, int rowNumber){
+Color* Canvas::getPixelColor (int columnNumber, int rowNumber) const{
     Color* pixelColor = *(pixelArray + rowNumber * width + columnNumber);
     return pixelColor;
 }

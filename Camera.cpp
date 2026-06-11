@@ -63,3 +63,14 @@ Ray Camera::generateRayForPixel(int pixelXCoordinate, int pixelYCoordinate) {
     Ray ray{untransformedOrigin, direction};
     return ray;
 }
+
+const Canvas& Camera::render(World &world) {
+    for(int y=0; y<verticalPixelSize; y++){
+        for(int x=0; x<horizontalPixelSize; x++){
+            Ray ray = this->generateRayForPixel(x,y);
+            Color color = ray.colorAt(world);
+            canvas.setPixelColor(x,y,color);
+        }
+    }
+    return canvas;
+}
