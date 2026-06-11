@@ -17,11 +17,15 @@ public:
 
     double getFieldOfView() const;
 
+    void setCameraTransformation(const Transformer& transformation);
+
     Transformer& getTransformation();
 
     double getPixelSize() const;
 
     void setPixelSize();
+
+    Ray generateRayForPixel(int pixelXCoordinate, int pixelYCoordinate);
 
 private:
     int horizontalPixelSize{};
