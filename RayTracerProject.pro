@@ -8,6 +8,7 @@ CONFIG += c++14
 LIBS += -lpthread
 
 SOURCES += \
+        Camera.cpp \
         CameraTest.cpp \
         Canvas.cpp \
         CanvasTest.cpp \
@@ -30,7 +31,6 @@ SOURCES += \
         Utilities.cpp \
         World.cpp \
         WorldTest.cpp \
-        camera.cpp \
         main.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
@@ -42,6 +42,7 @@ SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googletest/src/gtest-all.c
 SOURCES += /Users/muhannadhendy/GoogleTest/googletest/googlemock/src/gmock-all.cc
 
 HEADERS += \
+    Camera.h \
     Canvas.h \
     Color.h \
     Intersection.h \
@@ -54,5 +55,4 @@ HEADERS += \
     Transformer.h \
     Tuple.h \
     Utilities.h \
-    World.h \
-    camera.h
+    World.h

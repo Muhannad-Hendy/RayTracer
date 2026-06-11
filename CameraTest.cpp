@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "camera.h"
+#include "Camera.h"
 #include "Utilities.h"
 
 using namespace testing;
