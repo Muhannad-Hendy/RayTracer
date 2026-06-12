@@ -12,6 +12,8 @@ class World
 public:
     World();
 
+    World(Sphere sphere, Light light);
+
     bool isEmpty() const;
 
     bool isDark() const;
@@ -20,9 +22,13 @@ public:
 
     Light getLight(int i) const;
 
+    void addLight(Light light);
+
     int getNumberOfSpheres() const;
 
     Sphere& getSphere(int i);
+
+    void addSphere(Sphere sphere);
 
     Color shadeHit(Intersection& intersection);
 

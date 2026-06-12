@@ -24,9 +24,9 @@ public:
 
     void setPixelColor (int columnNumber, int rowNumber, Color color);
 
-    void saveToPPM(const std::string& filePath);
+    void saveToPPM(const std::string& filePath) const;
 
-    std::vector<int> scaleThenClampColor(const Color& pixelColor, double scalar);
+    std::vector<int> scaleThenClampColor(const Color& pixelColor, double scalar) const;
 
     std::string readFromPPM(const std::string& filePath);
 

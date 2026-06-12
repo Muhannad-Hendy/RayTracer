@@ -32,7 +32,7 @@ void Canvas::setPixelColor (int columnNumber, int rowNumber, Color color){
     **(pixelArray + rowNumber * width + columnNumber) = color;
 }
 
-void Canvas::saveToPPM(const std::string& filePath){
+void Canvas::saveToPPM(const std::string& filePath) const{
     std::ofstream ppmFile{filePath, std::ios::out};
     std::ostringstream outputStringStream;
     Color* pixelColor;
@@ -68,7 +68,7 @@ void Canvas::saveToPPM(const std::string& filePath){
     ppmFile << std::endl;
 }
 
-std::vector<int> Canvas::scaleThenClampColor(const Color& pixelColor, double scalar){
+std::vector<int> Canvas::scaleThenClampColor(const Color& pixelColor, double scalar) const{
     std::vector<int> colorComponent(3);
     Color color = pixelColor * scalar;
 

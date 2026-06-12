@@ -3,6 +3,7 @@
 #include "Utilities.h"
 #include "Tuple.h"
 #include "Ray.h"
+#include "Light.h"
 
 using namespace testing;
 
@@ -90,4 +91,98 @@ TEST_F(CameraFeature, RenderingWorldWithCamera) {
     Color* pixelColor = image.getPixelColor(5,5);
     Color correctColor{0.38066,0.47583,0.2855};
     ASSERT_THAT(*pixelColor==correctColor, true);
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingWorldScene) {
+    Sphere floor{};
+    Transformer scaler{Transformation::scaling,10,0.01,10};
+    floor.setTransformation(scaler);
+    Material floorMaterial{};
+    Color floorColor{1,0.9,0.9};
+    floorMaterial.setColor(floorColor);
+    floorMaterial.setSpecular(0);
+    floor.setMaterial(floorMaterial);
+
+    Sphere leftWall{};
+    Transformer translation{Transformation::translation, 0,0,5};
+    Transformer leftWallXRotation{Transformation::xRotation,util::PI/2};
+    Transformer leftWallYRotation{Transformation::yRotation,util::PI/-4};
+    leftWall.setTransformation(scaler>leftWallXRotation>leftWallYRotation>translation);
+    leftWall.setMaterial(floorMaterial);
+
+    Sphere rightWall{};
+    Transformer rightWallYRotation{Transformation::yRotation,util::PI/4};
+    rightWall.setTransformation(scaler>leftWallXRotation>rightWallYRotation>translation);
+    rightWall.setMaterial(floorMaterial);
+
+    Sphere middleSphere{};
+    Transformer middleTranslation{Transformation::translation,-0.5,1,0.5};
+    middleSphere.setTransformation(middleTranslation);
+    Material middleMaterial{};
+    Color middleColor{0.1,1,0.5};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(0.7);
+    middleMaterial.setSpecular(0.3);
+    middleSphere.setMaterial(middleMaterial);
+
+    Sphere rightSphere{};
+    Transformer rightSphereTranslation{Transformation::translation,1.5,0.5,-0.5};
+    Transformer rightSphereScaling{Transformation::scaling,0.5,0.5,0.5};
+    rightSphere.setTransformation(rightSphereScaling>rightSphereTranslation);
+    Material rightSphereMaterial{};
+    Color rightSphereColor{0.5,1,0.1};
+    rightSphereMaterial.setColor(rightSphereColor);
+    rightSphereMaterial.setDiffuse(0.7);
+    rightSphereMaterial.setSpecular(0.3);
+    rightSphere.setMaterial(rightSphereMaterial);
+
+    Sphere leftSphere{};
+    Transformer leftSphereTranslation{Transformation::translation,-1.5,0.33,-0.75};
+    Transformer leftSphereScaling{Transformation::scaling,0.33,0.33,0.33};
+    leftSphere.setTransformation(leftSphereScaling>leftSphereTranslation);
+    Material leftSphereMaterial{};
+    Color leftSphereColor{1,0.8,0.1};
+    leftSphereMaterial.setColor(leftSphereColor);
+    leftSphereMaterial.setDiffuse(0.7);
+    leftSphereMaterial.setSpecular(0.3);
+    leftSphere.setMaterial(leftSphereMaterial);
+
+    Tuple lightPosition{-10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world(floor, light);
+    world.addSphere(leftWall);
+    world.addSphere(rightWall);
+    world.addSphere(middleSphere);
+    world.addSphere(rightSphere);
+    world.addSphere(leftSphere);
+
+    Camera camera{500,250,util::PI/3};
+    Tuple from{0,1.5,-5,TupleType::point};
+    Tuple to{0,1,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingScene.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_Rendering3DSphere) {
+    Sphere sphere{};
+    Material sphereMaterial{};
+    Color materialColor{0.25,0.88,0.82};
+    sphereMaterial.setColor(materialColor);
+    sphere.setMaterial(sphereMaterial);
+    Tuple lightPosition{-10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    Camera camera{500,500,util::PI/3};
+    Tuple from{0,0,-5,TupleType::point};
+    Tuple to{0,0,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    World world{sphere,light};
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/Sphere3D.ppm");
 }

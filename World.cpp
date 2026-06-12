@@ -19,6 +19,11 @@ World::World(){
     spheres.push_back(halfSphere);
 }
 
+World::World(Sphere sphere, Light light) {
+    addSphere(sphere);
+    addLight(light);
+}
+
 bool World::isEmpty() const{
     return spheres.empty();
 }
@@ -35,12 +40,20 @@ Light World::getLight(int i) const{
     return lights.at(i);
 }
 
+void World::addLight(Light light) {
+    lights.push_back(std::move(light));
+}
+
 int World::getNumberOfSpheres() const{
     return spheres.size();
 }
 
 Sphere& World::getSphere(int i) {
     return spheres.at(i);
+}
+
+void World::addSphere(Sphere sphere) {
+    spheres.push_back(std::move(sphere));
 }
 
 Color World::shadeHit(Intersection &intersection) {
