@@ -149,7 +149,7 @@ TEST_F(WorldFeature, NoShadowWhenObjectIsBehindPoint) {
 }
 
 TEST_F(WorldFeature, ShadeHitInShadow) {
-    Tuple point{0,0,10,TupleType::point};
+    Tuple point{0,0,-10,TupleType::point};
     Color lightColor{1,1,1};
     Light light{point, lightColor};
     Sphere sphere1{};

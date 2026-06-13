@@ -1,4 +1,5 @@
 #include "World.h"
+#include "Ray.h"
 
 World::World(){
     Tuple lightPosition{-10,10,-10,TupleType::point};
@@ -62,6 +63,8 @@ Color World::shadeHit(Intersection &intersection) {
     Tuple* point = intersection.getIntersectionPoint();
     Tuple eyeVector = intersection.getEyeVector();
     Tuple normalVector = intersection.getNormalVector();
-    Color color = light.light(material,*point,eyeVector,normalVector);
+    Ray shadowRay{*this,*point};
+    bool inShadow = shadowRay.isShadowed(*this);
+    Color color = light.light(material,*point,eyeVector,normalVector,inShadow);
     return color;
 }
