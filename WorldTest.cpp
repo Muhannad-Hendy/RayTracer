@@ -111,3 +111,60 @@ TEST_F(WorldFeature, ColorWithIntersectionBehindRay) {
     Color correctColor = material.getColor();
     ASSERT_THAT(color == correctColor, true);
 }
+
+TEST_F(WorldFeature, NoShadowWhenNothingIsCollinearWithPointAndLight) {
+    World world{};
+    Tuple point{0,10,0,TupleType::point};
+    Ray shadowRay{world,point};
+    bool isShadowed = shadowRay.isShadowed(world);
+    bool correctIsShadowed = false;
+    ASSERT_EQ(isShadowed,correctIsShadowed);
+}
+
+TEST_F(WorldFeature, ShadowWhenObjectIsBetweenPointAndLight) {
+    World world{};
+    Tuple point{10,-10,10,TupleType::point};
+    Ray shadowRay{world,point};
+    bool isShadowed = shadowRay.isShadowed(world);
+    bool correctIsShadowed = true;
+    ASSERT_EQ(isShadowed,correctIsShadowed);
+}
+
+TEST_F(WorldFeature, NoShadowWhenObjectIsBehindLight) {
+    World world{};
+    Tuple point{-20,20,-20,TupleType::point};
+    Ray shadowRay{world,point};
+    bool isShadowed = shadowRay.isShadowed(world);
+    bool correctIsShadowed = false;
+    ASSERT_EQ(isShadowed,correctIsShadowed);
+}
+
+TEST_F(WorldFeature, NoShadowWhenObjectIsBehindPoint) {
+    World world{};
+    Tuple point{-2,2,-2,TupleType::point};
+    Ray shadowRay{world,point};
+    bool isShadowed = shadowRay.isShadowed(world);
+    bool correctIsShadowed = false;
+    ASSERT_EQ(isShadowed,correctIsShadowed);
+}
+
+TEST_F(WorldFeature, ShadeHitInShadow) {
+    Tuple point{0,0,10,TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{point, lightColor};
+    Sphere sphere1{};
+    World world{sphere1, light};
+    Sphere sphere2{};
+    Transformer translation{Transformation::translation,0,0,10};
+    sphere2.setTransformation(translation);
+    world.addSphere(sphere2);
+    Tuple rayOrigin{0,0,5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    ray.intersect(sphere2);
+    ray.prepComputations();
+    Intersection intersection = ray.getIntersectionTracker().getIntersection(0);
+    Color color = world.shadeHit(intersection);
+    Color correctColor{0.1,0.1,0.1};
+    ASSERT_THAT(color==correctColor, true);
+}

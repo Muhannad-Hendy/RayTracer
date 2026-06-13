@@ -6,6 +6,14 @@ Ray::Ray(){};
 
 Ray::Ray(Tuple& origin, Tuple& direction) : origin{origin}, direction{direction}{}
 
+Ray::Ray(World& world, Tuple& point) {
+    Tuple lightPosition = world.getLight(0).getPosition();
+    Tuple vector = lightPosition - point;
+    distance = vector.magnitude();
+    direction = vector.normalize();
+    origin = point;
+}
+
 Tuple Ray::getOrigin() const{
     return origin;
 }
@@ -120,4 +128,11 @@ Color Ray::colorAt(World &world) {
         Color black{0,0,0};
         return black;
     }
+}
+
+bool Ray::isShadowed(World &world) {
+    this->intersect(world);
+    Intersection* hit = this->getIntersectionTracker().hit();
+    if(hit && (hit->getIntersectionTime() < distance)) return true;
+    else return false;
 }

@@ -15,6 +15,8 @@ public:
 
     Ray(Tuple& origin, Tuple& direction);
 
+    Ray(World& world, Tuple& point);
+
     Tuple getOrigin() const;
 
     Tuple getDirection() const;
@@ -45,9 +47,12 @@ public:
 
     Color colorAt(World& world);
 
+    bool isShadowed(World& world);
+
 private:
     Tuple origin{};
     Tuple direction{};
     IntersectionTracker intersections{};
+    double distance{0};
 };
 #endif // RAY_H
