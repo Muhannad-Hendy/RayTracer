@@ -10,11 +10,12 @@ Color Light::getIntensity() const{
     return intensity;
 }
 
-Color Light::light(Material &material, Tuple &target, Tuple &eyeVector, Tuple &normalVector) {
+Color Light::light(Material &material, Tuple &target, Tuple &eyeVector, Tuple &normalVector, bool inShadow) {
     Color effectiveColor = material.getColor() * this->intensity;
     Tuple lightVector = this->position - target;
     lightVector = lightVector.normalize();
     Color ambientComponent = effectiveColor * material.getAmbient();
+    if (inShadow) return ambientComponent;
     double lightDotNormal = lightVector.dot(normalVector);
     Color diffuseComponent;
     Color specularComponent;

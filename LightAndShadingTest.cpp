@@ -228,4 +228,18 @@ TEST_F(LightAndShadingFeature, TwoLightsAreNotEqual){
     ASSERT_THAT(light1 == light3, false);
 }
 
+TEST_F(LightAndShadingFeature, LightingWithSurfaceInShadow) {
+    Tuple eyeVector{0,0,-1,TupleType::vector};
+    Tuple lightPosition{0,0,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition, lightColor};
+    Material material{};
+    Tuple position{0,0,0,TupleType::point};
+    Tuple normalVector{0,0,-1,TupleType::vector};
+    bool inShadow = true;
+    Color result = light.light(material, position, eyeVector, normalVector, inShadow);
+    Color correctColor{0.1,0.1,0.1};
+    ASSERT_THAT(result==correctColor, true);
+}
+
 

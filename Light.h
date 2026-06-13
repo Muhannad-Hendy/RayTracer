@@ -13,7 +13,7 @@ public:
 
     Color getIntensity() const;
 
-    Color light(Material& material, Tuple& target, Tuple& eyeVector, Tuple& normalVector);
+    Color light(Material& material, Tuple& target, Tuple& eyeVector, Tuple& normalVector, bool inShadow=false);
 
     friend bool operator== (Light& light1, Light& light2);
 
