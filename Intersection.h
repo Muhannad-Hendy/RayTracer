@@ -40,6 +40,10 @@ public:
 
     void invertNormal();
 
+    void setOverIntersectionPoint(Tuple point);
+
+    Tuple& getOverIntersectionPoint();
+
 private:
     double intersectionTime{};
     Sphere* intersectedSphere{};
@@ -47,6 +51,7 @@ private:
     Tuple eyeVector{};
     Tuple normalVector{};
     bool m_isInside{};
+    Tuple overIntersectionPoint{};
 };
 
 #endif // INTERSECTION_H

@@ -60,11 +60,11 @@ void World::addSphere(Sphere sphere) {
 Color World::shadeHit(Intersection &intersection) {
     Material material = intersection.getIntersectedSphere()->getMaterial();
     Light light = this->getLight(0);
-    Tuple* point = intersection.getIntersectionPoint();
     Tuple eyeVector = intersection.getEyeVector();
     Tuple normalVector = intersection.getNormalVector();
-    Ray shadowRay{*this,*point};
+    Tuple& overIntersectionPoint = intersection.getOverIntersectionPoint();
+    Ray shadowRay{*this,overIntersectionPoint};
     bool inShadow = shadowRay.isShadowed(*this);
-    Color color = light.light(material,*point,eyeVector,normalVector,inShadow);
+    Color color = light.light(material,overIntersectionPoint,eyeVector,normalVector,inShadow);
     return color;
 }

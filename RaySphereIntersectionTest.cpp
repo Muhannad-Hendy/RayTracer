@@ -7,6 +7,7 @@
 #include "Canvas.h"
 #include "Color.h"
 #include "Light.h"
+#include "Utilities.h"
 
 using namespace testing;
 
@@ -346,4 +347,22 @@ TEST_F(RaySphereIntersectionFeature, HitIntersectionOnInside){
     Tuple correctNormal{0,0,-1,TupleType::vector};
     Tuple& normalVector = intersection->getNormalVector();
     ASSERT_THAT(normalVector == correctNormal, true);
+}
+
+TEST_F(RaySphereIntersectionFeature, HitShouldOffsetPoint) {
+    Tuple rayOrigin{0,0,-5,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    Sphere sphere{};
+    Transformer translation{Transformation::translation, 0,0,1};
+    sphere.setTransformation(translation);
+    ray.intersect(sphere);
+    ray.prepComputations();
+    Intersection* intersection = ray.getIntersectionTracker().hit();
+    Tuple& pointOverIntersection = intersection->getOverIntersectionPoint();
+    double overIntersectionZValue = pointOverIntersection.getZValue();
+    ASSERT_LT(overIntersectionZValue, util::EPSILON/-2);
+    Tuple* intersectionPoint = intersection->getIntersectionPoint();
+    double intersectionZValue = intersectionPoint->getZValue();
+    ASSERT_GT(intersectionZValue,overIntersectionZValue);
 }

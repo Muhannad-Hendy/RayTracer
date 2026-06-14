@@ -54,3 +54,11 @@ void Intersection::setInside(bool status) {
 void Intersection::invertNormal() {
     normalVector = -normalVector;
 }
+
+void Intersection::setOverIntersectionPoint(Tuple point) {
+    overIntersectionPoint = point;
+}
+
+Tuple& Intersection::getOverIntersectionPoint() {
+    return overIntersectionPoint;
+}

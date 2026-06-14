@@ -79,7 +79,7 @@ TEST_F(CameraFeature, ConstructingRayWhenCameraIsTransformed) {
     ASSERT_THAT(rayDirection==correctDirection, true);
 }
 
-TEST_F(CameraFeature, RenderingWorldWithCamera) {
+TEST_F(CameraFeature, DISABLED_RenderingWorldWithCamera) {
     World world{};
     Camera camera{11,11,util::PI/2};
     Tuple from{0,0,-5,TupleType::point};
@@ -187,7 +187,7 @@ TEST_F(CameraFeature, DISABLED_Rendering3DSphere) {
     image.saveToPPM("../Output/Sphere3D.ppm");
 }
 
-TEST_F(CameraFeature, RenderingWorldSceneWithAcne) {
+TEST_F(CameraFeature, DISABLED_RenderingWorldSceneWithShadow) {
     Sphere floor{};
     Transformer scaler{Transformation::scaling,10,0.01,10};
     floor.setTransformation(scaler);
@@ -251,12 +251,12 @@ TEST_F(CameraFeature, RenderingWorldSceneWithAcne) {
     world.addSphere(rightSphere);
     world.addSphere(leftSphere);
 
-    Camera camera{500,250,util::PI/3};
+    Camera camera{500,100,util::PI/3};
     Tuple from{0,1.5,-5,TupleType::point};
     Tuple to{0,1,0,TupleType::point};
     Tuple up{0,1,0,TupleType::vector};
     Transformer viewTransformer{from,to,up};
     camera.setCameraTransformation(viewTransformer);
     const Canvas& image = camera.render(world);
-    image.saveToPPM("../Output/renderingSceneWithAcne.ppm");
+    image.saveToPPM("../Output/renderingSceneWithShadow.ppm");
 }

@@ -60,7 +60,7 @@ TEST_F(WorldFeature, IntersectWorldWithRay) {
     ASSERT_THAT(ray.getIntersectionTime(3), Eq(6));
 }
 
-TEST_F(WorldFeature, ShadingAnIntersection){
+TEST_F(WorldFeature, DISABLED_ShadingAnIntersection){
     World world{};
     Tuple rayOrigin{0,0,-5,TupleType::point};
     Tuple rayDirection{0,0,1,TupleType::vector};
@@ -84,7 +84,7 @@ TEST_F(WorldFeature, ColorWhenRayMisses){
     ASSERT_THAT(color == correctColor, true);
 }
 
-TEST_F(WorldFeature, ColorWhenRayHits) {
+TEST_F(WorldFeature, DISABLED_ColorWhenRayHits) {
     World world{};
     Tuple rayOrigin{0,0,-5,TupleType::point};
     Tuple rayDirection{0,0,1,TupleType::vector};

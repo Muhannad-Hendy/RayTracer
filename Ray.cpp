@@ -106,6 +106,9 @@ void Ray::prepComputations() {
         intersection.setIntersectionPoint(intersectionPoint);
         intersection.setEyeVector(-direction);
         intersection.setNormalVector();
+        Tuple offsetVector = intersection.getNormalVector() * util::EPSILON;
+        Tuple overIntersection = intersectionPoint + offsetVector;
+        intersection.setOverIntersectionPoint(overIntersection);
         double dotProduct = intersection.getEyeVector().dot(intersection.getNormalVector());
         if (dotProduct < 0){
             intersection.setInside(true);
