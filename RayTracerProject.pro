@@ -1,9 +1,9 @@
 TEMPLATE = app
-CONFIG += console c++14
+CONFIG += console c++17
 CONFIG += debug
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += c++14
+CONFIG += c++17
 
 LIBS += -lpthread
 
