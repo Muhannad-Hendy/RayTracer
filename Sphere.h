@@ -10,8 +10,6 @@ public:
 
     Tuple getCenter() const;
 
-    int getSphereID() const;
-
 protected:
     Tuple localNormalAt(const Tuple &localPoint) const override;
 

@@ -13,10 +13,6 @@ Tuple Sphere::getCenter() const{
     return center;
 }
 
-int Sphere::getSphereID() const{
-    return ID;
-}
-
 Tuple Sphere::localNormalAt(const Tuple &localPoint) const {
     Tuple localNormal = localPoint;
     localNormal.setWValue(0);

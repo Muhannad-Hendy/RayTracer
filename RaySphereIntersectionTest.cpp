@@ -17,15 +17,15 @@ class RaySphereIntersectionFeature : public Test {
 
 TEST_F(RaySphereIntersectionFeature, DISABLED_SphereIDStartsAtZero){
     Sphere sphere1{};
-    ASSERT_THAT(sphere1.getSphereID(), Eq(0));
+    ASSERT_THAT(sphere1.getShapeID(), Eq(0));
 }
 
 TEST_F(RaySphereIntersectionFeature, DISABLED_SpheresHaveIdenticalIDs){
     Sphere sphere2{};
     Sphere sphere3{};
 
-    ASSERT_THAT(sphere2.getSphereID(), Eq(1));
-    ASSERT_THAT(sphere3.getSphereID(), Eq(2));
+    ASSERT_THAT(sphere2.getShapeID(), Eq(1));
+    ASSERT_THAT(sphere3.getShapeID(), Eq(2));
 }
 
 TEST_F(RaySphereIntersectionFeature, CreatingAndQueryingRay){
@@ -117,7 +117,7 @@ TEST_F(RaySphereIntersectionFeature, IntersectionEncapsulatesTimeAndObject){
     Intersection intersection{3.5, sphere};
 
     ASSERT_THAT(intersection.getIntersectionTime(), Eq(3.5));
-    ASSERT_THAT(intersection.getIntersectedShape()->getShapeID(), Eq(sphere.getSphereID()));
+    ASSERT_THAT(intersection.getIntersectedShape()->getShapeID(), Eq(sphere.getShapeID()));
 }
 
 TEST_F(RaySphereIntersectionFeature, IntersectionsObjectAggregatesIntersections){
@@ -305,7 +305,7 @@ TEST_F(RaySphereIntersectionFeature, PrecomputeStateOfIntersection){
     ray.prepComputations();
     Intersection intersection = ray.getIntersectionTracker().getIntersection(0);
     Shape* intersectedObject = intersection.getIntersectedShape();
-    ASSERT_THAT(intersectedObject->getShapeID(), Eq(sphere.getSphereID()));
+    ASSERT_THAT(intersectedObject->getShapeID(), Eq(sphere.getShapeID()));
     Tuple correctIntersectionPoint{0,0,-1,TupleType::point};
     Tuple* intersectionPoint = intersection.getIntersectionPoint();
     ASSERT_THAT(*intersectionPoint == correctIntersectionPoint, true);
