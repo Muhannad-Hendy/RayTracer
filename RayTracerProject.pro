@@ -23,6 +23,7 @@ SOURCES += \
         MatrixTest.cpp \
         Ray.cpp \
         RaySphereIntersectionTest.cpp \
+        Shape.cpp \
         Sphere.cpp \
         TransformationTest.cpp \
         Transformer.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     Material.h \
     Matrix.h \
     Ray.h \
+    Shape.h \
     Sphere.h \
     Transformer.h \
     Tuple.h \

@@ -58,7 +58,7 @@ void World::addSphere(Sphere sphere) {
 }
 
 Color World::shadeHit(Intersection &intersection) {
-    Material material = intersection.getIntersectedSphere()->getMaterial();
+    Material material = intersection.getIntersectedShape()->getMaterial();
     Light light = this->getLight(0);
     Tuple eyeVector = intersection.getEyeVector();
     Tuple normalVector = intersection.getNormalVector();

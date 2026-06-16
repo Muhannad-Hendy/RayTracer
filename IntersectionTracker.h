@@ -14,7 +14,7 @@ public:
 
     void addIntersection(const Intersection& intersection);
 
-    void addIntersection(double time, Sphere& sphere);
+    void addIntersection(double time, Shape &shape);
 
     Intersection& getIntersection(int position);
 

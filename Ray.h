@@ -31,11 +31,11 @@ public:
 
     double getIntersectionTime(int index);
 
-    Sphere& getIntersectedObject(int index);
+    Shape& getIntersectedObject(int index);
 
-    std::vector<double> calculateIntersectionParameters(Sphere& sphere);
+    std::vector<double> calculateIntersectionParameters(Shape &shape);
 
-    void intersect(Sphere& sphere);
+    void intersect(Shape &shape);
 
     void intersect(World& world);
 

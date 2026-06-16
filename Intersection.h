@@ -2,18 +2,18 @@
 #define INTERSECTION_H
 #include "Tuple.h"
 
-class Sphere;
+class Shape;
 
 class Intersection
 {
 public:
     Intersection();
 
-    Intersection(double time, Sphere& sphere);
+    Intersection(double time, Shape &shape);
 
     double getIntersectionTime() const;
 
-    Sphere* getIntersectedSphere();
+    Shape* getIntersectedShape();
 
     friend bool operator< (const Intersection& intersection1, const Intersection& intersection2){
         if (intersection1.intersectionTime < intersection2.intersectionTime) return true;
@@ -46,7 +46,7 @@ public:
 
 private:
     double intersectionTime{};
-    Sphere* intersectedSphere{};
+    Shape* intersectedShape{};
     Tuple intersectionPoint{};
     Tuple eyeVector{};
     Tuple normalVector{};

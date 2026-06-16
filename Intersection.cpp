@@ -3,19 +3,19 @@
 
 Intersection::Intersection(){};
 
-Intersection::Intersection(double time, Sphere& sphere) : intersectionTime{time}, intersectedSphere{&sphere}{};
+Intersection::Intersection(double time, Shape &shape) : intersectionTime{time}, intersectedShape{&shape}{};
 
 double Intersection::getIntersectionTime() const{
     return intersectionTime;
 }
 
-Sphere* Intersection::getIntersectedSphere(){
-    return intersectedSphere;
+Shape* Intersection::getIntersectedShape(){
+    return intersectedShape;
 }
 
 bool operator== (const Intersection& intersection1, const Intersection& intersection2){
     if ((intersection1.intersectionTime == intersection2.intersectionTime)
-            && (*intersection1.intersectedSphere == *intersection2.intersectedSphere)) return true;
+            && (*intersection1.intersectedShape == *intersection2.intersectedShape)) return true;
     else return false;
 }
 
@@ -40,7 +40,7 @@ Tuple& Intersection::getNormalVector() {
 }
 
 void Intersection::setNormalVector() {
-    normalVector = intersectedSphere->normal(intersectionPoint);
+    normalVector = intersectedShape->normalAt(intersectionPoint);
 }
 
 bool Intersection::isInside() const {
