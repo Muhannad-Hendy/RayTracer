@@ -14,8 +14,8 @@ void IntersectionTracker::addIntersection(const Intersection& intersection){
     sortIntersections();
 }
 
-void IntersectionTracker::addIntersection(double time, Sphere& sphere){
-    intersections.emplace_back(time, sphere);
+void IntersectionTracker::addIntersection(double time, Shape &shape){
+    intersections.emplace_back(time, shape);
     sortIntersections();
 }
 

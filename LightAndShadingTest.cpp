@@ -20,7 +20,7 @@ public:
 TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnXAxis){
     Sphere sphere{};
     Tuple point{1,0,0,TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple trueNormalVector{1,0,0,TupleType::vector};
 
     ASSERT_THAT(normalVector == trueNormalVector, true);
@@ -29,7 +29,7 @@ TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnXAxis){
 TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnYAxis){
     Sphere sphere{};
     Tuple point{0,1,0,TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple trueNormalVector{0,1,0,TupleType::vector};
 
     ASSERT_THAT(normalVector == trueNormalVector, true);
@@ -38,7 +38,7 @@ TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnYAxis){
 TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnZAxis){
     Sphere sphere{};
     Tuple point{0,0,1,TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple trueNormalVector{0,0,1,TupleType::vector};
 
     ASSERT_THAT(normalVector == trueNormalVector, true);
@@ -47,7 +47,7 @@ TEST_F(LightAndShadingFeature, NormalOnSphereAtPointOnZAxis){
 TEST_F(LightAndShadingFeature, NormalOnSphereAtNonAxialPoint){
     Sphere sphere{};
     Tuple point{coordinateValue,coordinateValue,coordinateValue,TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple trueNormalVector{coordinateValue,coordinateValue,coordinateValue,TupleType::vector};
 
     ASSERT_THAT(normalVector == trueNormalVector, true);
@@ -56,7 +56,7 @@ TEST_F(LightAndShadingFeature, NormalOnSphereAtNonAxialPoint){
 TEST_F(LightAndShadingFeature, NormalVectorIsNormalized){
     Sphere sphere{};
     Tuple point{coordinateValue,coordinateValue,coordinateValue,TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple normalizedVector = normalVector.normalize();
 
     ASSERT_THAT(normalVector == normalizedVector, true);
@@ -67,7 +67,7 @@ TEST_F(LightAndShadingFeature, ComputingNormalOnTranslatedSphere){
     Transformer translation{Transformation::translation,0,1,0};
     sphere.setTransformation(translation);
     Tuple point{0, 1.70711, -0.70711, TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple trueNormalVector{0, 0.70711, -0.70711, TupleType::vector};
 
     ASSERT_THAT(normalVector == trueNormalVector, true);
@@ -81,7 +81,7 @@ TEST_F(LightAndShadingFeature, ComputingNormalOnTransformedSphere){
     sphere.setTransformation(combined);
     double value{sqrt(2)/2};
     Tuple point{0, value, -value, TupleType::point};
-    Tuple normalVector = sphere.normal(point);
+    Tuple normalVector = sphere.normalAt(point);
     Tuple trueNormalVector{0, 0.97014, -0.24254, TupleType::vector};
 
     ASSERT_THAT(normalVector == trueNormalVector, true);

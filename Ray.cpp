@@ -49,18 +49,18 @@ double Ray::getIntersectionTime(int index) {
     return intersection.getIntersectionTime();
 }
 
-Sphere& Ray::getIntersectedObject(int index) {
+Shape& Ray::getIntersectedObject(int index) {
     Intersection intersection = intersections.getIntersection(index);
-    return *intersection.getIntersectedSphere();
+    return *intersection.getIntersectedShape();
 }
 
-std::vector<double> Ray::calculateIntersectionParameters(Sphere& sphere){
-    Transformer rayTransformation = sphere.getTransformation().invert();
+std::vector<double> Ray::calculateIntersectionParameters(Shape &shape){
+    Transformer rayTransformation = shape.getTransformation().invert();
     Ray rayTransformed = rayTransformation.transform(*this);
-    Tuple sphereCenter = sphere.getCenter();
     Tuple rayOrigin = rayTransformed.getOrigin();
     Tuple rayDirection = rayTransformed.getDirection();
-    Tuple sphereToRay = rayOrigin - sphereCenter;
+    Tuple objectOrigin{0,0,0,TupleType::point};
+    Tuple sphereToRay = rayOrigin - objectOrigin;
 
     double a = rayDirection.dot(rayDirection);
     double b = 2 * rayDirection.dot(sphereToRay);
@@ -69,8 +69,8 @@ std::vector<double> Ray::calculateIntersectionParameters(Sphere& sphere){
     return {a, b, c, discriminant};
 }
 
-void Ray::intersect(Sphere& sphere) {
-    std::vector<double> intersectionParameters = calculateIntersectionParameters(sphere);
+void Ray::intersect(Shape &shape) {
+    std::vector<double> intersectionParameters = calculateIntersectionParameters(shape);
     double a = intersectionParameters[0];
     double b = intersectionParameters[1];
     double discriminant = intersectionParameters[3];
@@ -78,8 +78,8 @@ void Ray::intersect(Sphere& sphere) {
     if (discriminant >= 0) {
         double intersectionTime1 = (-b - sqrt(discriminant)) / (2 * a);
         double intersectionTime2 = (-b + sqrt(discriminant)) / (2 * a);
-        intersections.addIntersection(intersectionTime1, sphere);
-        intersections.addIntersection(intersectionTime2, sphere);
+        intersections.addIntersection(intersectionTime1, shape);
+        intersections.addIntersection(intersectionTime2, shape);
     }
 }
 

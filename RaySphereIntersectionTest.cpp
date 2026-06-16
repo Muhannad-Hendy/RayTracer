@@ -117,7 +117,7 @@ TEST_F(RaySphereIntersectionFeature, IntersectionEncapsulatesTimeAndObject){
     Intersection intersection{3.5, sphere};
 
     ASSERT_THAT(intersection.getIntersectionTime(), Eq(3.5));
-    ASSERT_THAT(intersection.getIntersectedSphere()->getSphereID(), Eq(sphere.getSphereID()));
+    ASSERT_THAT(intersection.getIntersectedShape()->getShapeID(), Eq(sphere.getSphereID()));
 }
 
 TEST_F(RaySphereIntersectionFeature, IntersectionsObjectAggregatesIntersections){
@@ -286,7 +286,7 @@ TEST_F(RaySphereIntersectionFeature, DISABLED_Projecting3DSphereOntoCanvas){
             if (ray.hitFound()){
                 double intersectionTime = ray.getIntersectionTracker().hit()->getIntersectionTime();
                 Tuple hitLocation = ray.locate(intersectionTime);
-                Tuple normalAtHit = sphere.normal(hitLocation);
+                Tuple normalAtHit = sphere.normalAt(hitLocation);
                 Tuple eyeVector = -ray.getDirection();
                 Color lightingColor  = light.light(sphereMaterial,hitLocation,eyeVector,normalAtHit);
                 canvas.setPixelColor(i, j, lightingColor);
@@ -304,8 +304,8 @@ TEST_F(RaySphereIntersectionFeature, PrecomputeStateOfIntersection){
     ray.intersect(sphere);
     ray.prepComputations();
     Intersection intersection = ray.getIntersectionTracker().getIntersection(0);
-    Sphere* intersectedObject = intersection.getIntersectedSphere();
-    ASSERT_THAT(intersectedObject->getSphereID(), Eq(sphere.getSphereID()));
+    Shape* intersectedObject = intersection.getIntersectedShape();
+    ASSERT_THAT(intersectedObject->getShapeID(), Eq(sphere.getSphereID()));
     Tuple correctIntersectionPoint{0,0,-1,TupleType::point};
     Tuple* intersectionPoint = intersection.getIntersectionPoint();
     ASSERT_THAT(*intersectionPoint == correctIntersectionPoint, true);
