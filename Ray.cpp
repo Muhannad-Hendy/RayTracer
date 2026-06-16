@@ -96,7 +96,11 @@ bool Ray::hitFound() {
     else return false;
 }
 
-IntersectionTracker Ray::getIntersectionTracker() const {
+const IntersectionTracker& Ray::getIntersectionTracker() const {
+    return intersections;
+}
+
+IntersectionTracker& Ray::getIntersectionTracker() {
     return intersections;
 }
 
@@ -123,7 +127,7 @@ void Ray::prepComputations() {
 Color Ray::colorAt(World &world) {
     this->intersect(world);
     this->prepComputations();
-    Intersection* hit = this->getIntersectionTracker().hit();
+    Intersection* hit = intersections.hit();
     if (hit) {
         return world.shadeHit(*hit);
     }
@@ -135,7 +139,7 @@ Color Ray::colorAt(World &world) {
 
 bool Ray::isShadowed(World &world) {
     this->intersect(world);
-    Intersection* hit = this->getIntersectionTracker().hit();
+    Intersection* hit = intersections.hit();
     if(hit && (hit->getIntersectionTime() < distance)) return true;
     else return false;
 }

@@ -41,7 +41,9 @@ public:
 
     bool hitFound();
 
-    IntersectionTracker getIntersectionTracker() const;
+    const IntersectionTracker& getIntersectionTracker() const;
+
+    IntersectionTracker& getIntersectionTracker();
 
     void prepComputations();
 

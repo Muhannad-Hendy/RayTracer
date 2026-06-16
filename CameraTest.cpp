@@ -251,7 +251,7 @@ TEST_F(CameraFeature, DISABLED_RenderingWorldSceneWithShadow) {
     world.addSphere(rightSphere);
     world.addSphere(leftSphere);
 
-    Camera camera{500,100,util::PI/3};
+    Camera camera{1000,500,util::PI/3};
     Tuple from{0,1.5,-5,TupleType::point};
     Tuple to{0,1,0,TupleType::point};
     Tuple up{0,1,0,TupleType::vector};
