@@ -68,7 +68,7 @@ const Canvas& Camera::render(World &world) {
     for(int y=0; y<verticalPixelSize; y++){
         for(int x=0; x<horizontalPixelSize; x++){
             Ray ray = this->generateRayForPixel(x,y);
-            Color color = ray.colorAt(world);
+            Color color = world.colorAt(ray);
             canvas.setPixelColor(x,y,color);
         }
     }

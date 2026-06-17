@@ -4,6 +4,8 @@
 #include "Tuple.h"
 #include "Ray.h"
 #include "Light.h"
+#include "Shape.h"
+#include "Sphere.h"
 
 using namespace testing;
 
@@ -79,7 +81,7 @@ TEST_F(CameraFeature, ConstructingRayWhenCameraIsTransformed) {
     ASSERT_THAT(rayDirection==correctDirection, true);
 }
 
-TEST_F(CameraFeature, DISABLED_RenderingWorldWithCamera) {
+TEST_F(CameraFeature, RenderingWorldWithCamera) {
     World world{};
     Camera camera{11,11,util::PI/2};
     Tuple from{0,0,-5,TupleType::point};
@@ -150,12 +152,12 @@ TEST_F(CameraFeature, DISABLED_RenderingWorldScene) {
     Tuple lightPosition{-10,10,-10, TupleType::point};
     Color lightColor{1,1,1};
     Light light{lightPosition,lightColor};
-    World world(floor, light);
-    world.addSphere(leftWall);
-    world.addSphere(rightWall);
-    world.addSphere(middleSphere);
-    world.addSphere(rightSphere);
-    world.addSphere(leftSphere);
+    World world(std::make_unique<Sphere>(floor), light);
+    world.addShape(std::make_unique<Sphere>(leftWall));
+    world.addShape(std::make_unique<Sphere>(rightWall));
+    world.addShape(std::make_unique<Sphere>(middleSphere));
+    world.addShape(std::make_unique<Sphere>(rightSphere));
+    world.addShape(std::make_unique<Sphere>(leftSphere));
 
     Camera camera{500,250,util::PI/3};
     Tuple from{0,1.5,-5,TupleType::point};
@@ -182,7 +184,7 @@ TEST_F(CameraFeature, DISABLED_Rendering3DSphere) {
     Tuple up{0,1,0,TupleType::vector};
     Transformer viewTransformer{from,to,up};
     camera.setCameraTransformation(viewTransformer);
-    World world{sphere,light};
+    World world{std::make_unique<Sphere>(sphere),light};
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/Sphere3D.ppm");
 }
@@ -244,12 +246,12 @@ TEST_F(CameraFeature, DISABLED_RenderingWorldSceneWithShadow) {
     Tuple lightPosition{-10,10,-10, TupleType::point};
     Color lightColor{1,1,1};
     Light light{lightPosition,lightColor};
-    World world(floor, light);
-    world.addSphere(leftWall);
-    world.addSphere(rightWall);
-    world.addSphere(middleSphere);
-    world.addSphere(rightSphere);
-    world.addSphere(leftSphere);
+    World world(std::make_unique<Sphere>(floor), light);
+    world.addShape(std::make_unique<Sphere>(leftWall));
+    world.addShape(std::make_unique<Sphere>(rightWall));
+    world.addShape(std::make_unique<Sphere>(middleSphere));
+    world.addShape(std::make_unique<Sphere>(rightSphere));
+    world.addShape(std::make_unique<Sphere>(leftSphere));
 
     Camera camera{1000,500,util::PI/3};
     Tuple from{0,1.5,-5,TupleType::point};
