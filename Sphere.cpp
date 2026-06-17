@@ -19,3 +19,30 @@ Tuple Sphere::localNormalAt(const Tuple &localPoint) const {
     return localNormal;
 }
 
+void Sphere::localIntersect(const Ray &localRay, IntersectionTracker &tracker) {
+    std::vector<double> intersectionParameters = calculateIntersectionParameters(localRay);
+    double a = intersectionParameters[0];
+    double b = intersectionParameters[1];
+    double discriminant = intersectionParameters[3];
+
+    if (discriminant >= 0) {
+        double intersectionTime1 = (-b - sqrt(discriminant)) / (2 * a);
+        double intersectionTime2 = (-b + sqrt(discriminant)) / (2 * a);
+        tracker.addIntersection(intersectionTime1, *this);
+        tracker.addIntersection(intersectionTime2, *this);
+    }
+}
+
+std::vector<double> Sphere::calculateIntersectionParameters(const Ray &ray) const {
+    Tuple rayOrigin = ray.getOrigin();
+    Tuple rayDirection = ray.getDirection();
+    Tuple objectOrigin{0,0,0,TupleType::point};
+    Tuple sphereToRay = rayOrigin - objectOrigin;
+
+    double a = rayDirection.dot(rayDirection);
+    double b = 2 * rayDirection.dot(sphereToRay);
+    double c = sphereToRay.dot(sphereToRay) - 1;
+    double discriminant = b * b - 4 * a * c;
+    return {a, b, c, discriminant};
+}
+

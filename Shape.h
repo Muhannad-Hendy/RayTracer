@@ -4,6 +4,8 @@
 #include "Tuple.h"
 #include "Transformer.h"
 #include "Material.h"
+#include "IntersectionTracker.h"
+#include "Ray.h"
 
 class Shape
 {
@@ -26,8 +28,11 @@ public:
 
     int getShapeID() const;
 
+    void intersect(const Ray &ray, IntersectionTracker &tracker);
+
 protected:
     virtual Tuple localNormalAt(const Tuple& localPoint) const = 0;
+    virtual void localIntersect(const Ray &localRay, IntersectionTracker &tracker) = 0;
 
 private:
     Transformer transformation{};

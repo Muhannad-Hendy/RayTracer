@@ -64,10 +64,11 @@ TEST_F(RaySphereIntersectionFeature, RayIntersectsSphereAtTwoPoints){
     Tuple direction{0,0,1,TupleType::vector};
     Ray ray{origin,direction};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionTime(0), Eq(4));
-    ASSERT_THAT(ray.getIntersectionTime(1), Eq(6));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray, tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(tracker.getIntersectionTime(0), Eq(4));
+    ASSERT_THAT(tracker.getIntersectionTime(1), Eq(6));
 }
 
 TEST_F(RaySphereIntersectionFeature, RayIntersectsSphereAtTangent){
@@ -75,10 +76,11 @@ TEST_F(RaySphereIntersectionFeature, RayIntersectsSphereAtTangent){
     Tuple direction{0,0,1,TupleType::vector};
     Ray ray{origin,direction};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionTime(0), Eq(5));
-    ASSERT_THAT(ray.getIntersectionTime(1), Eq(5));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray, tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(tracker.getIntersectionTime(0), Eq(5));
+    ASSERT_THAT(tracker.getIntersectionTime(1), Eq(5));
 }
 
 TEST_F(RaySphereIntersectionFeature, RayMissesSphere){
@@ -86,8 +88,9 @@ TEST_F(RaySphereIntersectionFeature, RayMissesSphere){
     Tuple direction{0,0,1,TupleType::vector};
     Ray ray{origin,direction};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(0));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray, tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(0));
 }
 
 TEST_F(RaySphereIntersectionFeature, RayOriginatesInsideSphere){
@@ -95,10 +98,11 @@ TEST_F(RaySphereIntersectionFeature, RayOriginatesInsideSphere){
     Tuple direction{0,0,1,TupleType::vector};
     Ray ray{origin,direction};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionTime(0), Eq(-1));
-    ASSERT_THAT(ray.getIntersectionTime(1), Eq(1));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(tracker.getIntersectionTime(0), Eq(-1));
+    ASSERT_THAT(tracker.getIntersectionTime(1), Eq(1));
 }
 
 TEST_F(RaySphereIntersectionFeature, SphereIsBehindRay){
@@ -106,10 +110,11 @@ TEST_F(RaySphereIntersectionFeature, SphereIsBehindRay){
     Tuple direction{0,0,1,TupleType::vector};
     Ray ray{origin,direction};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionTime(0), Eq(-6));
-    ASSERT_THAT(ray.getIntersectionTime(1), Eq(-4));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(tracker.getIntersectionTime(0), Eq(-6));
+    ASSERT_THAT(tracker.getIntersectionTime(1), Eq(-4));
 }
 
 TEST_F(RaySphereIntersectionFeature, IntersectionEncapsulatesTimeAndObject){
@@ -136,10 +141,11 @@ TEST_F(RaySphereIntersectionFeature, IntersectSetsIntersectedObjectOnTheIntersec
     Tuple direction{0,0,1,TupleType::vector};
     Ray ray{origin,direction};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectedObject(0) == sphere, true);
-    ASSERT_THAT(ray.getIntersectedObject(1) == sphere, true);
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(tracker.getIntersectedObject(0) == sphere, true);
+    ASSERT_THAT(tracker.getIntersectedObject(1) == sphere, true);
 }
 
 TEST_F(RaySphereIntersectionFeature, HitWhenAllIntersectionsHavePositiveTime){
@@ -204,11 +210,11 @@ TEST_F(RaySphereIntersectionFeature, IntersectingScaledSphereWithRay){
     Sphere sphere{};
     Transformer scaling{Transformation::scaling, 2,2,2};
     sphere.setTransformation(scaling);
-    ray.intersect(sphere);
-
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(2));
-    ASSERT_THAT(ray.getIntersectionTime(0), Eq(3));
-    ASSERT_THAT(ray.getIntersectionTime(1), Eq(7));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(2));
+    ASSERT_THAT(tracker.getIntersectionTime(0), Eq(3));
+    ASSERT_THAT(tracker.getIntersectionTime(1), Eq(7));
 }
 
 TEST_F(RaySphereIntersectionFeature, IntersectingTranslatedSphereWithRay){
@@ -218,16 +224,16 @@ TEST_F(RaySphereIntersectionFeature, IntersectingTranslatedSphereWithRay){
     Sphere sphere{};
     Transformer translate(Transformation::translation,5,0,0);
     sphere.setTransformation(translate);
-    ray.intersect(sphere);
-
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(0));
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(0));
 }
 
 TEST_F(RaySphereIntersectionFeature, DISABLED_ProjectingSphereOntoCanvas){
 
     Tuple rayOrigin{0,0,-5,TupleType::point};
     double wallSize{7};
-    int canvasPixels{100};
+    int canvasPixels{1000};
     double pixelSize = wallSize / canvasPixels;
     double halfCanvasLength = wallSize / 2;
     Canvas canvas{canvasPixels, canvasPixels};
@@ -245,8 +251,9 @@ TEST_F(RaySphereIntersectionFeature, DISABLED_ProjectingSphereOntoCanvas){
             Tuple directionVector = targetPoint - rayOrigin;
             directionVector = directionVector.normalize();
             Ray ray{rayOrigin, directionVector};
-            ray.intersect(sphere);
-            if (ray.hitFound()){
+            IntersectionTracker tracker{};
+            sphere.intersect(ray,tracker);
+            if (tracker.hit()){
                 canvas.setPixelColor(i, j, red);
             }
         }
@@ -282,9 +289,10 @@ TEST_F(RaySphereIntersectionFeature, DISABLED_Projecting3DSphereOntoCanvas){
             Tuple directionVector = targetPoint - rayOrigin;
             directionVector = directionVector.normalize();
             Ray ray{rayOrigin, directionVector};
-            ray.intersect(sphere);
-            if (ray.hitFound()){
-                double intersectionTime = ray.getIntersectionTracker().hit()->getIntersectionTime();
+            IntersectionTracker tracker{};
+            sphere.intersect(ray,tracker);
+            if (tracker.hit()){
+                double intersectionTime = tracker.hit()->getIntersectionTime();
                 Tuple hitLocation = ray.locate(intersectionTime);
                 Tuple normalAtHit = sphere.normalAt(hitLocation);
                 Tuple eyeVector = -ray.getDirection();
@@ -301,9 +309,10 @@ TEST_F(RaySphereIntersectionFeature, PrecomputeStateOfIntersection){
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin, rayDirection};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ray.prepComputations();
-    Intersection intersection = ray.getIntersectionTracker().getIntersection(0);
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection intersection = tracker.getIntersection(0);
     Shape* intersectedObject = intersection.getIntersectedShape();
     ASSERT_THAT(intersectedObject->getShapeID(), Eq(sphere.getShapeID()));
     Tuple correctIntersectionPoint{0,0,-1,TupleType::point};
@@ -323,9 +332,10 @@ TEST_F(RaySphereIntersectionFeature, HitIntersectionOnOutside){
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin, rayDirection};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ray.prepComputations();
-    Intersection* intersection = ray.getIntersectionTracker().hit();
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection* intersection = tracker.hit();
     ASSERT_THAT(intersection->isInside(), Eq(false));
 }
 
@@ -334,9 +344,10 @@ TEST_F(RaySphereIntersectionFeature, HitIntersectionOnInside){
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin, rayDirection};
     Sphere sphere{};
-    ray.intersect(sphere);
-    ray.prepComputations();
-    Intersection* intersection = ray.getIntersectionTracker().hit();
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection* intersection = tracker.hit();
     Tuple correctIntersectionPoint{0,0,1,TupleType::point};
     Tuple* intersectionPoint = intersection->getIntersectionPoint();
     ASSERT_THAT(*intersectionPoint == correctIntersectionPoint, true);
@@ -356,9 +367,10 @@ TEST_F(RaySphereIntersectionFeature, HitShouldOffsetPoint) {
     Sphere sphere{};
     Transformer translation{Transformation::translation, 0,0,1};
     sphere.setTransformation(translation);
-    ray.intersect(sphere);
-    ray.prepComputations();
-    Intersection* intersection = ray.getIntersectionTracker().hit();
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection* intersection = tracker.hit();
     Tuple& pointOverIntersection = intersection->getOverIntersectionPoint();
     double overIntersectionZValue = pointOverIntersection.getZValue();
     ASSERT_LT(overIntersectionZValue, util::EPSILON/-2);

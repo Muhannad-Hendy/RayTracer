@@ -10,6 +10,7 @@ public:
 
 protected:
     Tuple localNormalAt(const Tuple &localPoint) const override;
+    void localIntersect(const Ray &localRay, IntersectionTracker &tracker) override;
 };
 
 #endif // PLANE_H

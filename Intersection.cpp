@@ -1,5 +1,5 @@
 #include "Intersection.h"
-#include "Sphere.h"
+#include "Shape.h"
 
 Intersection::Intersection(){};
 

@@ -1,5 +1,6 @@
 #include "Shape.h"
 #include "Matrix.h"
+#include "IntersectionTracker.h"
 
 int Shape::shapesCounter = 0;
 
@@ -37,4 +38,9 @@ bool operator== (const Shape &shape1, const Shape &shape2) {
 
 int Shape::getShapeID() const {
     return shapeID;
+}
+
+void Shape::intersect(const Ray &ray, IntersectionTracker &tracker) {
+    Ray localRay = transformation.invert().transform(ray);
+    localIntersect(localRay, tracker);
 }

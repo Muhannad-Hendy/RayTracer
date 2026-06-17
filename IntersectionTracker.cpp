@@ -14,7 +14,7 @@ void IntersectionTracker::addIntersection(const Intersection& intersection){
     sortIntersections();
 }
 
-void IntersectionTracker::addIntersection(double time, Shape &shape){
+void IntersectionTracker::addIntersection(double time,Shape &shape){
     intersections.emplace_back(time, shape);
     sortIntersections();
 }
@@ -39,4 +39,38 @@ Intersection* IntersectionTracker::hit(){
         if (element.getIntersectionTime() >= 0) return &element;
     }
     return nullptr;
+}
+
+int IntersectionTracker::getNumberOfIntersections() const {
+    return intersections.size();
+}
+
+double IntersectionTracker::getIntersectionTime(const int index) {
+    Intersection intersection =  this->getIntersection(index);
+    return intersection.getIntersectionTime();
+}
+
+Shape& IntersectionTracker::getIntersectedObject(const int index) {
+    Intersection intersection = this->getIntersection(index);
+    return *intersection.getIntersectedShape();
+}
+
+void IntersectionTracker::prepComputations(const Ray &ray) {
+    for (Intersection& intersection : intersections) {
+        Tuple intersectionPoint = ray.locate(intersection.getIntersectionTime());
+        intersection.setIntersectionPoint(intersectionPoint);
+        intersection.setEyeVector(-ray.getDirection());
+        intersection.setNormalVector();
+        Tuple offsetVector = intersection.getNormalVector() * util::EPSILON;
+        Tuple overIntersection = intersectionPoint + offsetVector;
+        intersection.setOverIntersectionPoint(overIntersection);
+        double dotProduct = intersection.getEyeVector().dot(intersection.getNormalVector());
+        if (dotProduct < 0){
+            intersection.setInside(true);
+            intersection.invertNormal();
+        }
+        else {
+            intersection.setInside(false);
+        }
+    }
 }

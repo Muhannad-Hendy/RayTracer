@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include "Intersection.h"
+#include "Ray.h"
 
 class IntersectionTracker
 {
@@ -31,6 +32,15 @@ public:
     auto end() {
         return intersections.end();
     }
+
+    int getNumberOfIntersections() const;
+
+    double getIntersectionTime(const int index);
+
+    Shape& getIntersectedObject(const int index);
+
+    void prepComputations(const Ray &ray);
+
 
 private:
     std::list<Intersection> intersections{};
