@@ -38,13 +38,13 @@ void Tuple::setWValue(double value){
     w = value;
 }
 
-bool operator== (Tuple& tuple1, Tuple& tuple2){
+bool operator== (const Tuple& tuple1, const Tuple& tuple2){
     using namespace util;
     if (equals(tuple1.x, tuple2.x) && equals(tuple1.y, tuple2.y) && equals(tuple1.z, tuple2.z) && equals(tuple1.w, tuple2.w)) return true;
     else return false;
 }
 
-Tuple operator+ (Tuple& tuple1, Tuple& tuple2){
+Tuple operator+ (const Tuple& tuple1, const Tuple& tuple2){
     double xSum = tuple1.x + tuple2.x;
     double ySum = tuple1.y + tuple2.y;
     double zSum = tuple1.z + tuple2.z;
@@ -53,7 +53,7 @@ Tuple operator+ (Tuple& tuple1, Tuple& tuple2){
     return sum;
 }
 
-Tuple operator- (Tuple& tuple1, Tuple& tuple2){
+Tuple operator- (const Tuple& tuple1, const Tuple& tuple2){
     double xSum = tuple1.x - tuple2.x;
     double ySum = tuple1.y - tuple2.y;
     double zSum = tuple1.z - tuple2.z;

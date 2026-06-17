@@ -41,14 +41,14 @@ TEST_F(CanvasFeature, WritingPixelsToCanvas){
     ASSERT_THAT(black == *pixelColor, true);
 }
 
-//TEST_F(CanvasFeature, WritingPPMHFileHeader){
+//TEST_F(CanvasFeature, DISABLED_WritingPPMHFileHeader){
 //    Canvas canvas{5, 3};
 //    std::string fileOutput = canvas.saveToPPM();
 //    std::string correctValue = "P3\n5 3\n255\n";
 //    ASSERT_THAT(fileOutput, Eq(correctValue));
 //}
 
-//TEST_F(CanvasFeature, ConstructingPPMPixelData){
+//TEST_F(CanvasFeature, DISABLED_ConstructingPPMPixelData){
 //    Canvas canvas{5, 3};
 //    Color c1{1.5, 0, 0};
 //    Color c2{0, 0.5, 0};
@@ -62,7 +62,7 @@ TEST_F(CanvasFeature, WritingPixelsToCanvas){
 //    ASSERT_THAT(fileOutput, Eq(correctVale));
 //}
 
-//TEST_F(CanvasFeature, EnsuringNoPPMLineExceedsSeventyCharactersLong){
+//TEST_F(CanvasFeature, DISABLED_EnsuringNoPPMLineExceedsSeventyCharactersLong){
 //    Canvas canvas{10, 2};
 //    Color color{1, 0.8, 0.6};
 //    for (int i = 0; i < 2; i++){

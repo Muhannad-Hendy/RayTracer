@@ -31,11 +31,11 @@ public:
 
     void setWValue(double value);
 
-    friend bool operator== (Tuple& tuple1, Tuple& tuple2);
+    friend bool operator== (const Tuple& tuple1, const Tuple& tuple2);
 
-    friend Tuple operator+ (Tuple& tuple1, Tuple& tuple2);
+    friend Tuple operator+ (const Tuple& tuple1, const Tuple& tuple2);
 
-    friend Tuple operator- (Tuple& tuple1, Tuple& tuple2);
+    friend Tuple operator- (const Tuple& tuple1, const Tuple& tuple2);
 
     Tuple operator- ();
 
