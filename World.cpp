@@ -1,5 +1,6 @@
 #include "World.h"
 #include "Ray.h"
+#include "Sphere.h"
 
 World::World(){
     Tuple lightPosition{-10,10,-10,TupleType::point};
@@ -14,19 +15,19 @@ World::World(){
     material.setDiffuse(0.7);
     material.setSpecular(0.2);
     unitSphere.setMaterial(material);
-    spheres.push_back(unitSphere);
+    shapes.push_back(std::make_unique<Sphere>(unitSphere));
     Transformer scaler{Transformation::scaling, 0.5,0.5,0.5};
     halfSphere.setTransformation(scaler);
-    spheres.push_back(halfSphere);
+    shapes.push_back(std::make_unique<Sphere>(halfSphere));
 }
 
-World::World(Sphere sphere, Light light) {
-    addSphere(sphere);
+World::World(std::unique_ptr<Shape> shape, Light light) {
+    addShape(std::move(shape));
     addLight(light);
 }
 
 bool World::isEmpty() const{
-    return spheres.empty();
+    return shapes.empty();
 }
 
 bool World::isDark() const{
@@ -45,16 +46,27 @@ void World::addLight(Light light) {
     lights.push_back(std::move(light));
 }
 
-int World::getNumberOfSpheres() const{
-    return spheres.size();
+int World::getNumberOfShapes() const{
+    return shapes.size();
 }
 
-Sphere& World::getSphere(int i) {
-    return spheres.at(i);
+Shape& World::getShape(int i) {
+    return *shapes.at(i);
 }
 
-void World::addSphere(Sphere sphere) {
-    spheres.push_back(std::move(sphere));
+void World::addShape(std::unique_ptr<Shape> shape) {
+    shapes.push_back(std::move(shape));
+}
+
+Ray World::generateShadowRay(const Tuple& objectPoint) const {
+    Tuple lightPosition = getLight(0).getPosition();
+    Tuple vector = lightPosition - objectPoint;
+    double distance = vector.magnitude();
+    Tuple direction = vector.normalize();
+    Tuple origin = objectPoint;
+    Ray ray{origin,direction};
+    ray.setDistance(distance);
+    return ray;
 }
 
 Color World::shadeHit(Intersection &intersection) {
@@ -63,8 +75,36 @@ Color World::shadeHit(Intersection &intersection) {
     Tuple eyeVector = intersection.getEyeVector();
     Tuple normalVector = intersection.getNormalVector();
     Tuple& overIntersectionPoint = intersection.getOverIntersectionPoint();
-    Ray shadowRay{*this,overIntersectionPoint};
-    bool inShadow = shadowRay.isShadowed(*this);
+    Ray shadowRay = generateShadowRay(overIntersectionPoint);
+    bool inShadow = isShadowed(shadowRay);
     Color color = light.light(material,overIntersectionPoint,eyeVector,normalVector,inShadow);
     return color;
+}
+
+void World::intersect(Ray &ray, IntersectionTracker &tracker) {
+    for (const auto& shape : shapes) {
+        shape->intersect(ray,tracker);
+    }
+}
+
+bool World::isShadowed(Ray &ray) {
+    IntersectionTracker tracker{};
+    intersect(ray, tracker);
+    Intersection* hit = tracker.hit();
+    if(hit && (hit->getIntersectionTime() < ray.getDistance())) return true;
+    else return false;
+}
+
+Color World::colorAt(Ray &ray) {
+    IntersectionTracker tracker{};
+    intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection* hit = tracker.hit();
+    if (hit) {
+            return shadeHit(*hit);
+        }
+        else {
+            Color black{0,0,0};
+            return black;
+        }
 }

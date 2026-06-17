@@ -3,6 +3,7 @@
 #include "World.h"
 #include "Light.h"
 #include "Ray.h"
+#include "Sphere.h"
 #define PI 3.14159265
 using namespace testing;
 
@@ -10,12 +11,12 @@ class WorldFeature : public Test {
 
 };
 
-TEST_F(WorldFeature, DISABLED_WorldInitializedEmpty) {
-    World emptyWorld{};
+//TEST_F(WorldFeature, DISABLED_WorldInitializedEmpty) {
+//    World emptyWorld{};
 
-    ASSERT_THAT(emptyWorld.isEmpty(), true);
-    ASSERT_THAT(emptyWorld.isDark(), true);
-}
+//    ASSERT_THAT(emptyWorld.isEmpty(), true);
+//    ASSERT_THAT(emptyWorld.isDark(), true);
+//}
 
 TEST_F(WorldFeature, DefaultWorldHasDefaultLight) {
     World world{};
@@ -39,10 +40,10 @@ TEST_F(WorldFeature, DefaultWorldHasDefaultSpheres) {
 
     Transformer scaler{Transformation::scaling, 0.5,0.5,0.5};
 
-    Material sphereMaterial = world.getSphere(0).getMaterial();
-    Transformer sphereScaler = world.getSphere(1).getTransformation();
+    Material sphereMaterial = world.getShape(0).getMaterial();
+    Transformer sphereScaler = world.getShape(1).getTransformation();
 
-    ASSERT_THAT(world.getNumberOfSpheres() == 2, true);
+    ASSERT_THAT(world.getNumberOfShapes() == 2, true);
     ASSERT_THAT(sphereMaterial == material, true);
 }
 
@@ -51,24 +52,26 @@ TEST_F(WorldFeature, IntersectWorldWithRay) {
     Tuple rayOrigin{0,0,-5,TupleType::point};
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin,rayDirection};
-    ray.intersect(world);
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
 
-    ASSERT_THAT(ray.getNumberOfIntersections(), Eq(4));
-    ASSERT_THAT(ray.getIntersectionTime(0), Eq(4));
-    ASSERT_THAT(ray.getIntersectionTime(1), Eq(4.5));
-    ASSERT_THAT(ray.getIntersectionTime(2), Eq(5.5));
-    ASSERT_THAT(ray.getIntersectionTime(3), Eq(6));
+    ASSERT_THAT(tracker.getNumberOfIntersections(), Eq(4));
+    ASSERT_THAT(tracker.getIntersectionTime(0), Eq(4));
+    ASSERT_THAT(tracker.getIntersectionTime(1), Eq(4.5));
+    ASSERT_THAT(tracker.getIntersectionTime(2), Eq(5.5));
+    ASSERT_THAT(tracker.getIntersectionTime(3), Eq(6));
 }
 
-TEST_F(WorldFeature, DISABLED_ShadingAnIntersection){
+TEST_F(WorldFeature, ShadingAnIntersection){
     World world{};
     Tuple rayOrigin{0,0,-5,TupleType::point};
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin, rayDirection};
-    Sphere sphere = world.getSphere(0);
-    ray.intersect(sphere);
-    ray.prepComputations();
-    Intersection* hit = ray.getIntersectionTracker().hit();
+    auto& sphere = world.getShape(0);
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection* hit = tracker.hit();
     Color color = world.shadeHit(*hit);
     Color correctColor{0.38066,0.47583,0.2855};
     ASSERT_THAT(color == correctColor, true);
@@ -79,25 +82,25 @@ TEST_F(WorldFeature, ColorWhenRayMisses){
     Tuple rayOrigin{0,0,-5,TupleType::point};
     Tuple rayDirection{0,1,0,TupleType::vector};
     Ray ray{rayOrigin,rayDirection};
-    Color color = ray.colorAt(world);
+    Color color = world.colorAt(ray);
     Color correctColor{0,0,0};
     ASSERT_THAT(color == correctColor, true);
 }
 
-TEST_F(WorldFeature, DISABLED_ColorWhenRayHits) {
+TEST_F(WorldFeature, ColorWhenRayHits) {
     World world{};
     Tuple rayOrigin{0,0,-5,TupleType::point};
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin,rayDirection};
-    Color color = ray.colorAt(world);
+    Color color = world.colorAt(ray);
     Color correctColor{0.38066,0.47583,0.2855};
     ASSERT_THAT(color == correctColor, true);
 }
 
 TEST_F(WorldFeature, ColorWithIntersectionBehindRay) {
     World world{};
-    Sphere& outerSphere = world.getSphere(0);
-    Sphere& innerSphere = world.getSphere(1);
+    auto& outerSphere = world.getShape(0);
+    auto& innerSphere = world.getShape(1);
     Material material = outerSphere.getMaterial();
     material.setAmbient(1);
     outerSphere.setMaterial(material);
@@ -107,7 +110,7 @@ TEST_F(WorldFeature, ColorWithIntersectionBehindRay) {
     Tuple rayOrigin{0,0,0.75,TupleType::point};
     Tuple rayDirection{0,0,-1,TupleType::vector};
     Ray ray{rayOrigin,rayDirection};
-    Color color = ray.colorAt(world);
+    Color color = world.colorAt(ray);
     Color correctColor = material.getColor();
     ASSERT_THAT(color == correctColor, true);
 }
@@ -115,8 +118,8 @@ TEST_F(WorldFeature, ColorWithIntersectionBehindRay) {
 TEST_F(WorldFeature, NoShadowWhenNothingIsCollinearWithPointAndLight) {
     World world{};
     Tuple point{0,10,0,TupleType::point};
-    Ray shadowRay{world,point};
-    bool isShadowed = shadowRay.isShadowed(world);
+    Ray shadowRay = world.generateShadowRay(point);
+    bool isShadowed = world.isShadowed(shadowRay);
     bool correctIsShadowed = false;
     ASSERT_EQ(isShadowed,correctIsShadowed);
 }
@@ -124,8 +127,8 @@ TEST_F(WorldFeature, NoShadowWhenNothingIsCollinearWithPointAndLight) {
 TEST_F(WorldFeature, ShadowWhenObjectIsBetweenPointAndLight) {
     World world{};
     Tuple point{10,-10,10,TupleType::point};
-    Ray shadowRay{world,point};
-    bool isShadowed = shadowRay.isShadowed(world);
+    Ray shadowRay = world.generateShadowRay(point);
+    bool isShadowed = world.isShadowed(shadowRay);
     bool correctIsShadowed = true;
     ASSERT_EQ(isShadowed,correctIsShadowed);
 }
@@ -133,8 +136,8 @@ TEST_F(WorldFeature, ShadowWhenObjectIsBetweenPointAndLight) {
 TEST_F(WorldFeature, NoShadowWhenObjectIsBehindLight) {
     World world{};
     Tuple point{-20,20,-20,TupleType::point};
-    Ray shadowRay{world,point};
-    bool isShadowed = shadowRay.isShadowed(world);
+    Ray shadowRay = world.generateShadowRay(point);
+    bool isShadowed = world.isShadowed(shadowRay);
     bool correctIsShadowed = false;
     ASSERT_EQ(isShadowed,correctIsShadowed);
 }
@@ -142,8 +145,8 @@ TEST_F(WorldFeature, NoShadowWhenObjectIsBehindLight) {
 TEST_F(WorldFeature, NoShadowWhenObjectIsBehindPoint) {
     World world{};
     Tuple point{-2,2,-2,TupleType::point};
-    Ray shadowRay{world,point};
-    bool isShadowed = shadowRay.isShadowed(world);
+    Ray shadowRay = world.generateShadowRay(point);
+    bool isShadowed = world.isShadowed(shadowRay);
     bool correctIsShadowed = false;
     ASSERT_EQ(isShadowed,correctIsShadowed);
 }
@@ -153,17 +156,18 @@ TEST_F(WorldFeature, ShadeHitInShadow) {
     Color lightColor{1,1,1};
     Light light{point, lightColor};
     Sphere sphere1{};
-    World world{sphere1, light};
+    World world{std::make_unique<Sphere>(sphere1), light};
     Sphere sphere2{};
     Transformer translation{Transformation::translation,0,0,10};
     sphere2.setTransformation(translation);
-    world.addSphere(sphere2);
+    world.addShape(std::make_unique<Sphere>(sphere2));
     Tuple rayOrigin{0,0,5,TupleType::point};
     Tuple rayDirection{0,0,1,TupleType::vector};
     Ray ray{rayOrigin,rayDirection};
-    ray.intersect(sphere2);
-    ray.prepComputations();
-    Intersection intersection = ray.getIntersectionTracker().getIntersection(0);
+    IntersectionTracker tracker{};
+    sphere2.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection intersection = tracker.getIntersection(0);
     Color color = world.shadeHit(intersection);
     Color correctColor{0.1,0.1,0.1};
     ASSERT_THAT(color==correctColor, true);

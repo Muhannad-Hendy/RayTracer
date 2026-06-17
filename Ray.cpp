@@ -1,18 +1,9 @@
 #include "Ray.h"
-#include "Sphere.h"
 #include "Transformer.h"
 
 Ray::Ray(){};
 
 Ray::Ray(Tuple& origin, Tuple& direction) : origin{origin}, direction{direction}{}
-
-Ray::Ray(World& world, Tuple& point) {
-    Tuple lightPosition = world.getLight(0).getPosition();
-    Tuple vector = lightPosition - point;
-    distance = vector.magnitude();
-    direction = vector.normalize();
-    origin = point;
-}
 
 Tuple Ray::getOrigin() const{
     return origin;
@@ -34,112 +25,16 @@ Ray& Ray::operator= (const Ray& original){
     return *this;
 }
 
-Tuple Ray::locate(double time) {
+Tuple Ray::locate(double time) const{
     Tuple deltaDistance = direction * time;
     Tuple distance = origin + deltaDistance;
     return distance;
 }
 
-int Ray::getNumberOfIntersections() const{
-    return intersections.count();
+void Ray::setDistance(double distance) {
+    this->distance = distance;
 }
 
-double Ray::getIntersectionTime(int index) {
-    Intersection intersection =  intersections.getIntersection(index);
-    return intersection.getIntersectionTime();
-}
-
-Shape& Ray::getIntersectedObject(int index) {
-    Intersection intersection = intersections.getIntersection(index);
-    return *intersection.getIntersectedShape();
-}
-
-std::vector<double> Ray::calculateIntersectionParameters(Shape &shape){
-    Transformer rayTransformation = shape.getTransformation().invert();
-    Ray rayTransformed = rayTransformation.transform(*this);
-    Tuple rayOrigin = rayTransformed.getOrigin();
-    Tuple rayDirection = rayTransformed.getDirection();
-    Tuple objectOrigin{0,0,0,TupleType::point};
-    Tuple sphereToRay = rayOrigin - objectOrigin;
-
-    double a = rayDirection.dot(rayDirection);
-    double b = 2 * rayDirection.dot(sphereToRay);
-    double c = sphereToRay.dot(sphereToRay) - 1;
-    double discriminant = b * b - 4 * a * c;
-    return {a, b, c, discriminant};
-}
-
-void Ray::intersect(Shape &shape) {
-    std::vector<double> intersectionParameters = calculateIntersectionParameters(shape);
-    double a = intersectionParameters[0];
-    double b = intersectionParameters[1];
-    double discriminant = intersectionParameters[3];
-
-    if (discriminant >= 0) {
-        double intersectionTime1 = (-b - sqrt(discriminant)) / (2 * a);
-        double intersectionTime2 = (-b + sqrt(discriminant)) / (2 * a);
-        intersections.addIntersection(intersectionTime1, shape);
-        intersections.addIntersection(intersectionTime2, shape);
-    }
-}
-
-void Ray::intersect(World& world) {
-    int numberOfSpheres = world.getNumberOfSpheres();
-    for (int i = 0; i < numberOfSpheres; i++) {
-        Sphere& sphere = world.getSphere(i);
-        intersect(sphere);
-    }
-}
-
-bool Ray::hitFound() {
-    if (this->intersections.hit() != nullptr) return true;
-    else return false;
-}
-
-const IntersectionTracker& Ray::getIntersectionTracker() const {
-    return intersections;
-}
-
-IntersectionTracker& Ray::getIntersectionTracker() {
-    return intersections;
-}
-
-void Ray::prepComputations() {
-    for (Intersection& intersection : intersections) {
-        Tuple intersectionPoint = locate(intersection.getIntersectionTime());
-        intersection.setIntersectionPoint(intersectionPoint);
-        intersection.setEyeVector(-direction);
-        intersection.setNormalVector();
-        Tuple offsetVector = intersection.getNormalVector() * util::EPSILON;
-        Tuple overIntersection = intersectionPoint + offsetVector;
-        intersection.setOverIntersectionPoint(overIntersection);
-        double dotProduct = intersection.getEyeVector().dot(intersection.getNormalVector());
-        if (dotProduct < 0){
-            intersection.setInside(true);
-            intersection.invertNormal();
-        }
-        else {
-            intersection.setInside(false);
-        }
-    }
-}
-
-Color Ray::colorAt(World &world) {
-    this->intersect(world);
-    this->prepComputations();
-    Intersection* hit = intersections.hit();
-    if (hit) {
-        return world.shadeHit(*hit);
-    }
-    else {
-        Color black{0,0,0};
-        return black;
-    }
-}
-
-bool Ray::isShadowed(World &world) {
-    this->intersect(world);
-    Intersection* hit = intersections.hit();
-    if(hit && (hit->getIntersectionTime() < distance)) return true;
-    else return false;
+double Ray::getDistance() const {
+    return distance;
 }

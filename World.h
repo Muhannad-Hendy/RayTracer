@@ -2,9 +2,9 @@
 #define WORLD_H
 
 #include <vector>
-#include "Sphere.h"
+#include "Shape.h"
 #include "Light.h"
-#include "Intersection.h"
+#include "IntersectionTracker.h"
 
 
 class World
@@ -12,7 +12,7 @@ class World
 public:
     World();
 
-    World(Sphere sphere, Light light);
+    World(std::unique_ptr<Shape> shape, Light light);
 
     bool isEmpty() const;
 
@@ -24,16 +24,24 @@ public:
 
     void addLight(Light light);
 
-    int getNumberOfSpheres() const;
+    int getNumberOfShapes() const;
 
-    Sphere& getSphere(int i);
+    Shape& getShape(int i);
 
-    void addSphere(Sphere sphere);
+    void addShape(std::unique_ptr<Shape> shape);
 
     Color shadeHit(Intersection& intersection);
 
+    Ray generateShadowRay(const Tuple& objectPoint) const;
+
+    bool isShadowed(Ray& ray);
+
+    void intersect(Ray& ray, IntersectionTracker& tracker);
+
+    Color colorAt(Ray& ray);
+
 private:
-    std::vector<Sphere> spheres{};
+    std::vector<std::unique_ptr<Shape>> shapes;
     std::vector<Light> lights{};
 };
 
