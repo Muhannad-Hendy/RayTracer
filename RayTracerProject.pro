@@ -21,6 +21,7 @@ SOURCES += \
         Material.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
+        Pattern.cpp \
         Plane.cpp \
         PlaneTest.cpp \
         Ray.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     Light.h \
     Material.h \
     Matrix.h \
+    Pattern.h \
     Plane.h \
     Ray.h \
     Shape.h \
