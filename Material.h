@@ -1,6 +1,8 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 #include "Color.h"
+#include "Pattern.h"
+#include <memory>
 
 class Material
 {
@@ -30,12 +32,17 @@ public:
     friend bool operator== (Material& material1, Material& material2);
 
     Material& operator= (const Material& original);
+
+    std::shared_ptr<Pattern> getPattern() const;
+
+    void setPattern(std::shared_ptr<Pattern> pattern);
 private:
     Color color{};
     double ambient{};
     double diffuse{};
     double specular{};
     double shininess{};
+    std::shared_ptr<Pattern> pattern;
 };
 
 #endif // MATERIAL_H

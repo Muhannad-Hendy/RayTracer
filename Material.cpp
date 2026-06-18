@@ -68,3 +68,11 @@ Material& Material::operator=(const Material& original){
     shininess = original.shininess;
     return *this;
 }
+
+std::shared_ptr<Pattern> Material::getPattern() const {
+    return pattern;
+}
+
+void Material::setPattern(std::shared_ptr<Pattern> pattern) {
+    this->pattern = pattern;
+}
