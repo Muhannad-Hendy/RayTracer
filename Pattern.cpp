@@ -8,3 +8,8 @@ const Color& Pattern::patternAtShape(const Shape &shape, const Tuple &worldPoint
     const Color& patternColor = patternAt(patternPoint);
     return patternColor;
 }
+
+Pattern::Pattern() {
+    colors.emplace_back(0,0,0);
+    colors.emplace_back(1,1,1);
+}

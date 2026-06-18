@@ -3,12 +3,13 @@
 
 #include <vector>
 #include "Color.h"
-#include "Transformer.h"
 #include "Shape.h"
 
 class Pattern
 {
 public:
+    Pattern();
+
     Pattern(const Color& color1, const Color& color2);
 
     const Color& patternAtShape(const Shape& shape, const Tuple& worldPoint) const;
