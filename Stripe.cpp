@@ -1,5 +1,6 @@
 #include <cmath>
 #include "Stripe.h"
+#include "Tuple.h"
 
 Stripe::Stripe() {}
 

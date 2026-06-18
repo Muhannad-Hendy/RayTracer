@@ -3,7 +3,9 @@
 
 #include <vector>
 #include "Color.h"
-#include "Shape.h"
+#include "Transformer.h"
+
+class Shape;
 
 class Pattern
 {

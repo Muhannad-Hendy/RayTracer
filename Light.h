@@ -2,7 +2,8 @@
 #define LIGHT_H
 #include "Color.h"
 #include "Tuple.h"
-#include "Material.h"
+
+class Material;
 
 class Light
 {

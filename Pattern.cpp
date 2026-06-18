@@ -1,4 +1,5 @@
 #include "Pattern.h"
+#include "Shape.h"
 
 Pattern::Pattern(const Color& color1, const Color& color2) : colors{color1,color2} {}
 
