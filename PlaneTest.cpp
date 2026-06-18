@@ -20,3 +20,56 @@ TEST_F(PlanesFeature, NormalOfPlaneIsConstantEverywhere) {
     ASSERT_THAT(normal2==correctNormal, true);
     ASSERT_THAT(normal3==correctNormal, true);
 }
+
+TEST_F(PlanesFeature, IntersectionWithRayParallelToPlane) {
+    Plane plane{};
+    Tuple rayOrigin{0,10,10,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    Intersection* intersection = tracker.hit();
+    ASSERT_THAT(intersection==nullptr, true);
+}
+
+TEST_F(PlanesFeature, IntersectionWithCoplanarRay) {
+    Plane plane{};
+    Tuple rayOrigin{0,0,10,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    Intersection* intersection = tracker.hit();
+    ASSERT_THAT(intersection==nullptr, true);
+}
+
+TEST_F(PlanesFeature, RayIntersectingPlaneFromAbove) {
+    Plane plane{};
+    Tuple rayOrigin{0,1,0,TupleType::point};
+    Tuple rayDirection{0,-1,0,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    double numberOfIntersections = tracker.getNumberOfIntersections();
+    ASSERT_EQ(numberOfIntersections, 1);
+    Intersection intersection = tracker.getIntersection(0);
+    const auto& intersectedObject = intersection.getIntersectedShape();
+    ASSERT_THAT(*intersectedObject==plane, true);
+    ASSERT_EQ(intersection.getIntersectionTime(), 1);
+}
+
+
+TEST_F(PlanesFeature, RayIntersectingPlaneFromBelow) {
+    Plane plane{};
+    Tuple rayOrigin{0,-1,0,TupleType::point};
+    Tuple rayDirection{0,1,0,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    double numberOfIntersections = tracker.getNumberOfIntersections();
+    ASSERT_EQ(numberOfIntersections, 1);
+    Intersection intersection = tracker.getIntersection(0);
+    const auto& intersectedObject = intersection.getIntersectedShape();
+    ASSERT_THAT(*intersectedObject==plane, true);
+    ASSERT_EQ(intersection.getIntersectionTime(), 1);
+}
