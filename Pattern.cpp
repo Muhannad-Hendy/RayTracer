@@ -10,6 +10,10 @@ const Color& Pattern::patternAtShape(const Shape &shape, const Tuple &worldPoint
 }
 
 Pattern::Pattern() {
-    colors.emplace_back(0,0,0);
     colors.emplace_back(1,1,1);
+    colors.emplace_back(0,0,0);
+}
+
+const Color& Pattern::getColor(const int index) const {
+    return colors.at(index);
 }

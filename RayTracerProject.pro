@@ -22,12 +22,14 @@ SOURCES += \
         Matrix.cpp \
         MatrixTest.cpp \
         Pattern.cpp \
+        PatternsTest.cpp \
         Plane.cpp \
         PlaneTest.cpp \
         Ray.cpp \
         RaySphereIntersectionTest.cpp \
         Shape.cpp \
         Sphere.cpp \
+        Stripe.cpp \
         TransformationTest.cpp \
         Transformer.cpp \
         Tuple.cpp \
@@ -59,6 +61,7 @@ HEADERS += \
     Ray.h \
     Shape.h \
     Sphere.h \
+    Stripe.h \
     Transformer.h \
     Tuple.h \
     Utilities.h \
