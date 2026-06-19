@@ -28,6 +28,7 @@ SOURCES += \
         PlaneTest.cpp \
         Ray.cpp \
         RaySphereIntersectionTest.cpp \
+        Rings.cpp \
         Shape.cpp \
         Sphere.cpp \
         Stripe.cpp \
@@ -61,6 +62,7 @@ HEADERS += \
     Pattern.h \
     Plane.h \
     Ray.h \
+    Rings.h \
     Shape.h \
     Sphere.h \
     Stripe.h \

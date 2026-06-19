@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "Sphere.h"
 #include "Gradient.h"
+#include "Rings.h"
 
 using namespace testing;
 
@@ -147,4 +148,17 @@ TEST_F(PatternFeature, GradientLinearlyInterpolatesBetweenColors) {
     ASSERT_THAT(color2==correctColor2,true);
     ASSERT_THAT(color3==correctColor3,true);
     ASSERT_THAT(color4==correctColor4,true);
+}
+
+TEST_F(PatternFeature, RingShouldExtendInBothXAndZ) {
+    Rings ring{};
+    Plane plane{};
+    Color color1 = ring.patternAtShape(plane,Tuple{0,0,0,TupleType::point});
+    Color color2 = ring.patternAtShape(plane,Tuple{1,0,0,TupleType::point});
+    Color color3 = ring.patternAtShape(plane,Tuple{0,0,1,TupleType::point});
+    Color color4 = ring.patternAtShape(plane,Tuple{0.708,0,0.708,TupleType::point});
+    ASSERT_THAT(color1==white,true);
+    ASSERT_THAT(color2==black,true);
+    ASSERT_THAT(color3==black,true);
+    ASSERT_THAT(color4==black,true);
 }
