@@ -3,6 +3,7 @@
 #include "Color.h"
 #include "Tuple.h"
 
+class Shape;
 class Material;
 
 class Light
@@ -14,7 +15,9 @@ public:
 
     Color getIntensity() const;
 
-    Color light(Material& material, Tuple& target, Tuple& eyeVector, Tuple& normalVector, bool inShadow=false);
+    Color light(const Material& material, const Shape& shape, const Tuple& point, const Tuple& eyeVector, const Tuple& normalVector, const bool inShadow=false) const;
+
+    Color light(const Material& material, const Tuple& point, const Tuple& eyeVector, const Tuple& normalVector, const bool inShadow=false) const;
 
     friend bool operator== (Light& light1, Light& light2);
 

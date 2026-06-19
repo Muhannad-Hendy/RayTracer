@@ -20,6 +20,8 @@ public:
 
     const Color& getColor(const int index) const;
 
+    void setTransformation(const Transformer& transform);
+
 protected:
     virtual const Color& patternAt(const Tuple& patternPoint) const = 0;
 

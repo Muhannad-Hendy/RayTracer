@@ -71,13 +71,14 @@ Ray World::generateShadowRay(const Tuple& objectPoint) const {
 
 Color World::shadeHit(Intersection &intersection) {
     Material material = intersection.getIntersectedShape()->getMaterial();
+    const auto& shape = intersection.getIntersectedShape();
     Light light = this->getLight(0);
     Tuple eyeVector = intersection.getEyeVector();
     Tuple normalVector = intersection.getNormalVector();
     Tuple& overIntersectionPoint = intersection.getOverIntersectionPoint();
     Ray shadowRay = generateShadowRay(overIntersectionPoint);
     bool inShadow = isShadowed(shadowRay);
-    Color color = light.light(material,overIntersectionPoint,eyeVector,normalVector,inShadow);
+    Color color = light.light(material,*shape,overIntersectionPoint,eyeVector,normalVector,inShadow);
     return color;
 }
 

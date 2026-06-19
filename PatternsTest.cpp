@@ -2,19 +2,21 @@
 #include "Pattern.h"
 #include "Stripe.h"
 #include "Plane.h"
+#include "Light.h"
+#include "Sphere.h"
 
 using namespace testing;
 
 class PatternFeature : public Test {
-
+public:
+    Color black{0,0,0};
+    Color white{1,1,1};
 };
 
 TEST_F(PatternFeature, CreatingStripePattern) {
     Stripe stripe{};
     Color colorA = stripe.getColor(0);
     Color colorB = stripe.getColor(1);
-    Color black{0,0,0};
-    Color white{1,1,1};
 
     ASSERT_THAT(colorA==white, true);
     ASSERT_THAT(colorB==black, true);
@@ -23,8 +25,6 @@ TEST_F(PatternFeature, CreatingStripePattern) {
 TEST_F(PatternFeature, StripePatternIsConstantInY) {
     Stripe stripe{};
     Plane plane{};
-    Color black{0,0,0};
-    Color white{1,1,1};
 
     Tuple point1{0,0,0,TupleType::point};
     Tuple point2{0,1,0,TupleType::point};
@@ -41,8 +41,6 @@ TEST_F(PatternFeature, StripePatternIsConstantInY) {
 TEST_F(PatternFeature, StripePatternIsConstantInZ) {
     Stripe stripe{};
     Plane plane{};
-    Color black{0,0,0};
-    Color white{1,1,1};
 
     Tuple point1{0,0,0,TupleType::point};
     Tuple point2{0,0,1,TupleType::point};
@@ -59,8 +57,6 @@ TEST_F(PatternFeature, StripePatternIsConstantInZ) {
 TEST_F(PatternFeature, StripePatternAlternatesInX) {
     Stripe stripe{};
     Plane plane{};
-    Color black{0,0,0};
-    Color white{1,1,1};
 
     Tuple point1{0,0,0,TupleType::point};
     Tuple point2{0.9,0,0,TupleType::point};
@@ -82,3 +78,57 @@ TEST_F(PatternFeature, StripePatternAlternatesInX) {
     ASSERT_THAT(color5==black,true);
     ASSERT_THAT(color6==white,true);
 }
+
+TEST_F(PatternFeature, LightingWithPatternApplied) {
+    Stripe stripe{};
+    Plane plane{};
+    Material material{};
+    material.setPattern(std::make_shared<Stripe>(stripe));
+    material.setAmbient(1);
+    material.setDiffuse(0);
+    material.setSpecular(0);
+    Tuple eyeVector{0,0,-1,TupleType::vector};
+    Tuple normalVector{0,0,-1,TupleType::vector};
+    Tuple lightPoint{0,0,-10,TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPoint,lightColor};
+    Tuple point1{0.9,0,0,TupleType::point};
+    Tuple point2{1.1,0,0,TupleType::point};
+    Color color1 = light.light(material,plane,point1,eyeVector,normalVector);
+    Color color2 = light.light(material,plane,point2,eyeVector,normalVector);
+    ASSERT_THAT(color1==white,true);
+    ASSERT_THAT(color2==black,true);
+}
+
+TEST_F(PatternFeature, StipesWithObjectTransformation) {
+    Sphere sphere{};
+    Transformer scaler{Transformation::scaling,2,2,2};
+    sphere.setTransformation(scaler);
+    Stripe stripe{};
+    Tuple point{1.5,0,0,TupleType::point};
+    Color color = stripe.patternAtShape(sphere,point);
+    ASSERT_THAT(color==white,true);
+}
+
+TEST_F(PatternFeature, StipesWithPatternTransformation) {
+    Sphere sphere{};
+    Transformer scaler{Transformation::scaling,2,2,2};
+    Stripe stripe{};
+    stripe.setTransformation(scaler);
+    Tuple point{1.5,0,0,TupleType::point};
+    Color color = stripe.patternAtShape(sphere,point);
+    ASSERT_THAT(color==white,true);
+}
+
+TEST_F(PatternFeature, StipesWithBothObjectAndPatternTransformation) {
+    Sphere sphere{};
+    Transformer scaler{Transformation::scaling,2,2,2};
+    sphere.setTransformation(scaler);
+    Stripe stripe{};
+    Transformer translator{Transformation::translation,0.5,0,0};
+    stripe.setTransformation(translator);
+    Tuple point{2.5,0,0,TupleType::point};
+    Color color = stripe.patternAtShape(sphere,point);
+    ASSERT_THAT(color==white,true);
+}
+

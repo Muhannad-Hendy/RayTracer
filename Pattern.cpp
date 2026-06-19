@@ -18,3 +18,7 @@ Pattern::Pattern() {
 const Color& Pattern::getColor(const int index) const {
     return colors.at(index);
 }
+
+void Pattern::setTransformation(const Transformer &transform) {
+    transformation = transform;
+}

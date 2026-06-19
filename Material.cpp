@@ -66,6 +66,7 @@ Material& Material::operator=(const Material& original){
     diffuse = original.diffuse;
     specular = original.specular;
     shininess = original.shininess;
+    pattern = original.pattern;
     return *this;
 }
 
