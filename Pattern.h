@@ -23,7 +23,7 @@ public:
     void setTransformation(const Transformer& transform);
 
 protected:
-    virtual const Color& patternAt(const Tuple& patternPoint) const = 0;
+    virtual const Color patternAt(const Tuple& patternPoint) const = 0;
 
 private:
     std::vector<Color> colors{};

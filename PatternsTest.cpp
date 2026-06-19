@@ -4,6 +4,7 @@
 #include "Plane.h"
 #include "Light.h"
 #include "Sphere.h"
+#include "Gradient.h"
 
 using namespace testing;
 
@@ -132,3 +133,18 @@ TEST_F(PatternFeature, StipesWithBothObjectAndPatternTransformation) {
     ASSERT_THAT(color==white,true);
 }
 
+TEST_F(PatternFeature, GradientLinearlyInterpolatesBetweenColors) {
+    Gradient gradient{};
+    Plane plane{};
+    Color color1 = gradient.patternAtShape(plane,Tuple{0,0,0,TupleType::point});
+    Color color2 = gradient.patternAtShape(plane,Tuple{0.25,0,0,TupleType::point});
+    Color color3 = gradient.patternAtShape(plane,Tuple{0.5,0,0,TupleType::point});
+    Color color4 = gradient.patternAtShape(plane,Tuple{0.75,0,0,TupleType::point});
+    ASSERT_THAT(color1==white, true);
+    Color correctColor2{0.75,0.75,0.75};
+    Color correctColor3{0.5,0.5,0.5};
+    Color correctColor4{0.25,0.25,0.25};
+    ASSERT_THAT(color2==correctColor2,true);
+    ASSERT_THAT(color3==correctColor3,true);
+    ASSERT_THAT(color4==correctColor4,true);
+}

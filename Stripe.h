@@ -9,7 +9,7 @@ public:
     Stripe();
 
 protected:
-    const Color & patternAt(const Tuple &patternPoint) const override;
+    const Color patternAt(const Tuple &patternPoint) const override;
 };
 
 #endif // STRIPE_H

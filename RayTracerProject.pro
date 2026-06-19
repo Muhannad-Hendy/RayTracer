@@ -14,6 +14,7 @@ SOURCES += \
         CanvasTest.cpp \
         Color.cpp \
         ColorTest.cpp \
+        Gradient.cpp \
         Intersection.cpp \
         IntersectionTracker.cpp \
         Light.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     Camera.h \
     Canvas.h \
     Color.h \
+    Gradient.h \
     Intersection.h \
     IntersectionTracker.h \
     Light.h \

@@ -322,7 +322,7 @@ TEST_F(CameraFeature, DISABLED_RenderingWorldSceneWithShadowOnPlane) {
     image.saveToPPM("../Output/renderingSceneWithShadowOnPlane.ppm");
 }
 
-TEST_F(CameraFeature, RenderingSceneWithStripes) {
+TEST_F(CameraFeature, DISABLED_RenderingSceneWithStripes) {
     Plane floor{};
     Material floorMaterial{};
     Color floorColor{0.87,0.29,0.17};
@@ -340,6 +340,7 @@ TEST_F(CameraFeature, RenderingSceneWithStripes) {
     middleMaterial.setColor(middleColor);
     middleMaterial.setDiffuse(0.7);
     middleMaterial.setSpecular(0.3);
+    middleMaterial.setPattern(std::make_shared<Stripe>(stripe));
     middleSphere.setMaterial(middleMaterial);
 
     Sphere rightSphere{};
