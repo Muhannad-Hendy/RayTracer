@@ -6,7 +6,7 @@
 class Stripe : public Pattern
 {
 public:
-    Stripe();
+    using Pattern::Pattern;
 
 protected:
     const Color patternAt(const Tuple &patternPoint) const override;

@@ -6,7 +6,7 @@
 class Gradient : public Pattern
 {
 public:
-    Gradient();
+    using Pattern::Pattern;
 
 protected:
     const Color patternAt(const Tuple &patternPoint) const override;

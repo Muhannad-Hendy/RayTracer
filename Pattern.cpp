@@ -3,7 +3,7 @@
 
 Pattern::Pattern(const Color& color1, const Color& color2) : colors{color1,color2} {}
 
-const Color& Pattern::patternAtShape(const Shape &shape, const Tuple &worldPoint) const {
+const Color Pattern::patternAtShape(const Shape &shape, const Tuple &worldPoint) const {
     Tuple objectPoint = shape.getTransformation().invert().transform(worldPoint);
     Tuple patternPoint = transformation.invert().transform(objectPoint);
     const Color& patternColor = patternAt(patternPoint);
