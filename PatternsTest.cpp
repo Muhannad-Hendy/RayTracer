@@ -6,6 +6,7 @@
 #include "Sphere.h"
 #include "Gradient.h"
 #include "Rings.h"
+#include "checker.h"
 
 using namespace testing;
 
@@ -161,4 +162,37 @@ TEST_F(PatternFeature, RingShouldExtendInBothXAndZ) {
     ASSERT_THAT(color2==black,true);
     ASSERT_THAT(color3==black,true);
     ASSERT_THAT(color4==black,true);
+}
+
+TEST_F(PatternFeature, CheckersShouldRepeatInX) {
+    Checker checker{};
+    Plane plane{};
+    Color color1 = checker.patternAtShape(plane,Tuple{0,0,0,TupleType::point});
+    Color color2 = checker.patternAtShape(plane,Tuple{0.99,0,0,TupleType::point});
+    Color color3 = checker.patternAtShape(plane,Tuple{1.01,0,0,TupleType::point});
+    ASSERT_THAT(color1==white,true);
+    ASSERT_THAT(color2==white,true);
+    ASSERT_THAT(color3==black,true);
+}
+
+TEST_F(PatternFeature, CheckersShouldRepeatInY) {
+    Checker checker{};
+    Plane plane{};
+    Color color1 = checker.patternAtShape(plane,Tuple{0,0,0,TupleType::point});
+    Color color2 = checker.patternAtShape(plane,Tuple{0,0.99,0,TupleType::point});
+    Color color3 = checker.patternAtShape(plane,Tuple{0,1.01,0,TupleType::point});
+    ASSERT_THAT(color1==white,true);
+    ASSERT_THAT(color2==white,true);
+    ASSERT_THAT(color3==black,true);
+}
+
+TEST_F(PatternFeature, CheckersShouldRepeatInZ) {
+    Checker checker{};
+    Plane plane{};
+    Color color1 = checker.patternAtShape(plane,Tuple{0,0,0,TupleType::point});
+    Color color2 = checker.patternAtShape(plane,Tuple{0,0,0.99,TupleType::point});
+    Color color3 = checker.patternAtShape(plane,Tuple{0,0,1.01,TupleType::point});
+    ASSERT_THAT(color1==white,true);
+    ASSERT_THAT(color2==white,true);
+    ASSERT_THAT(color3==black,true);
 }

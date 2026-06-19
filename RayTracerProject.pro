@@ -39,6 +39,7 @@ SOURCES += \
         Utilities.cpp \
         World.cpp \
         WorldTest.cpp \
+        checker.cpp \
         main.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
@@ -69,4 +70,5 @@ HEADERS += \
     Transformer.h \
     Tuple.h \
     Utilities.h \
-    World.h
+    World.h \
+    checker.h
