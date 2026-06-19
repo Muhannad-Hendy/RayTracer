@@ -9,6 +9,7 @@
 #include "Plane.h"
 #include "Stripe.h"
 #include "Gradient.h"
+#include "checker.h"
 
 using namespace testing;
 
@@ -444,4 +445,61 @@ TEST_F(CameraFeature, DISABLED_RenderingSceneWithGradient) {
     camera.setCameraTransformation(viewTransformer);
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingSceneWithGradient.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingSceneWithChecker) {
+    Checker checker{};
+    Plane floor{};
+    Material floorMaterial{};
+    floorMaterial.setPattern(std::make_shared<Checker>(checker));
+    floor.setMaterial(floorMaterial);
+
+    Sphere middleSphere{};
+    Transformer middleTranslation{Transformation::translation,-0.5,1,0.5};
+    middleSphere.setTransformation(middleTranslation);
+    Material middleMaterial{};
+    Color middleColor{0.1,1,0.5};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(0.7);
+    middleMaterial.setSpecular(0.3);
+    middleSphere.setMaterial(middleMaterial);
+
+    Sphere rightSphere{};
+    Transformer rightSphereTranslation{Transformation::translation,1.5,0.5,-0.5};
+    Transformer rightSphereScaling{Transformation::scaling,0.5,0.5,0.5};
+    rightSphere.setTransformation(rightSphereScaling>rightSphereTranslation);
+    Material rightSphereMaterial{};
+    Color rightSphereColor{0.5,1,0.1};
+    rightSphereMaterial.setColor(rightSphereColor);
+    rightSphereMaterial.setDiffuse(0.7);
+    rightSphereMaterial.setSpecular(0.3);
+    rightSphere.setMaterial(rightSphereMaterial);
+
+    Sphere leftSphere{};
+    Transformer leftSphereTranslation{Transformation::translation,-1.5,0.33,-0.75};
+    Transformer leftSphereScaling{Transformation::scaling,0.33,0.33,0.33};
+    leftSphere.setTransformation(leftSphereScaling>leftSphereTranslation);
+    Material leftSphereMaterial{};
+    Color leftSphereColor{1,0.8,0.1};
+    leftSphereMaterial.setColor(leftSphereColor);
+    leftSphereMaterial.setDiffuse(0.7);
+    leftSphereMaterial.setSpecular(0.3);
+    leftSphere.setMaterial(leftSphereMaterial);
+
+    Tuple lightPosition{-10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world(std::make_unique<Plane>(floor), light);
+    world.addShape(std::make_unique<Sphere>(middleSphere));
+    world.addShape(std::make_unique<Sphere>(rightSphere));
+    world.addShape(std::make_unique<Sphere>(leftSphere));
+
+    Camera camera{1000,500,util::PI/3};
+    Tuple from{0,1.5,-5,TupleType::point};
+    Tuple to{0,1,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingSceneWithChecker.ppm");
 }
