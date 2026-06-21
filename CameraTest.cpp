@@ -503,3 +503,60 @@ TEST_F(CameraFeature, DISABLED_RenderingSceneWithChecker) {
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingSceneWithChecker.ppm");
 }
+
+TEST_F(CameraFeature, DISABLED_RenderingSceneWithReflections) {
+    Checker checker{};
+    Plane floor{};
+    Material floorMaterial{};
+    floorMaterial.setPattern(std::make_shared<Checker>(checker));
+    floorMaterial.setReflectivity(0.1);
+    floor.setMaterial(floorMaterial);
+
+    Plane backWall{};
+    Material wallMaterial{};
+    wallMaterial.setReflectivity(0);
+    wallMaterial.setColor(Color{0.86,0.08,0.24});
+    backWall.setMaterial(wallMaterial);
+    Transformer wallTranslation{Transformation::translation,0,0,3};
+    Transformer wallRotation{Transformation::xRotation,-util::PI/2};
+    backWall.setTransformation(wallRotation>wallTranslation);
+
+    Plane leftWall{};
+    Material leftWallMaterial{};
+    leftWallMaterial.setReflectivity(1);
+    leftWallMaterial.setSpecular(1);
+    leftWallMaterial.setAmbient(0);
+    leftWallMaterial.setDiffuse(0.1);
+    leftWall.setMaterial(leftWallMaterial);
+    Transformer leftWallTranslation{Transformation::translation,-3,0,0};
+    Transformer leftWallRotation{Transformation::zRotation,-util::PI/2};
+    leftWall.setTransformation(leftWallRotation>leftWallTranslation);
+
+    Sphere middleSphere{};
+    Transformer middleTranslation{Transformation::translation,0.7,1,-0.5};
+    middleSphere.setTransformation(middleTranslation);
+    Material middleMaterial{};
+    Color middleColor{0.1,1,0.5};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(0.7);
+    middleMaterial.setSpecular(0.7);
+    middleSphere.setMaterial(middleMaterial);
+
+
+    Tuple lightPosition{10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world(std::make_unique<Plane>(floor), light);
+    world.addShape(std::make_unique<Sphere>(middleSphere));
+    world.addShape(std::make_unique<Plane>(backWall));
+    world.addShape(std::make_unique<Plane>(leftWall));
+
+    Camera camera{2000,1000,util::PI/3};
+    Tuple from{5,3,-3,TupleType::point};
+    Tuple to{0,0.5,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingSceneWithReflections.ppm");
+}

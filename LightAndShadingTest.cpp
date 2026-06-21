@@ -242,4 +242,9 @@ TEST_F(LightAndShadingFeature, LightingWithSurfaceInShadow) {
     ASSERT_THAT(result==correctColor, true);
 }
 
+TEST_F(LightAndShadingFeature, ReflectivityForDefaultMaterial) {
+    Material material{};
+    ASSERT_DOUBLE_EQ(material.getReflectivity(),0);
+}
+
 

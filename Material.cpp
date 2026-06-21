@@ -7,6 +7,7 @@ Material::Material() {
     diffuse = 0.9;
     specular = 0.9;
     shininess = 200;
+    reflectivity = 0;
 }
 
 Color Material::getColor() const{
@@ -67,6 +68,7 @@ Material& Material::operator=(const Material& original){
     specular = original.specular;
     shininess = original.shininess;
     pattern = original.pattern;
+    reflectivity = original.reflectivity;
     return *this;
 }
 
@@ -76,4 +78,12 @@ std::shared_ptr<Pattern> Material::getPattern() const {
 
 void Material::setPattern(std::shared_ptr<Pattern> pattern) {
     this->pattern = pattern;
+}
+
+void Material::setReflectivity(const double reflectivity) {
+    this->reflectivity = reflectivity;
+}
+
+double Material::getReflectivity() const {
+    return reflectivity;
 }

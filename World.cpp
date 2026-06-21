@@ -69,7 +69,7 @@ Ray World::generateShadowRay(const Tuple& objectPoint) const {
     return ray;
 }
 
-Color World::shadeHit(Intersection &intersection) {
+Color World::shadeHit(Intersection &intersection, int remainingRecursions) {
     Material material = intersection.getIntersectedShape()->getMaterial();
     const auto& shape = intersection.getIntersectedShape();
     Light light = this->getLight(0);
@@ -78,8 +78,9 @@ Color World::shadeHit(Intersection &intersection) {
     Tuple& overIntersectionPoint = intersection.getOverIntersectionPoint();
     Ray shadowRay = generateShadowRay(overIntersectionPoint);
     bool inShadow = isShadowed(shadowRay);
-    Color color = light.light(material,*shape,overIntersectionPoint,eyeVector,normalVector,inShadow);
-    return color;
+    Color surface = light.light(material,*shape,overIntersectionPoint,eyeVector,normalVector,inShadow);
+    Color reflected = this->reflectedColor(intersection, remainingRecursions);
+    return surface+reflected;
 }
 
 void World::intersect(Ray &ray, IntersectionTracker &tracker) {
@@ -96,16 +97,28 @@ bool World::isShadowed(Ray &ray) {
     else return false;
 }
 
-Color World::colorAt(Ray &ray) {
+Color World::colorAt(Ray &ray, int remainingRecursions) {
     IntersectionTracker tracker{};
     intersect(ray,tracker);
     tracker.prepComputations(ray);
     Intersection* hit = tracker.hit();
     if (hit) {
-            return shadeHit(*hit);
+            return shadeHit(*hit, remainingRecursions);
         }
         else {
             Color black{0,0,0};
             return black;
         }
+}
+
+Color World::reflectedColor(Intersection &intersection, int remainingRecursions) {
+    double objectReflectivy = intersection.getIntersectedShape()->getMaterial().getReflectivity();
+    if ((objectReflectivy==0) || (remainingRecursions<1)) {
+        return Color{0,0,0};
+    }
+    else {
+        Ray reflectedRay{intersection.getOverIntersectionPoint(),intersection.getReflectionVector()};
+        Color color = colorAt(reflectedRay, --remainingRecursions);
+        return color*intersection.getIntersectedShape()->getMaterial().getReflectivity();
+    }
 }

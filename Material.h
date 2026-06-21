@@ -36,6 +36,11 @@ public:
     std::shared_ptr<Pattern> getPattern() const;
 
     void setPattern(std::shared_ptr<Pattern> pattern);
+
+    void setReflectivity(const double reflectivity);
+
+    double getReflectivity() const;
+
 private:
     Color color{};
     double ambient{};
@@ -43,6 +48,7 @@ private:
     double specular{};
     double shininess{};
     std::shared_ptr<Pattern> pattern;
+    double reflectivity{};
 };
 
 #endif // MATERIAL_H

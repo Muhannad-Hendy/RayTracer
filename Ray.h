@@ -9,7 +9,7 @@ class Ray
 public:
     Ray();
 
-    Ray(Tuple& origin, Tuple& direction);
+    Ray(const Tuple& origin, const Tuple& direction);
 
     Tuple getOrigin() const;
 

@@ -30,7 +30,7 @@ public:
 
     void addShape(std::unique_ptr<Shape> shape);
 
-    Color shadeHit(Intersection& intersection);
+    Color shadeHit(Intersection& intersection, int remainingRecursions=5);
 
     Ray generateShadowRay(const Tuple& objectPoint) const;
 
@@ -38,7 +38,9 @@ public:
 
     void intersect(Ray& ray, IntersectionTracker& tracker);
 
-    Color colorAt(Ray& ray);
+    Color colorAt(Ray& ray, int remainingRecursions=5);
+
+    Color reflectedColor(Intersection& intersection, int remainingRecursions=5);
 
 private:
     std::vector<std::unique_ptr<Shape>> shapes;

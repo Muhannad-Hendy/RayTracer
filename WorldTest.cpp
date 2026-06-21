@@ -4,6 +4,7 @@
 #include "Light.h"
 #include "Ray.h"
 #include "Sphere.h"
+#include "Plane.h"
 #define PI 3.14159265
 using namespace testing;
 
@@ -172,3 +173,94 @@ TEST_F(WorldFeature, ShadeHitInShadow) {
     Color correctColor{0.1,0.1,0.1};
     ASSERT_THAT(color==correctColor, true);
 }
+
+
+TEST_F(WorldFeature, ReflectedColorForNonreflectiveMaterial) {
+    World world{};
+    Tuple rayOrigin{0,0,0,TupleType::point};
+    Tuple rayDirection{0,0,1,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    auto& shape = world.getShape(1);
+    Material material{};
+    material.setAmbient(1);
+    shape.setMaterial(material);
+    IntersectionTracker tracker{};
+    shape.intersect(ray,tracker);
+    Color reflectedColor = world.reflectedColor(*tracker.hit());
+    Color correctReflected{0,0,0};
+    ASSERT_THAT(reflectedColor==correctReflected,true);
+}
+
+TEST_F(WorldFeature, ReflectedColorForReflectiveMaterial) {
+    World world{};
+    Plane plane{};
+    Material planeMaterial{};
+    planeMaterial.setReflectivity(0.5);
+    plane.setMaterial(planeMaterial);
+    Transformer planeTranslation{Transformation::translation,0,-1,0};
+    plane.setTransformation(planeTranslation);
+    world.addShape(std::make_unique<Plane>(plane));
+    Ray ray{Tuple{0,0,-3,TupleType::point},Tuple{0,-std::sqrt(2)/2, std::sqrt(2)/2,TupleType::vector}};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Color reflectedColor = world.reflectedColor(*tracker.hit());
+    Color correctReflection{0.19033,0.23791,0.14274};
+    ASSERT_THAT(reflectedColor==correctReflection,true);
+}
+
+TEST_F(WorldFeature, ReflectedColorForReflectiveMaterialShadeHit) {
+    World world{};
+    Plane plane{};
+    Material planeMaterial{};
+    planeMaterial.setReflectivity(0.5);
+    plane.setMaterial(planeMaterial);
+    Transformer planeTranslation{Transformation::translation,0,-1,0};
+    plane.setTransformation(planeTranslation);
+    world.addShape(std::make_unique<Plane>(plane));
+    Ray ray{Tuple{0,0,-3,TupleType::point},Tuple{0,-std::sqrt(2)/2, std::sqrt(2)/2,TupleType::vector}};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Color reflectedColor = world.shadeHit(*tracker.hit());
+    Color correctReflection{0.87676,0.92434,0.82917};
+    ASSERT_THAT(reflectedColor==correctReflection,true);
+}
+
+
+TEST_F(WorldFeature, ColorAtWithMutuallyReflectiveSurfaces) {
+    Light light{Tuple{0,0,0,TupleType::point},Color{1,1,1}};
+    Plane lower{};
+    Material lowerMaterial{};
+    lowerMaterial.setReflectivity(1);
+    Transformer lowerTranslation{Transformation::translation,0,-1,0};
+    lower.setMaterial(lowerMaterial);
+    lower.setTransformation(lowerTranslation);
+    World world{std::make_unique<Plane>(lower),light};
+    Plane upper{};
+    Transformer upperTranslation{Transformation::translation,0,1,0};
+    upper.setMaterial(lowerMaterial);
+    upper.setTransformation(upperTranslation);
+    world.addShape(std::make_unique<Plane>(upper));
+    Ray ray{Tuple{0,0,0,TupleType::point},Tuple{0,1,0,TupleType::vector}};
+    Color color = world.colorAt(ray);
+}
+
+TEST_F(WorldFeature, ReflectedColorAtMaximumRecursiveDepth) {
+    World world{};
+    Plane plane{};
+    Material planeMaterial{};
+    planeMaterial.setReflectivity(0.5);
+    plane.setMaterial(planeMaterial);
+    Transformer planeTranslation{Transformation::translation,0,-1,0};
+    plane.setTransformation(planeTranslation);
+    world.addShape(std::make_unique<Plane>(plane));
+    Ray ray{Tuple{0,0,-3,TupleType::point},Tuple{0,-std::sqrt(2)/2, std::sqrt(2)/2,TupleType::vector}};
+    IntersectionTracker tracker{};
+    plane.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Color reflectedColor = world.reflectedColor(*tracker.hit(),0);
+    Color black{0,0,0};
+    ASSERT_THAT(reflectedColor==black,true);
+}
+

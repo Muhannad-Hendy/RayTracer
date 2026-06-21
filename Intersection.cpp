@@ -62,3 +62,11 @@ void Intersection::setOverIntersectionPoint(Tuple point) {
 Tuple& Intersection::getOverIntersectionPoint() {
     return overIntersectionPoint;
 }
+
+void Intersection::setReflectionVector(const Tuple &reflectionVector) {
+    this->reflectionVector = reflectionVector;
+}
+
+const Tuple& Intersection::getReflectionVector() const {
+    return reflectionVector;
+}

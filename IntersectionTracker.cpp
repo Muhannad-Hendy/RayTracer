@@ -64,6 +64,8 @@ void IntersectionTracker::prepComputations(const Ray &ray) {
         Tuple offsetVector = intersection.getNormalVector() * util::EPSILON;
         Tuple overIntersection = intersectionPoint + offsetVector;
         intersection.setOverIntersectionPoint(overIntersection);
+        Tuple rayReflectionVector = ray.getDirection().reflectAround(intersection.getNormalVector());
+        intersection.setReflectionVector(rayReflectionVector);
         double dotProduct = intersection.getEyeVector().dot(intersection.getNormalVector());
         if (dotProduct < 0){
             intersection.setInside(true);

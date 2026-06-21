@@ -8,6 +8,7 @@
 #include "Color.h"
 #include "Light.h"
 #include "Utilities.h"
+#include "Plane.h"
 
 using namespace testing;
 
@@ -377,4 +378,17 @@ TEST_F(RaySphereIntersectionFeature, HitShouldOffsetPoint) {
     Tuple* intersectionPoint = intersection->getIntersectionPoint();
     double intersectionZValue = intersectionPoint->getZValue();
     ASSERT_GT(intersectionZValue,overIntersectionZValue);
+}
+
+TEST_F(RaySphereIntersectionFeature, PrecomputingReflectionVector) {
+    Plane plane{};
+    Tuple rayOrigin{0,1,-1,TupleType::point};
+    Tuple rayDirection{0,-std::sqrt(2)/2,std::sqrt(2)/2,TupleType::vector};
+    Ray ray{rayOrigin,rayDirection};
+    Intersection intersection{std::sqrt(2),plane};
+    IntersectionTracker tracker{};
+    tracker.addIntersection(intersection);
+    tracker.prepComputations(ray);
+    Tuple correctReflection{0,std::sqrt(2)/2,std::sqrt(2)/2,TupleType::vector};
+    ASSERT_THAT(tracker.hit()->getReflectionVector()==correctReflection,true);
 }

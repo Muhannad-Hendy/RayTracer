@@ -3,7 +3,7 @@
 
 Ray::Ray(){};
 
-Ray::Ray(Tuple& origin, Tuple& direction) : origin{origin}, direction{direction}{}
+Ray::Ray(const Tuple& origin, const Tuple& direction) : origin{origin}, direction{direction}{}
 
 Tuple Ray::getOrigin() const{
     return origin;
