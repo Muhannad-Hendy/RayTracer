@@ -41,6 +41,14 @@ public:
 
     double getReflectivity() const;
 
+    void setTransparency(const double transparency);
+
+    double getTransparency() const;
+
+    void setRefractiveIndex(const double index);
+
+    double getRefractiveIndex() const;
+
 private:
     Color color{};
     double ambient{};
@@ -49,6 +57,8 @@ private:
     double shininess{};
     std::shared_ptr<Pattern> pattern;
     double reflectivity{};
+    double transparency{};
+    double refractiveIndex{};
 };
 
 #endif // MATERIAL_H

@@ -4,10 +4,16 @@
 #include <vector>
 #include "Shape.h"
 
+enum class SphereType{
+    glass
+};
+
 class Sphere : public Shape
 {
 public:
     Sphere();
+
+    Sphere(SphereType type);
 
     Tuple getCenter() const;
 

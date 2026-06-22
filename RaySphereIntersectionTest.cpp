@@ -392,3 +392,9 @@ TEST_F(RaySphereIntersectionFeature, PrecomputingReflectionVector) {
     Tuple correctReflection{0,std::sqrt(2)/2,std::sqrt(2)/2,TupleType::vector};
     ASSERT_THAT(tracker.hit()->getReflectionVector()==correctReflection,true);
 }
+
+TEST_F(RaySphereIntersectionFeature, SphereWithGlassyMaterial) {
+    Sphere sphere{SphereType::glass};
+    ASSERT_DOUBLE_EQ(sphere.getMaterial().getTransparency(),1);
+    ASSERT_DOUBLE_EQ(sphere.getMaterial().getRefractiveIndex(),1.5);
+}

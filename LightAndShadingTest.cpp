@@ -247,4 +247,10 @@ TEST_F(LightAndShadingFeature, ReflectivityForDefaultMaterial) {
     ASSERT_DOUBLE_EQ(material.getReflectivity(),0);
 }
 
+TEST_F(LightAndShadingFeature, TransparencyAndRefractiveIndexForDefaultMaterial) {
+    Material material{};
+    ASSERT_DOUBLE_EQ(material.getTransparency(),0);
+    ASSERT_DOUBLE_EQ(material.getRefractiveIndex(),1);
+}
+
 

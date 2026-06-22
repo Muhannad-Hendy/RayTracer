@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include "Material.h"
 
 int Sphere::spheresCounter=0;
 
@@ -7,6 +8,22 @@ Sphere::Sphere() {
     spheresCounter++;
     radius = 1.0;
     center.initialize(0,0,0,TupleType::point);
+}
+
+Sphere::Sphere(SphereType type) {
+    switch (type) {
+    case SphereType::glass: {
+        ID = spheresCounter;
+        spheresCounter++;
+        radius = 1.0;
+        center.initialize(0,0,0,TupleType::point);
+        Material glass{};
+        glass.setTransparency(1);
+        glass.setRefractiveIndex(1.5);
+        setMaterial(glass);
+    }
+
+    }
 }
 
 Tuple Sphere::getCenter() const{

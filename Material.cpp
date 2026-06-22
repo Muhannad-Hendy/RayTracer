@@ -8,6 +8,8 @@ Material::Material() {
     specular = 0.9;
     shininess = 200;
     reflectivity = 0;
+    transparency = 0;
+    refractiveIndex = 1.0;
 }
 
 Color Material::getColor() const{
@@ -69,6 +71,8 @@ Material& Material::operator=(const Material& original){
     shininess = original.shininess;
     pattern = original.pattern;
     reflectivity = original.reflectivity;
+    transparency = original.transparency;
+    refractiveIndex = original.refractiveIndex;
     return *this;
 }
 
@@ -86,4 +90,20 @@ void Material::setReflectivity(const double reflectivity) {
 
 double Material::getReflectivity() const {
     return reflectivity;
+}
+
+void Material::setTransparency(const double transparency) {
+    this->transparency = transparency;
+}
+
+double Material::getTransparency() const {
+    return transparency;
+}
+
+void Material::setRefractiveIndex(const double index) {
+    this->refractiveIndex = index;
+}
+
+double Material::getRefractiveIndex() const {
+    return refractiveIndex;
 }
