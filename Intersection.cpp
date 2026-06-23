@@ -70,3 +70,19 @@ void Intersection::setReflectionVector(const Tuple &reflectionVector) {
 const Tuple& Intersection::getReflectionVector() const {
     return reflectionVector;
 }
+
+void Intersection::setN1(const double n1) {
+    this->n1 = n1;
+}
+
+double Intersection::getN1() const {
+    return n1;
+}
+
+void Intersection::setN2(const double n2) {
+    this->n2 = n2;
+}
+
+double Intersection::getN2() const {
+    return n2;
+}

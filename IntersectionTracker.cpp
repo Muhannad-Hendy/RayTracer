@@ -1,4 +1,7 @@
 #include "IntersectionTracker.h"
+#include "Shape.h"
+#include <algorithm>
+#include <vector>
 
 IntersectionTracker::IntersectionTracker(){};
 
@@ -56,6 +59,7 @@ Shape& IntersectionTracker::getIntersectedObject(const int index) {
 }
 
 void IntersectionTracker::prepComputations(const Ray &ray) {
+    setRefractionIndices();
     for (Intersection& intersection : intersections) {
         Tuple intersectionPoint = ray.locate(intersection.getIntersectionTime());
         intersection.setIntersectionPoint(intersectionPoint);
@@ -73,6 +77,41 @@ void IntersectionTracker::prepComputations(const Ray &ray) {
         }
         else {
             intersection.setInside(false);
+        }
+    }
+}
+
+void IntersectionTracker::setRefractionIndices() {
+    std::vector<Shape*> encounteredShapes;
+    encounteredShapes.reserve(10);
+    for (auto& intersection : intersections) {
+        auto* intersectedShape = intersection.getIntersectedShape();
+        if (intersection.getIntersectionTime() >= 0) {
+            if (encounteredShapes.empty()) {
+                intersection.setN1(1);
+            }
+            else {
+                auto& lastInList = encounteredShapes.back();
+                double refractiveIndex = lastInList->getMaterial().getRefractiveIndex();
+                intersection.setN1(refractiveIndex);
+            }
+        }
+        auto intersectionInList = std::find(encounteredShapes.begin(), encounteredShapes.end(), intersectedShape);
+        if (intersectionInList != encounteredShapes.end()) {
+            encounteredShapes.erase(intersectionInList);
+        }
+        else {
+            encounteredShapes.push_back(intersectedShape);
+        }
+        if (intersection.getIntersectionTime() >= 0) {
+            if (encounteredShapes.empty()) {
+                intersection.setN2(1);
+            }
+            else {
+                auto& lastInList = encounteredShapes.back();
+                double refractiveIndex = lastInList->getMaterial().getRefractiveIndex();
+                intersection.setN2(refractiveIndex);
+            }
         }
     }
 }

@@ -41,6 +41,8 @@ public:
 
     void prepComputations(const Ray &ray);
 
+    void setRefractionIndices();
+
 
 private:
     std::list<Intersection> intersections{};

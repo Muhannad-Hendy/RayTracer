@@ -18,7 +18,7 @@ public:
 
     void setTransformation(const Transformer &transformation);
 
-    const Material& getMaterial() const;
+    Material& getMaterial();
 
     void setMaterial(const Material &newMaterial);
 

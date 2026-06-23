@@ -398,3 +398,45 @@ TEST_F(RaySphereIntersectionFeature, SphereWithGlassyMaterial) {
     ASSERT_DOUBLE_EQ(sphere.getMaterial().getTransparency(),1);
     ASSERT_DOUBLE_EQ(sphere.getMaterial().getRefractiveIndex(),1.5);
 }
+
+TEST_F(RaySphereIntersectionFeature, FindingN1AndN2AtVariousIntersections) {
+    Sphere sphereA{SphereType::glass};
+    Transformer sphereAScaler{Transformation::scaling,2,2,2};
+    sphereA.setTransformation(sphereAScaler);
+
+    Sphere sphereB{SphereType::glass};
+    Transformer sphereBTranslator{Transformation::translation,0,0,-0.25};
+    sphereB.setTransformation(sphereBTranslator);
+    Material& materialB = sphereB.getMaterial();
+    materialB.setRefractiveIndex(2);
+
+    Sphere sphereC{SphereType::glass};
+    Transformer sphereCTranslator{Transformation::translation,0,0,0.25};
+    sphereC.setTransformation(sphereCTranslator);
+    Material& materialC = sphereC.getMaterial();
+    materialC.setRefractiveIndex(2.5);
+
+    Ray ray{Tuple{0,0,-4,TupleType::point},Tuple{0,0,1,TupleType::vector}};
+    IntersectionTracker tracker{};
+    tracker.addIntersection(Intersection{2,sphereA});
+    tracker.addIntersection(Intersection{2.75,sphereB});
+    tracker.addIntersection(Intersection{3.25,sphereC});
+    tracker.addIntersection(Intersection{4.75,sphereB});
+    tracker.addIntersection(Intersection{5.25,sphereC});
+    tracker.addIntersection(Intersection{6,sphereA});
+    tracker.prepComputations(ray);
+    double n1 = tracker.getIntersection(3).getN1();
+    double n2 = tracker.getIntersection(3).getN2();
+//    ASSERT_DOUBLE_EQ(n1,1);
+//    ASSERT_DOUBLE_EQ(n2,1.5);
+//    ASSERT_DOUBLE_EQ(n1,1.5);
+//    ASSERT_DOUBLE_EQ(n2,2);
+//    ASSERT_DOUBLE_EQ(n1,2);
+//    ASSERT_DOUBLE_EQ(n2,2.5);
+    ASSERT_DOUBLE_EQ(n1,2.5);
+    ASSERT_DOUBLE_EQ(n2,2.5);
+//    ASSERT_DOUBLE_EQ(n1,2.5);
+//    ASSERT_DOUBLE_EQ(n2,1.5);
+//    ASSERT_DOUBLE_EQ(n1,1.5);
+//    ASSERT_DOUBLE_EQ(n2,1);
+}

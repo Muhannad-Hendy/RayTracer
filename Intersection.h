@@ -48,6 +48,14 @@ public:
 
     const Tuple& getReflectionVector() const;
 
+    void setN1(const double n1);
+
+    double getN1() const;
+
+    void setN2(const double n2);
+
+    double getN2() const;
+
 private:
     double intersectionTime{};
     Shape* intersectedShape{};
@@ -57,6 +65,8 @@ private:
     bool m_isInside{};
     Tuple overIntersectionPoint{};
     Tuple reflectionVector{};
+    double n1{};
+    double n2{};
 };
 
 #endif // INTERSECTION_H

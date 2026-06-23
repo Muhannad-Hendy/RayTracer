@@ -14,7 +14,7 @@ void Shape::setTransformation(const Transformer &transformation) {
     this->transformation = transformation;
 }
 
-const Material& Shape::getMaterial() const {
+Material& Shape::getMaterial() {
     return material;
 }
 
