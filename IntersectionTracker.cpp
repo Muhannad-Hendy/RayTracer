@@ -65,11 +65,7 @@ void IntersectionTracker::prepComputations(const Ray &ray) {
         intersection.setIntersectionPoint(intersectionPoint);
         intersection.setEyeVector(-ray.getDirection());
         intersection.setNormalVector();
-        Tuple offsetVector = intersection.getNormalVector() * util::EPSILON;
-        Tuple overIntersection = intersectionPoint + offsetVector;
-        intersection.setOverIntersectionPoint(overIntersection);
-        Tuple rayReflectionVector = ray.getDirection().reflectAround(intersection.getNormalVector());
-        intersection.setReflectionVector(rayReflectionVector);
+
         double dotProduct = intersection.getEyeVector().dot(intersection.getNormalVector());
         if (dotProduct < 0){
             intersection.setInside(true);
@@ -78,6 +74,14 @@ void IntersectionTracker::prepComputations(const Ray &ray) {
         else {
             intersection.setInside(false);
         }
+
+        Tuple offsetVector = intersection.getNormalVector() * util::EPSILON;
+        Tuple overIntersection = intersectionPoint + offsetVector;
+        intersection.setOverIntersectionPoint(overIntersection);
+        Tuple underIntersection = intersectionPoint - offsetVector;
+        intersection.setUnderIntersectionPoint(underIntersection);
+        Tuple rayReflectionVector = ray.getDirection().reflectAround(intersection.getNormalVector());
+        intersection.setReflectionVector(rayReflectionVector);
     }
 }
 
