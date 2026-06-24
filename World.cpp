@@ -82,7 +82,13 @@ Color World::shadeHit(Intersection &intersection, int remainingRecursions) {
     Color surface = light.light(material,*shape,overIntersectionPoint,eyeVector,normalVector,inShadow);
     Color reflected = this->reflectedColor(intersection, remainingRecursions);
     Color refracted = this->refractedColor(intersection, remainingRecursions);
-    return surface+reflected+refracted;
+    if (material.getReflectivity()>0 && material.getTransparency()>0) {
+        double reflectance = this->calculateSchlickReflectance(intersection);
+        return surface + reflected*reflectance + refracted*(1-reflectance);
+    }
+    else {
+        return surface+reflected+refracted;
+    }
 }
 
 void World::intersect(Ray &ray, IntersectionTracker &tracker) {
@@ -150,4 +156,20 @@ std::optional<Ray> World::generateRefractedRay(Intersection &intersection) {
     Tuple refractedRayDirection = directionTerm1 - directionTerm2;
     Ray refractedRAy{intersection.getUnderIntersectionPOint(),refractedRayDirection};
     return refractedRAy;
+}
+
+double World::calculateSchlickReflectance(Intersection &intersection) {
+    double cosineIncident = intersection.getEyeVector().dot(intersection.getNormalVector());
+    double n1 = intersection.getN1();
+    double n2 = intersection.getN2();
+    if (n1 > n2) {
+        double n = n1/n2;
+        double sineRefractedSquared = std::pow(n,2) * (1 - std::pow(cosineIncident,2));
+        if (sineRefractedSquared > 1) return 1;
+        double cosineRefracted = std::sqrt(1-sineRefractedSquared);
+        cosineIncident = cosineRefracted;
+    }
+    double r0 = std::pow((n1-n2) / (n1+n2), 2);
+    double reflectance = r0 + (1-r0) * std::pow((1-cosineIncident),5);
+    return  reflectance;
 }

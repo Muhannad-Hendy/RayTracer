@@ -354,3 +354,30 @@ TEST_F(WorldFeature, shadeHitWithTransparentMaterial) {
     Color correctColor{0.93642,0.68642,0.68642};
     ASSERT_THAT(color==correctColor,true);
 }
+
+TEST_F(WorldFeature, shadeHitWithReflectiveTransparentMaterial) {
+    World world{};
+    Ray ray{Tuple{0,0,-3,TupleType::point}, Tuple{0,-std::sqrt(2)/2,std::sqrt(2)/2,TupleType::vector}};
+    Plane floor{};
+    Transformer floorTransform{Transformation::translation,0,-1,0};
+    floor.setTransformation(floorTransform);
+    auto& floorMaterial = floor.getMaterial();
+    floorMaterial.setReflectivity(0.5);
+    floorMaterial.setTransparency(0.5);
+    floorMaterial.setRefractiveIndex(1.5);
+    world.addShape(std::make_unique<Plane>(floor));
+    Sphere ball{};
+    Transformer ballTransform{Transformation::translation,0,-3.5,-0.5};
+    ball.setTransformation(ballTransform);
+    auto& ballMaterial = ball.getMaterial();
+    ballMaterial.setColor(Color{1,0,0});
+    ballMaterial.setAmbient(0.5);
+    world.addShape(std::make_unique<Sphere>(ball));
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    auto& intersection = tracker.getIntersection(0);
+    Color color = world.shadeHit(intersection);
+    Color correctColor{0.93391,0.69643,0.69243};
+    ASSERT_THAT(color==correctColor,true);
+}

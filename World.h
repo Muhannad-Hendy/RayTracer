@@ -47,8 +47,7 @@ public:
 
     std::optional<Ray> generateRefractedRay(Intersection& intersection);
 
-//    Tuple calculateRefractedDirection(Intersection& intersection, double sineRefractedSquared);
-
+    double calculateSchlickReflectance(Intersection& intersection);
 private:
     std::vector<std::unique_ptr<Shape>> shapes;
     std::vector<Light> lights{};

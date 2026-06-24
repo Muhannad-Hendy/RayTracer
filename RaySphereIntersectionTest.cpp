@@ -9,6 +9,7 @@
 #include "Light.h"
 #include "Utilities.h"
 #include "Plane.h"
+#include "World.h"
 
 using namespace testing;
 
@@ -453,4 +454,46 @@ TEST_F(RaySphereIntersectionFeature, PointIsOffsetBelowSurface) {
     Tuple& underIntersection = tracker.getIntersection(0).getUnderIntersectionPOint();
     ASSERT_GT(underIntersection.getZValue(), util::EPSILON/2);
     ASSERT_LT(intersectionPoint->getZValue(), util::EPSILON/2);
+}
+
+TEST_F(RaySphereIntersectionFeature, SchlickApproximationUnderTotalInternalReflection) {
+    Sphere sphere{SphereType::glass};
+    Light light{Tuple{0,0,0,TupleType::point}, Color{1,1,1}};
+    World world{std::make_unique<Sphere>(sphere),light};
+    Ray ray{Tuple{0,0,std::sqrt(2)/2,TupleType::point},Tuple{0,1,0,TupleType::vector}};
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    auto& intersection = tracker.getIntersection(1);
+    double reflectance = world.calculateSchlickReflectance(intersection);
+    double correctReflectance{1};
+    ASSERT_DOUBLE_EQ(reflectance,correctReflectance);
+}
+
+TEST_F(RaySphereIntersectionFeature, SchlickApproximationWithPrependicularViewingAngle) {
+    Sphere sphere{SphereType::glass};
+    Light light{Tuple{0,0,0,TupleType::point}, Color{1,1,1}};
+    World world{std::make_unique<Sphere>(sphere),light};
+    Ray ray{Tuple{0,0,0,TupleType::point},Tuple{0,1,0,TupleType::vector}};
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    auto& intersection = tracker.getIntersection(1);
+    double reflectance = world.calculateSchlickReflectance(intersection);
+    double correctReflectance{0.04};
+    ASSERT_DOUBLE_EQ(reflectance,correctReflectance);
+}
+
+TEST_F(RaySphereIntersectionFeature, SchlickApproximationWithSmallAngleAndN2GreaterThanN1) {
+    Sphere sphere{SphereType::glass};
+    Light light{Tuple{0,0,0,TupleType::point}, Color{1,1,1}};
+    World world{std::make_unique<Sphere>(sphere),light};
+    Ray ray{Tuple{0,0.99,-2,TupleType::point},Tuple{0,0,1,TupleType::vector}};
+    IntersectionTracker tracker{};
+    sphere.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    auto& intersection = tracker.getIntersection(0);
+    double reflectance = world.calculateSchlickReflectance(intersection);
+    double correctReflectance{0.48881};
+    ASSERT_THAT(util::equals(reflectance,correctReflectance), true);
 }
