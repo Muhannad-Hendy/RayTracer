@@ -40,7 +40,8 @@ SOURCES += \
         World.cpp \
         WorldTest.cpp \
         checker.cpp \
-        main.cpp
+        main.cpp \
+        testpattern.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googlemock
@@ -71,4 +72,5 @@ HEADERS += \
     Tuple.h \
     Utilities.h \
     World.h \
-    checker.h
+    checker.h \
+    testpattern.h

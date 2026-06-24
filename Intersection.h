@@ -56,6 +56,10 @@ public:
 
     double getN2() const;
 
+    void setUnderIntersectionPoint(const Tuple& point);
+
+    Tuple& getUnderIntersectionPOint();
+
 private:
     double intersectionTime{};
     Shape* intersectedShape{};
@@ -64,6 +68,7 @@ private:
     Tuple normalVector{};
     bool m_isInside{};
     Tuple overIntersectionPoint{};
+    Tuple underIntersectionPoint{};
     Tuple reflectionVector{};
     double n1{};
     double n2{};

@@ -5,6 +5,8 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Stripe.h"
+#include "testpattern.h"
 #define PI 3.14159265
 using namespace testing;
 
@@ -264,3 +266,91 @@ TEST_F(WorldFeature, ReflectedColorAtMaximumRecursiveDepth) {
     ASSERT_THAT(reflectedColor==black,true);
 }
 
+TEST_F(WorldFeature, RefractedColorWithOpaqueSurface) {
+    World world{};
+    Ray ray{Tuple{0,0,-5,TupleType::point}, Tuple{0,0,1,TupleType::vector}};
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
+    Intersection& intersection = tracker.getIntersection(0);
+    Color refracted = world.refractedColor(intersection);
+    Color black{0,0,0};
+    ASSERT_THAT(refracted==black,true);
+}
+
+TEST_F(WorldFeature, RefractedColorAtMaximumRecursiveDepth) {
+    World world{};
+    auto& sphere1 = world.getShape(0);
+    auto& material1 = sphere1.getMaterial();
+    material1.setTransparency(1);
+    material1.setRefractiveIndex(1.5);
+    Ray ray{Tuple{0,0,-5,TupleType::point}, Tuple{0,0,1,TupleType::vector}};
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
+    Intersection& intersection = tracker.getIntersection(0);
+    Color refracted = world.refractedColor(intersection,0);
+    Color black{0,0,0};
+    ASSERT_THAT(refracted==black,true);
+}
+
+TEST_F(WorldFeature, RefractedColorUnderTotalInternalReflection) {
+    World world{};
+    auto& sphere1 = world.getShape(0);
+    auto& material1 = sphere1.getMaterial();
+    material1.setTransparency(1);
+    material1.setRefractiveIndex(1.5);
+    Ray ray{Tuple{0,0,std::sqrt(2)/2,TupleType::point}, Tuple{0,1,0,TupleType::vector}};
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection& intersection = tracker.getIntersection(1);
+    Color refracted = world.refractedColor(intersection);
+    Color black{0,0,0};
+    ASSERT_THAT(refracted==black,true);
+}
+
+TEST_F(WorldFeature, RefractedColorWithRefractedRay) {
+    World world{};
+    auto& sphere1 = world.getShape(0);
+    auto& material1 = sphere1.getMaterial();
+    material1.setAmbient(1);
+    TestPattern test{};
+    material1.setPattern(std::make_shared<TestPattern>(test));
+    auto& sphere2 = world.getShape(1);
+    auto& material2 = sphere2.getMaterial();
+    material2.setTransparency(1);
+    material2.setRefractiveIndex(1.5);
+    Ray ray{Tuple{0,0,0.1,TupleType::point}, Tuple{0,1,0,TupleType::vector}};
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    Intersection& intersection = tracker.getIntersection(2);
+    Color refracted = world.refractedColor(intersection);
+    Color correctColor{0,0.99887,0.04721};
+    ASSERT_THAT(refracted==correctColor,true);
+}
+
+TEST_F(WorldFeature, shadeHitWithTransparentMaterial) {
+    World world{};
+    Plane floor{};
+    Transformer translator{Transformation::translation,0,-1,0};
+    floor.setTransformation(translator);
+    auto& floorMaterial = floor.getMaterial();
+    floorMaterial.setTransparency(0.5);
+    floorMaterial.setRefractiveIndex(1.5);
+    world.addShape(std::make_unique<Plane>(floor));
+    Sphere ball{};
+    Transformer ballTransformer{Transformation::translation,0,-3.5,-0.5};
+    ball.setTransformation(ballTransformer);
+    auto& ballMaterial = ball.getMaterial();
+    ballMaterial.setColor(Color{1,0,0});
+    ballMaterial.setAmbient(0.5);
+    world.addShape(std::make_unique<Sphere>(ball));
+    Ray ray{Tuple{0,0,-3,TupleType::point}, Tuple{0,-std::sqrt(2)/2, std::sqrt(2)/2,TupleType::vector}};
+    IntersectionTracker tracker{};
+    world.intersect(ray,tracker);
+    tracker.prepComputations(ray);
+    auto& intersection = tracker.getIntersection(0);
+    Color color = world.shadeHit(intersection);
+    Color correctColor{0.93642,0.68642,0.68642};
+    ASSERT_THAT(color==correctColor,true);
+}

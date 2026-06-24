@@ -86,3 +86,11 @@ void Intersection::setN2(const double n2) {
 double Intersection::getN2() const {
     return n2;
 }
+
+void Intersection::setUnderIntersectionPoint(const Tuple &point) {
+    underIntersectionPoint = point;
+}
+
+Tuple& Intersection::getUnderIntersectionPOint() {
+    return underIntersectionPoint;
+}

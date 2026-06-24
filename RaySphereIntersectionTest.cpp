@@ -440,3 +440,17 @@ TEST_F(RaySphereIntersectionFeature, FindingN1AndN2AtVariousIntersections) {
 //    ASSERT_DOUBLE_EQ(n1,1.5);
 //    ASSERT_DOUBLE_EQ(n2,1);
 }
+
+TEST_F(RaySphereIntersectionFeature, PointIsOffsetBelowSurface) {
+    Ray ray{Tuple{0,0,-5,TupleType::point}, Tuple{0,0,1,TupleType::vector}};
+    Sphere sphere{};
+    Transformer translator{Transformation::translation,0,0,1};
+    sphere.setTransformation(translator);
+    IntersectionTracker tracker{};
+    tracker.addIntersection(Intersection{5,sphere});
+    tracker.prepComputations(ray);
+    Tuple* intersectionPoint = tracker.getIntersection(0).getIntersectionPoint();
+    Tuple& underIntersection = tracker.getIntersection(0).getUnderIntersectionPOint();
+    ASSERT_GT(underIntersection.getZValue(), util::EPSILON/2);
+    ASSERT_LT(intersectionPoint->getZValue(), util::EPSILON/2);
+}

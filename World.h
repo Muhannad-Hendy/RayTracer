@@ -5,6 +5,7 @@
 #include "Shape.h"
 #include "Light.h"
 #include "IntersectionTracker.h"
+#include <optional>
 
 
 class World
@@ -41,6 +42,12 @@ public:
     Color colorAt(Ray& ray, int remainingRecursions=5);
 
     Color reflectedColor(Intersection& intersection, int remainingRecursions=5);
+
+    Color refractedColor(Intersection& intersection, int remainingRecursions=5);
+
+    std::optional<Ray> generateRefractedRay(Intersection& intersection);
+
+//    Tuple calculateRefractedDirection(Intersection& intersection, double sineRefractedSquared);
 
 private:
     std::vector<std::unique_ptr<Shape>> shapes;

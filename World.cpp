@@ -1,6 +1,7 @@
 #include "World.h"
 #include "Ray.h"
 #include "Sphere.h"
+#include <cmath>
 
 World::World(){
     Tuple lightPosition{-10,10,-10,TupleType::point};
@@ -80,7 +81,8 @@ Color World::shadeHit(Intersection &intersection, int remainingRecursions) {
     bool inShadow = isShadowed(shadowRay);
     Color surface = light.light(material,*shape,overIntersectionPoint,eyeVector,normalVector,inShadow);
     Color reflected = this->reflectedColor(intersection, remainingRecursions);
-    return surface+reflected;
+    Color refracted = this->refractedColor(intersection, remainingRecursions);
+    return surface+reflected+refracted;
 }
 
 void World::intersect(Ray &ray, IntersectionTracker &tracker) {
@@ -121,4 +123,31 @@ Color World::reflectedColor(Intersection &intersection, int remainingRecursions)
         Color color = colorAt(reflectedRay, --remainingRecursions);
         return color*intersection.getIntersectedShape()->getMaterial().getReflectivity();
     }
+}
+
+Color World::refractedColor(Intersection &intersection, int remainingRecursions) {
+    double objectTransparency = intersection.getIntersectedShape()->getMaterial().getTransparency();
+    auto refractedRay = generateRefractedRay(intersection);
+    if ((objectTransparency==0) || (remainingRecursions<1) || (!refractedRay.has_value())) {
+        return Color{0,0,0};
+    }
+    else {
+        Color color= colorAt(*refractedRay, --remainingRecursions);
+        return color*intersection.getIntersectedShape()->getMaterial().getTransparency();
+    }
+}
+
+std::optional<Ray> World::generateRefractedRay(Intersection &intersection) {
+    double nRatio = intersection.getN1() / intersection.getN2();
+    Tuple eyeVector = intersection.getEyeVector();
+    Tuple normalVector = intersection.getNormalVector();
+    double cosineIncident = eyeVector.dot(normalVector);
+    double sineRefractedSquared = std::pow(nRatio,2) * (1 - std::pow(cosineIncident,2));
+    if (sineRefractedSquared>1) return std::nullopt;
+    double cosineRefracted = std::sqrt(1-sineRefractedSquared);
+    Tuple directionTerm1 = normalVector * (nRatio * cosineIncident - cosineRefracted);
+    Tuple directionTerm2 = eyeVector * nRatio;
+    Tuple refractedRayDirection = directionTerm1 - directionTerm2;
+    Ray refractedRAy{intersection.getUnderIntersectionPOint(),refractedRayDirection};
+    return refractedRAy;
 }
