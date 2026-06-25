@@ -14,6 +14,7 @@ SOURCES += \
         CanvasTest.cpp \
         Color.cpp \
         ColorTest.cpp \
+        CubeTest.cpp \
         Gradient.cpp \
         Intersection.cpp \
         IntersectionTracker.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
         World.cpp \
         WorldTest.cpp \
         checker.cpp \
+        cube.cpp \
         main.cpp \
         testpattern.cpp
 
@@ -73,4 +75,5 @@ HEADERS += \
     Utilities.h \
     World.h \
     checker.h \
+    cube.h \
     testpattern.h
