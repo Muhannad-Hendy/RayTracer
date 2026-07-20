@@ -15,6 +15,7 @@ SOURCES += \
         Color.cpp \
         ColorTest.cpp \
         CubeTest.cpp \
+        CylinderTest.cpp \
         Gradient.cpp \
         Intersection.cpp \
         IntersectionTracker.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
         WorldTest.cpp \
         checker.cpp \
         cube.cpp \
+        cylinder.cpp \
         main.cpp \
         testpattern.cpp
 
@@ -76,4 +78,5 @@ HEADERS += \
     World.h \
     checker.h \
     cube.h \
+    cylinder.h \
     testpattern.h
