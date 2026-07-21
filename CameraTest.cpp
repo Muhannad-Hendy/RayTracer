@@ -11,6 +11,7 @@
 #include "Gradient.h"
 #include "checker.h"
 #include "cube.h"
+#include "cylinder.h"
 
 using namespace testing;
 
@@ -733,4 +734,101 @@ TEST_F(CameraFeature, DISABLED_RenderingSceneWithCube) {
     camera.setCameraTransformation(viewTransformer);
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingSceneWithCube.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingSceneWithCylinders) {
+    Checker checker{};
+    Plane floor{};
+    Material floorMaterial{};
+    floorMaterial.setPattern(std::make_shared<Checker>(checker));
+    floorMaterial.setReflectivity(0.1);
+    floor.setMaterial(floorMaterial);
+
+    Plane backWall{};
+    Material wallMaterial{};
+    wallMaterial.setReflectivity(0);
+    wallMaterial.setColor(Color{0.86,0.08,0.24});
+    backWall.setMaterial(wallMaterial);
+    Transformer wallTranslation{Transformation::translation,0,0,3};
+    Transformer wallRotation{Transformation::xRotation,-util::PI/2};
+    backWall.setTransformation(wallRotation>wallTranslation);
+
+    Plane leftWall{};
+    Material leftWallMaterial{};
+    leftWallMaterial.setReflectivity(1);
+    leftWallMaterial.setSpecular(1);
+    leftWallMaterial.setAmbient(0);
+    leftWallMaterial.setDiffuse(0.1);
+    leftWall.setMaterial(leftWallMaterial);
+    Transformer leftWallTranslation{Transformation::translation,-3,0,0};
+    Transformer leftWallRotation{Transformation::zRotation,-util::PI/2};
+    leftWall.setTransformation(leftWallRotation>leftWallTranslation);
+
+    Cube middleSphere{};
+    Transformer middleTranslation{Transformation::translation,0.7,0.501,-1.5};
+    Transformer scaling{Transformation::scaling,0.5,0.5,0.5};
+    middleSphere.setTransformation(scaling>middleTranslation);
+    Material middleMaterial{};
+    Color middleColor{0,0,0};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(0);
+    middleMaterial.setSpecular(1);
+    middleMaterial.setTransparency(1);
+    middleMaterial.setReflectivity(1);
+    middleMaterial.setAmbient(0);
+    middleMaterial.setShininess(300);
+    middleMaterial.setRefractiveIndex(2.417);
+    middleSphere.setMaterial(middleMaterial);
+
+    Cylinder cylinder{};
+    cylinder.setClosed(true);
+    cylinder.setMaximum(2);
+    cylinder.setMinimum(0);
+    Transformer cylinderTranslation{Transformation::translation,-1,0.251,1.3};
+    Transformer cylinderScaling{Transformation::scaling,0.5,0.5,0.5};
+//    Transformer cylinderRotation{Transformation::yRotation,util::PI/4};
+    cylinder.setTransformation(cylinderScaling>cylinderTranslation);
+    auto& cylinderMaterial = cylinder.getMaterial();
+    cylinderMaterial.setColor(Color{0.294,0.325,0.125});
+    cylinderMaterial.setTransparency(1);
+    cylinderMaterial.setReflectivity(1);
+    cylinderMaterial.setRefractiveIndex(1.5);
+
+    Sphere backSphere{};
+    Transformer backTransform{Transformation::translation,-1,0.5,-1.5};
+    Transformer backScaling{Transformation::scaling,0.5,0.5,0.5};
+    backSphere.setTransformation(backScaling>backTransform);
+    auto& backMaterial = backSphere.getMaterial();
+    backMaterial.setColor(Color{0.25,0.88,0.82});
+    backMaterial.setReflectivity(0.2);
+
+    Sphere frontSphere{};
+    Transformer frontTransform{Transformation::translation,2.2,0.5,-0.5};
+    Transformer frontScaling{Transformation::scaling,0.5,0.5,0.5};
+    frontSphere.setTransformation(frontScaling>frontTransform);
+    auto& frontMaterial = frontSphere.getMaterial();
+    frontMaterial.setColor(Color{0.99,0.99,0.59});
+    frontMaterial.setReflectivity(0.2);
+
+
+    Tuple lightPosition{10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world(std::make_unique<Plane>(floor), light);
+    world.addShape(std::make_unique<Cube>(middleSphere));
+    world.addShape(std::make_unique<Plane>(backWall));
+    world.addShape(std::make_unique<Plane>(leftWall));
+    world.addShape(std::make_unique<Sphere>(backSphere));
+    world.addShape(std::make_unique<Sphere>(frontSphere));
+    world.addShape(std::make_unique<Cylinder>(cylinder));
+
+    Camera camera{2000,1000,util::PI/3};
+    Tuple from{5,3,-3,TupleType::point};
+//    Tuple from{0,10,0,TupleType::point};
+    Tuple to{0,0.5,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingSceneWithCylinder.ppm");
 }
