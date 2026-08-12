@@ -103,6 +103,7 @@ double Tuple::magnitude (){
 
 Tuple Tuple::normalize (){
     double magnitude = this->magnitude();
+    if (magnitude==0) return *this;
     double x_normalized = this->x / magnitude;
     double y_normalized = this->y / magnitude;
     double z_normalized = this->z / magnitude;
