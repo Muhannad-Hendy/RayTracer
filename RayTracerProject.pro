@@ -14,6 +14,7 @@ SOURCES += \
         CanvasTest.cpp \
         Color.cpp \
         ColorTest.cpp \
+        ConeTest.cpp \
         CubeTest.cpp \
         CylinderTest.cpp \
         Gradient.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
         World.cpp \
         WorldTest.cpp \
         checker.cpp \
+        cone.cpp \
         cube.cpp \
         cylinder.cpp \
         main.cpp \
@@ -77,6 +79,7 @@ HEADERS += \
     Utilities.h \
     World.h \
     checker.h \
+    cone.h \
     cube.h \
     cylinder.h \
     testpattern.h
