@@ -12,6 +12,7 @@
 #include "checker.h"
 #include "cube.h"
 #include "cylinder.h"
+#include "group.h"
 
 using namespace testing;
 
@@ -831,4 +832,45 @@ TEST_F(CameraFeature, DISABLED_RenderingSceneWithCylinders) {
     camera.setCameraTransformation(viewTransformer);
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingSceneWithCylinder.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingHexagonGroup) {
+    Group hexagon{};
+    for (int i = 0; i < 6; i++) {
+        Sphere sphere{};
+        Transformer sphereTranslator{Transformation::translation, 0, 0, -1};
+        Transformer sphereScalar{Transformation::scaling, 0.25, 0.25, 0.25};
+        sphere.setTransformation(sphereScalar > sphereTranslator);
+
+        Cylinder edge{};
+        edge.setMinimum(0);
+        edge.setMaximum(1);
+        Transformer edgeTranslator{Transformation::translation, 0, 0, -1};
+        Transformer edgeYRotator{Transformation::yRotation, util::PI / -6};
+        Transformer edgeZRotator{Transformation::zRotation, util::PI / -2};
+        Transformer edgeScalar{Transformation::scaling, 0.25, 1, 0.25};
+        edge.setTransformation(edgeScalar > edgeZRotator > edgeYRotator > edgeTranslator);
+
+        auto hexagonSide = std::make_unique<Group>();
+        Transformer rotator{Transformation::yRotation, util::PI / 3 * i};
+        hexagonSide->setTransformation(rotator);
+        hexagonSide->addChild(std::make_unique<Sphere>(sphere));
+        hexagonSide->addChild(std::make_unique<Cylinder>(edge));
+
+        hexagon.addChild(std::move(hexagonSide));
+    }
+
+    Tuple lightPosition{10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world{std::make_unique<Group>(std::move(hexagon)), light};
+    Camera camera{2000,1000,util::PI/3};
+    Tuple from{5,3,-3,TupleType::point};
+//    Tuple from{0,10,0,TupleType::point};
+    Tuple to{0,0.5,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingHexagonGroup.ppm");
 }
