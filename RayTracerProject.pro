@@ -8,6 +8,7 @@ CONFIG += c++17
 LIBS += -lpthread
 
 SOURCES += \
+        ../../../../GoogleTest/googletest/TestShapeTest.cpp \
         Camera.cpp \
         CameraTest.cpp \
         Canvas.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
         CubeTest.cpp \
         CylinderTest.cpp \
         Gradient.cpp \
+        GroupTest.cpp \
         Intersection.cpp \
         IntersectionTracker.cpp \
         Light.cpp \
@@ -46,8 +48,10 @@ SOURCES += \
         cone.cpp \
         cube.cpp \
         cylinder.cpp \
+        group.cpp \
         main.cpp \
-        testpattern.cpp
+        testpattern.cpp \
+        testshape.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googlemock
@@ -82,4 +86,6 @@ HEADERS += \
     cone.h \
     cube.h \
     cylinder.h \
-    testpattern.h
+    group.h \
+    testpattern.h \
+    testshape.h

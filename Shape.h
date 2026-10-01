@@ -7,6 +7,8 @@
 #include "IntersectionTracker.h"
 #include "Ray.h"
 
+class Group;
+
 class Shape
 {
 public:
@@ -30,6 +32,14 @@ public:
 
     void intersect(const Ray &ray, IntersectionTracker &tracker);
 
+    Group* getParent() const;
+
+    void setParent(Group* group);
+
+    Tuple worldToObject(const Tuple& point) const;
+
+    Tuple normalToWorld(const Tuple& normal) const;
+
 protected:
     virtual Tuple localNormalAt(const Tuple& localPoint) const = 0;
     virtual void localIntersect(const Ray &localRay, IntersectionTracker &tracker) = 0;
@@ -39,6 +49,7 @@ private:
     Material material{};
     static int shapesCounter;
     int shapeID{};
+    Group* parent{};
 };
 
 #endif // SHAPE_H
