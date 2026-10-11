@@ -39,6 +39,7 @@ SOURCES += \
         Stripe.cpp \
         TransformationTest.cpp \
         Transformer.cpp \
+        TriangleTest.cpp \
         Tuple.cpp \
         TupleTest.cpp \
         Utilities.cpp \
@@ -51,7 +52,8 @@ SOURCES += \
         group.cpp \
         main.cpp \
         testpattern.cpp \
-        testshape.cpp
+        testshape.cpp \
+        triangle.cpp
 
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googletest
 INCLUDEPATH += /Users/muhannadhendy/GoogleTest/googletest/googlemock
@@ -88,4 +90,5 @@ HEADERS += \
     cylinder.h \
     group.h \
     testpattern.h \
-    testshape.h
+    testshape.h \
+    triangle.h
