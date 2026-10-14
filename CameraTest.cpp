@@ -13,6 +13,7 @@
 #include "cube.h"
 #include "cylinder.h"
 #include "group.h"
+#include "meshreader.h"
 
 using namespace testing;
 
@@ -873,4 +874,22 @@ TEST_F(CameraFeature, DISABLED_RenderingHexagonGroup) {
     camera.setCameraTransformation(viewTransformer);
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingHexagonGroup.ppm");
+}
+
+TEST_F(CameraFeature, RenderingObjFileGroup) {
+    std::string file{"../TestFiles/teddyBear.obj"};
+    MeshReader reader{file};
+    reader.parseObjFile();
+    Tuple lightPosition{10,10,100, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world{reader.takeParserGroup(), light};
+    Camera camera{200,200,util::PI/3};
+    Tuple from{-30.0, 18.0, 90.0,TupleType::point};
+    Tuple to{0.0,  0.0,   0.0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingTeddyBear.ppm");
 }

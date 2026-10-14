@@ -27,6 +27,7 @@ SOURCES += \
         Material.cpp \
         Matrix.cpp \
         MatrixTest.cpp \
+        MeshReaderTest.cpp \
         Pattern.cpp \
         PatternsTest.cpp \
         Plane.cpp \
@@ -51,6 +52,7 @@ SOURCES += \
         cylinder.cpp \
         group.cpp \
         main.cpp \
+        meshreader.cpp \
         testpattern.cpp \
         testshape.cpp \
         triangle.cpp
@@ -89,6 +91,7 @@ HEADERS += \
     cube.h \
     cylinder.h \
     group.h \
+    meshreader.h \
     testpattern.h \
     testshape.h \
     triangle.h
