@@ -24,7 +24,7 @@ void Triangle::localIntersect(const Ray &localRay, IntersectionTracker &tracker)
     tracker.addIntersection(t,*this);
 }
 
-Tuple Triangle::localNormalAt(const Tuple &localPoint) const {
+Tuple Triangle::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
     return normal;
 }
 

@@ -19,11 +19,11 @@ public:
 
 protected:
     void localIntersect(const Ray &localRay, IntersectionTracker &tracker) override;
-    Tuple localNormalAt(const Tuple &localPoint) const override;
+    Tuple localNormalAt(const Tuple &localPoint, Intersection *intersection=nullptr) const override;
+    std::vector<Tuple> edges{};
+    std::vector<Tuple> vertices{};
 
 private:
-    std::vector<Tuple> vertices{};
-    std::vector<Tuple> edges{};
     Tuple normal{};
 };
 

@@ -24,7 +24,7 @@ public:
 
     void setMaterial(const Material &newMaterial);
 
-    Tuple normalAt(const Tuple &worldPoint) const;
+    Tuple normalAt(const Tuple &worldPoint, Intersection *intersection=nullptr) const;
 
     friend bool operator== (const Shape &shape1, const Shape &shape2);
 
@@ -41,7 +41,7 @@ public:
     Tuple normalToWorld(const Tuple& normal) const;
 
 protected:
-    virtual Tuple localNormalAt(const Tuple& localPoint) const = 0;
+    virtual Tuple localNormalAt(const Tuple& localPoint, Intersection *intersection=nullptr) const = 0;
     virtual void localIntersect(const Ray &localRay, IntersectionTracker &tracker) = 0;
 
 private:

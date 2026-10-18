@@ -22,6 +22,11 @@ void IntersectionTracker::addIntersection(double time,Shape &shape){
     sortIntersections();
 }
 
+void IntersectionTracker::addIntersection(double time,Shape &shape, double u, double v){
+    intersections.emplace_back(time, shape, u, v);
+    sortIntersections();
+}
+
 Intersection& IntersectionTracker::getIntersection(int position) {
     auto listStart = intersections.begin();
     std::advance(listStart, position);

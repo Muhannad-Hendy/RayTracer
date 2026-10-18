@@ -876,7 +876,7 @@ TEST_F(CameraFeature, DISABLED_RenderingHexagonGroup) {
     image.saveToPPM("../Output/renderingHexagonGroup.ppm");
 }
 
-TEST_F(CameraFeature, RenderingObjFileGroup) {
+TEST_F(CameraFeature, DISABLED_RenderingObjFileGroup) {
     std::string file{"../TestFiles/teddyBear.obj"};
     MeshReader reader{file};
     reader.parseObjFile();

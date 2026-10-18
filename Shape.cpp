@@ -23,9 +23,9 @@ void Shape::setMaterial(const Material &newMaterial) {
     this->material = newMaterial;
 }
 
-Tuple Shape::normalAt(const Tuple &worldPoint) const {
+Tuple Shape::normalAt(const Tuple &worldPoint, Intersection *intersection) const {
     Tuple localPoint = worldToObject(worldPoint);
-    Tuple localNormal = localNormalAt(localPoint);
+    Tuple localNormal = localNormalAt(localPoint, intersection);
     return normalToWorld(localNormal);
 }
 

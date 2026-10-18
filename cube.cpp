@@ -34,7 +34,7 @@ std::vector<double> Cube::checkAxis(double originComponent, double directionComp
     return std::vector<double>{tMin,tMax};
 }
 
-Tuple Cube::localNormalAt(const Tuple &localPoint) const {
+Tuple Cube::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
     double xComponent = localPoint.getXValue();
     double yComponent = localPoint.getYValue();
     double zComponent = localPoint.getZValue();

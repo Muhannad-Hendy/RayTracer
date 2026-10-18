@@ -36,6 +36,7 @@ SOURCES += \
         RaySphereIntersectionTest.cpp \
         Rings.cpp \
         Shape.cpp \
+        SmoothTriangleTest.cpp \
         Sphere.cpp \
         Stripe.cpp \
         TransformationTest.cpp \
@@ -53,6 +54,7 @@ SOURCES += \
         group.cpp \
         main.cpp \
         meshreader.cpp \
+        smoothtriangle.cpp \
         testpattern.cpp \
         testshape.cpp \
         triangle.cpp
@@ -92,6 +94,7 @@ HEADERS += \
     cylinder.h \
     group.h \
     meshreader.h \
+    smoothtriangle.h \
     testpattern.h \
     testshape.h \
     triangle.h

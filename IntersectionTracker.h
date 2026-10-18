@@ -17,6 +17,8 @@ public:
 
     void addIntersection(double time, Shape &shape);
 
+    void addIntersection(double time, Shape &shape, double u, double v);
+
     Intersection& getIntersection(int position);
 
     int count() const;

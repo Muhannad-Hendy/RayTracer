@@ -35,7 +35,7 @@ void Cone::localIntersect(const Ray &localRay, IntersectionTracker &tracker) {
     }
 }
 
-Tuple Cone::localNormalAt(const Tuple &localPoint) const {
+Tuple Cone::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
     double distance = std::pow(localPoint.getXValue(),2) + std::pow(localPoint.getZValue(),2);
     double y = std::sqrt(distance);
     if (distance<std::pow(maximum,2) && localPoint.getYValue()>=(maximum-util::EPSILON)) return Tuple{0,1,0,TupleType::vector};

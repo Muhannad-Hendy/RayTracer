@@ -3,7 +3,7 @@
 
 Plane::Plane() {}
 
-Tuple Plane::localNormalAt(const Tuple &localPoint) const {
+Tuple Plane::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
     Tuple normal{0,1,0,TupleType::vector};
     return normal;
 }

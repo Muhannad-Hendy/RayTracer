@@ -11,6 +11,8 @@ public:
 
     Intersection(double time, Shape &shape);
 
+    Intersection(double time, Shape &shape, double u, double v);
+
     double getIntersectionTime() const;
 
     Shape* getIntersectedShape();
@@ -60,6 +62,14 @@ public:
 
     Tuple& getUnderIntersectionPOint();
 
+    void setU(double u);
+
+    double getU() const;
+
+    void setV(double v);
+
+    double getV() const;
+
 private:
     double intersectionTime{};
     Shape* intersectedShape{};
@@ -72,6 +82,8 @@ private:
     Tuple reflectionVector{};
     double n1{};
     double n2{};
+    double triangleU{};
+    double triangleV{};
 };
 
 #endif // INTERSECTION_H

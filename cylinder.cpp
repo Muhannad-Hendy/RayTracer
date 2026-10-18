@@ -34,7 +34,7 @@ void Cylinder::localIntersect(const Ray &localRay, IntersectionTracker &tracker)
     }
 }
 
-Tuple Cylinder::localNormalAt(const Tuple &localPoint) const {
+Tuple Cylinder::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
     double distance = std::pow(localPoint.getXValue(),2) + std::pow(localPoint.getZValue(),2);
     if (distance<1 && localPoint.getYValue()>=(maximum-util::EPSILON)) return Tuple{0,1,0,TupleType::vector};
     else if (distance<1 && localPoint.getYValue()<=(minimum+util::EPSILON)) return Tuple{0,-1,0,TupleType::vector};

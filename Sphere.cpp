@@ -30,7 +30,7 @@ Tuple Sphere::getCenter() const{
     return center;
 }
 
-Tuple Sphere::localNormalAt(const Tuple &localPoint) const {
+Tuple Sphere::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
     Tuple localNormal = localPoint;
     localNormal.setWValue(0);
     return localNormal;

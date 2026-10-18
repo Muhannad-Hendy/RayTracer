@@ -5,6 +5,9 @@ Intersection::Intersection(){};
 
 Intersection::Intersection(double time, Shape &shape) : intersectionTime{time}, intersectedShape{&shape}{};
 
+Intersection::Intersection(double time, Shape &shape, double u, double v) : intersectionTime{time}, intersectedShape{&shape},
+                triangleU{u}, triangleV{v}{};
+
 double Intersection::getIntersectionTime() const{
     return intersectionTime;
 }
@@ -40,7 +43,7 @@ Tuple& Intersection::getNormalVector() {
 }
 
 void Intersection::setNormalVector() {
-    normalVector = intersectedShape->normalAt(intersectionPoint);
+    normalVector = intersectedShape->normalAt(intersectionPoint, this);
 }
 
 bool Intersection::isInside() const {
@@ -93,4 +96,20 @@ void Intersection::setUnderIntersectionPoint(const Tuple &point) {
 
 Tuple& Intersection::getUnderIntersectionPOint() {
     return underIntersectionPoint;
+}
+
+void Intersection::setU(double u) {
+    triangleU = u;
+}
+
+double Intersection::getU() const {
+    return triangleU;
+}
+
+void Intersection::setV(double v) {
+    triangleV = v;
+}
+
+double Intersection::getV() const {
+    return triangleV;
 }

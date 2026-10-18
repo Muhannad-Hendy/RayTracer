@@ -5,7 +5,7 @@ TestShape::TestShape()
 
 }
 
-Tuple TestShape::localNormalAt(const Tuple &localPoint) const {
+Tuple TestShape::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
 
 }
 

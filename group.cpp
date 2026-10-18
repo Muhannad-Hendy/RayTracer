@@ -5,7 +5,7 @@ Group::Group()
 
 }
 
-Tuple Group::localNormalAt(const Tuple &localPoint) const {
+Tuple Group::localNormalAt(const Tuple &localPoint, Intersection *intersection) const {
 
 }
 
