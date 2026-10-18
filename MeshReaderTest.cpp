@@ -2,6 +2,7 @@
 #include "meshreader.h"
 #include "triangle.h"
 #include "Tuple.h"
+#include "smoothtriangle.h"
 
 using namespace testing;
 
@@ -107,4 +108,49 @@ TEST_F(MeshReaderFeature, TrianglesInGroups) {
     ASSERT_THAT(triangle2->getVertex(0)==vertex1,true);
     ASSERT_THAT(triangle2->getVertex(1)==vertex3,true);
     ASSERT_THAT(triangle2->getVertex(2)==vertex4,true);
+}
+
+TEST_F(MeshReaderFeature, ParsingSmoothTriangleVertexNormals) {
+    std::string file{"../TestFiles/vertexNormals.obj"};
+
+    MeshReader reader{file};
+    reader.parseObjFile();
+
+    Tuple vertexNormal1{0, 0, 1,TupleType::vector};
+    Tuple vertexNormal2{0.707, 0, -0.707,TupleType::vector};
+    Tuple vertexNormal3{1, 2, 3,TupleType::vector};
+    ASSERT_THAT(reader.getVertexNormal(0)==vertexNormal1,true);
+    ASSERT_THAT(reader.getVertexNormal(1)==vertexNormal2,true);
+    ASSERT_THAT(reader.getVertexNormal(2)==vertexNormal3,true);
+}
+
+TEST_F(MeshReaderFeature, ParsingFacesWithNormals) {
+    std::string file{"../TestFiles/faceNormals.obj"};
+
+    MeshReader reader{file};
+    reader.parseObjFile();
+
+    Tuple vertex1{0,1,0,TupleType::point};
+    Tuple vertex2{-1, 0, 0,TupleType::point};
+    Tuple vertex3{1, 0, 0,TupleType::point};
+    Tuple vertexNormal1{-1,0,0,TupleType::vector};
+    Tuple vertexNormal2{1,0,0,TupleType::vector};
+    Tuple vertexNormal3{0,1,0,TupleType::vector};
+
+    auto group = reader.getParserGroup();
+    auto triangle1 = dynamic_cast<SmoothTriangle*>(group->getChild(0));
+    auto triangle2 = dynamic_cast<SmoothTriangle*>(group->getChild(1));
+    ASSERT_THAT(triangle1->getVertex(0)==vertex1,true);
+    ASSERT_THAT(triangle1->getVertex(1)==vertex2,true);
+    ASSERT_THAT(triangle1->getVertex(2)==vertex3,true);
+    ASSERT_THAT(triangle1->getVertexNormal(0)==vertexNormal3,true);
+    ASSERT_THAT(triangle1->getVertexNormal(1)==vertexNormal1,true);
+    ASSERT_THAT(triangle1->getVertexNormal(2)==vertexNormal2,true);
+
+    ASSERT_THAT(triangle2->getVertex(0)==vertex1,true);
+    ASSERT_THAT(triangle2->getVertex(1)==vertex2,true);
+    ASSERT_THAT(triangle2->getVertex(2)==vertex3,true);
+    ASSERT_THAT(triangle2->getVertexNormal(0)==vertexNormal3,true);
+    ASSERT_THAT(triangle2->getVertexNormal(1)==vertexNormal1,true);
+    ASSERT_THAT(triangle2->getVertexNormal(2)==vertexNormal2,true);
 }

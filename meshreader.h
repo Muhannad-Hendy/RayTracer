@@ -21,15 +21,19 @@ public:
 
     std::unique_ptr<Group> takeParserGroup();
 
+    Tuple getVertexNormal(const int index) const;
+
 private:
     std::string inputFile{};
     int ignoredLineCount{};
     int totalLineCount{};
     int readLineCount{};
     std::vector<Tuple> vertices{};
+    std::vector<Tuple> vertexNormals{};
     std::unique_ptr<Group> parserGroup = std::make_unique<Group>();
     void fanTriangulation(std::istringstream &stream);
     Group* activeGroup = parserGroup.get();
+    bool hasVertexNormals = false;
 };
 
 #endif // MESHREADER_H
