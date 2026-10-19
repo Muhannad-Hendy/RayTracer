@@ -43,11 +43,11 @@ void Shape::intersect(const Ray &ray, IntersectionTracker &tracker) {
     localIntersect(localRay, tracker);
 }
 
-Group* Shape::getParent() const{
+Shape* Shape::getParent() const{
     return parent;
 }
 
-void Shape::setParent(Group* group) {
+void Shape::setParent(Shape* group) {
     parent = group;
 }
 

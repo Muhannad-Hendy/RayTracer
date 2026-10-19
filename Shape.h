@@ -32,9 +32,9 @@ public:
 
     void intersect(const Ray &ray, IntersectionTracker &tracker);
 
-    Group* getParent() const;
+    Shape* getParent() const;
 
-    void setParent(Group* group);
+    void setParent(Shape* group);
 
     Tuple worldToObject(const Tuple& point) const;
 
@@ -49,7 +49,7 @@ private:
     Material material{};
     static int shapesCounter;
     int shapeID{};
-    Group* parent{};
+    Shape* parent{};
 };
 
 #endif // SHAPE_H
