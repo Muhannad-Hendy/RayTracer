@@ -942,12 +942,12 @@ TEST_F(CameraFeature, DISABLED_RenderingCSGUnion) {
     vertical->setTransformation(scalar1>translator);
     auto csg = std::make_unique<CSG>(CSG{Operation::Union,std::move(block),std::move(vertical)});
 
-    Tuple lightPosition{10,10,-10, TupleType::point};
+    Tuple lightPosition{10,10,5, TupleType::point};
     Color lightColor{1,1,1};
     Light light{lightPosition,lightColor};
     World world{std::move(csg), light};
     Camera camera{3000,1500,util::PI/3};
-    Tuple from{3,6,3,TupleType::point};
+    Tuple from{3,6,5,TupleType::point};
     Tuple to{0,0,0,TupleType::point};
     Tuple up{0,1,0,TupleType::vector};
     Transformer viewTransformer{from,to,up};
@@ -981,12 +981,12 @@ TEST_F(CameraFeature, DISABLED_RenderingCSGIntersection) {
     vertical->setTransformation(scalar1>translator);
     auto csg = std::make_unique<CSG>(CSG{Operation::Intersection,std::move(block),std::move(vertical)});
 
-    Tuple lightPosition{10,10,-10, TupleType::point};
+    Tuple lightPosition{10,10,5, TupleType::point};
     Color lightColor{1,1,1};
     Light light{lightPosition,lightColor};
     World world{std::move(csg), light};
     Camera camera{3000,1500,util::PI/3};
-    Tuple from{3,6,3,TupleType::point};
+    Tuple from{3,6,5,TupleType::point};
     Tuple to{0,0,0,TupleType::point};
     Tuple up{0,1,0,TupleType::vector};
     Transformer viewTransformer{from,to,up};
@@ -1020,12 +1020,12 @@ TEST_F(CameraFeature, DISABLED_RenderingCSGDifference) {
     vertical->setTransformation(scalar1>translator);
     auto csg = std::make_unique<CSG>(CSG{Operation::Difference,std::move(block),std::move(vertical)});
 
-    Tuple lightPosition{10,10,-10, TupleType::point};
+    Tuple lightPosition{10,10,5, TupleType::point};
     Color lightColor{1,1,1};
     Light light{lightPosition,lightColor};
     World world{std::move(csg), light};
     Camera camera{3000,1500,util::PI/3};
-    Tuple from{3,6,3,TupleType::point};
+    Tuple from{3,6,5,TupleType::point};
     Tuple to{0,0,0,TupleType::point};
     Tuple up{0,1,0,TupleType::vector};
     Transformer viewTransformer{from,to,up};
