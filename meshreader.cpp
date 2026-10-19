@@ -90,7 +90,7 @@ void MeshReader::fanTriangulation(std::istringstream &stream) {
                 else temp.push_back(0);
             }
             vertexIndices.push_back(temp[0]);
-            vertexNormalIndices.push_back(temp[2]);
+            if (temp.size() >= 3) vertexNormalIndices.push_back(temp[2]);
         }
     }
 
@@ -107,7 +107,7 @@ void MeshReader::fanTriangulation(std::istringstream &stream) {
 
     }
     else if (vertexIndices.size() > 3) {
-        for (size_t i=1; i<vertexIndices.size(); i++) {
+        for (size_t i=1; i<vertexIndices.size()-1; i++) {
             if (!hasVertexNormals) {
                 Triangle triangle{vertices[vertexIndices[0]],vertices[vertexIndices[i]],vertices[vertexIndices[i+1]]};
                 activeGroup->addChild(std::make_unique<Triangle>(triangle));

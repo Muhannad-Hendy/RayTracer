@@ -893,3 +893,25 @@ TEST_F(CameraFeature, DISABLED_RenderingObjFileGroup) {
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingTeddyBear.ppm");
 }
+
+TEST_F(CameraFeature, DISABLED_RenderingSmoothTriangles) {
+    std::string file{"../TestFiles/teaPot.obj"};
+    MeshReader reader{file};
+    reader.parseObjFile();
+    Tuple lightPosition{10,30,50, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    auto group = reader.takeParserGroup();
+    Transformer xRotation{Transformation::xRotation,util::PI/-2};
+    Transformer yRotation{Transformation::yRotation,util::PI/6};
+    group->setTransformation(xRotation>yRotation);
+    World world{std::move(group), light};
+    Camera camera{500,500,util::PI/3};
+    Tuple from{20.0, 12.0, 20.0,TupleType::point};
+    Tuple to{0.0,  0.0,   0.0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingSmoothTeaPot.ppm");
+}
