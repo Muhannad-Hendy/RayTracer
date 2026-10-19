@@ -14,6 +14,7 @@
 #include "cylinder.h"
 #include "group.h"
 #include "meshreader.h"
+#include "csg.h"
 
 using namespace testing;
 
@@ -906,7 +907,7 @@ TEST_F(CameraFeature, DISABLED_RenderingSmoothTriangles) {
     Transformer yRotation{Transformation::yRotation,util::PI/6};
     group->setTransformation(xRotation>yRotation);
     World world{std::move(group), light};
-    Camera camera{500,500,util::PI/3};
+    Camera camera{200,200,util::PI/3};
     Tuple from{20.0, 12.0, 20.0,TupleType::point};
     Tuple to{0.0,  0.0,   0.0,TupleType::point};
     Tuple up{0,1,0,TupleType::vector};
@@ -914,4 +915,121 @@ TEST_F(CameraFeature, DISABLED_RenderingSmoothTriangles) {
     camera.setCameraTransformation(viewTransformer);
     const Canvas& image = camera.render(world);
     image.saveToPPM("../Output/renderingSmoothTeaPot.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingCSGUnion) {
+    auto block = std::make_unique<Cube>(Cube{});
+    Transformer scalar{Transformation::scaling,0.9,0.9,0.9};
+    block->setTransformation(scalar);
+    Material middleMaterial{};
+    Color middleColor{0.7216, 0.4510, 0.2000};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(1);
+    middleMaterial.setSpecular(1);
+    middleMaterial.setTransparency(0.8);
+    middleMaterial.setReflectivity(0);
+    middleMaterial.setAmbient(0);
+    middleMaterial.setShininess(300);
+    middleMaterial.setRefractiveIndex(2.417);
+    block->setMaterial(middleMaterial);
+
+    auto vertical = std::make_unique<Cylinder>(Cylinder{});
+    vertical->setMinimum(-1.4);
+    vertical->setMaximum(1.4);
+    vertical->setClosed(true);
+    Transformer translator{Transformation::translation,0.9, 0.9, 0.9};
+    Transformer scalar1{Transformation::scaling,0.2,1,0.2};
+    vertical->setTransformation(scalar1>translator);
+    auto csg = std::make_unique<CSG>(CSG{Operation::Union,std::move(block),std::move(vertical)});
+
+    Tuple lightPosition{10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world{std::move(csg), light};
+    Camera camera{3000,1500,util::PI/3};
+    Tuple from{3,6,3,TupleType::point};
+    Tuple to{0,0,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingCSGUnion.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingCSGIntersection) {
+    auto block = std::make_unique<Cube>(Cube{});
+    Transformer scalar{Transformation::scaling,0.9,0.9,0.9};
+    block->setTransformation(scalar);
+    Material middleMaterial{};
+    Color middleColor{0.7216, 0.4510, 0.2000};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(1);
+    middleMaterial.setSpecular(1);
+    middleMaterial.setTransparency(0.8);
+    middleMaterial.setReflectivity(0);
+    middleMaterial.setAmbient(0);
+    middleMaterial.setShininess(300);
+    middleMaterial.setRefractiveIndex(2.417);
+    block->setMaterial(middleMaterial);
+
+    auto vertical = std::make_unique<Cylinder>(Cylinder{});
+    vertical->setMinimum(-1.4);
+    vertical->setMaximum(1.4);
+    vertical->setClosed(true);
+    Transformer translator{Transformation::translation,0.9, 0.9, 0.9};
+    Transformer scalar1{Transformation::scaling,0.2,1,0.2};
+    vertical->setTransformation(scalar1>translator);
+    auto csg = std::make_unique<CSG>(CSG{Operation::Intersection,std::move(block),std::move(vertical)});
+
+    Tuple lightPosition{10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world{std::move(csg), light};
+    Camera camera{3000,1500,util::PI/3};
+    Tuple from{3,6,3,TupleType::point};
+    Tuple to{0,0,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingCSGIntersection.ppm");
+}
+
+TEST_F(CameraFeature, DISABLED_RenderingCSGDifference) {
+    auto block = std::make_unique<Cube>(Cube{});
+    Transformer scalar{Transformation::scaling,0.9,0.9,0.9};
+    block->setTransformation(scalar);
+    Material middleMaterial{};
+    Color middleColor{0.6784, 0.8471, 0.9020};
+    middleMaterial.setColor(middleColor);
+    middleMaterial.setDiffuse(1);
+    middleMaterial.setSpecular(1);
+    middleMaterial.setTransparency(0.8);
+    middleMaterial.setReflectivity(0);
+    middleMaterial.setAmbient(0);
+    middleMaterial.setShininess(300);
+    middleMaterial.setRefractiveIndex(2.417);
+    block->setMaterial(middleMaterial);
+
+    auto vertical = std::make_unique<Cylinder>(Cylinder{});
+    vertical->setMinimum(-1.4);
+    vertical->setMaximum(1.4);
+    vertical->setClosed(true);
+    Transformer translator{Transformation::translation,0.9, 0.9, 0.9};
+    Transformer scalar1{Transformation::scaling,0.2,1,0.2};
+    vertical->setTransformation(scalar1>translator);
+    auto csg = std::make_unique<CSG>(CSG{Operation::Difference,std::move(block),std::move(vertical)});
+
+    Tuple lightPosition{10,10,-10, TupleType::point};
+    Color lightColor{1,1,1};
+    Light light{lightPosition,lightColor};
+    World world{std::move(csg), light};
+    Camera camera{3000,1500,util::PI/3};
+    Tuple from{3,6,3,TupleType::point};
+    Tuple to{0,0,0,TupleType::point};
+    Tuple up{0,1,0,TupleType::vector};
+    Transformer viewTransformer{from,to,up};
+    camera.setCameraTransformation(viewTransformer);
+    const Canvas& image = camera.render(world);
+    image.saveToPPM("../Output/renderingCSGDifference.ppm");
 }

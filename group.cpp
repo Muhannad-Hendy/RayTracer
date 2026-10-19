@@ -1,4 +1,5 @@
 #include "group.h"
+#include <algorithm>
 
 Group::Group()
 {
@@ -23,4 +24,9 @@ bool Group::isEmpty() {
 
 Shape* Group::getChild(std::size_t childNumber) const {
     return children.at(childNumber).get();
+}
+
+bool Group::includes(const Shape &shape) const {
+    return std::any_of(children.begin(), children.end(),
+                [&] (const auto& child) {return child->includes(shape);});
 }

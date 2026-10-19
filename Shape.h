@@ -40,6 +40,8 @@ public:
 
     Tuple normalToWorld(const Tuple& normal) const;
 
+    virtual bool includes(const Shape &shape) const;
+
 protected:
     virtual Tuple localNormalAt(const Tuple& localPoint, Intersection *intersection=nullptr) const = 0;
     virtual void localIntersect(const Ray &localRay, IntersectionTracker &tracker) = 0;

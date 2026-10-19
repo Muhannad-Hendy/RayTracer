@@ -1,7 +1,6 @@
 #include "Shape.h"
 #include "Matrix.h"
 #include "IntersectionTracker.h"
-#include "group.h"
 
 int Shape::shapesCounter = 0;
 
@@ -68,4 +67,8 @@ Tuple Shape::normalToWorld(const Tuple &normal) const {
         worldNormal = parent->normalToWorld(worldNormal);
     }
     return worldNormal;
+}
+
+bool Shape::includes(const Shape &shape) const {
+    return this==&shape;
 }

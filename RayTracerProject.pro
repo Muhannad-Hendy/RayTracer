@@ -9,6 +9,7 @@ LIBS += -lpthread
 
 SOURCES += \
         ../../../../GoogleTest/googletest/TestShapeTest.cpp \
+        CSGTest.cpp \
         Camera.cpp \
         CameraTest.cpp \
         Canvas.cpp \
@@ -49,6 +50,7 @@ SOURCES += \
         WorldTest.cpp \
         checker.cpp \
         cone.cpp \
+        csg.cpp \
         cube.cpp \
         cylinder.cpp \
         group.cpp \
@@ -90,6 +92,7 @@ HEADERS += \
     World.h \
     checker.h \
     cone.h \
+    csg.h \
     cube.h \
     cylinder.h \
     group.h \

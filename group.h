@@ -23,6 +23,8 @@ public:
         return childPointer;
     }
 
+    bool includes(const Shape &shape) const override;
+
 protected:
     Tuple localNormalAt(const Tuple &localPoint, Intersection *intersection=nullptr) const override;
     void localIntersect(const Ray &localRay, IntersectionTracker &tracker) override;
